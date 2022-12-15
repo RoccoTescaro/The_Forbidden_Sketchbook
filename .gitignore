@@ -34,9 +34,12 @@
 
 ################
 .vs/
+.vscode/
+build/
 Programmazione.sln
 Programmazione.vcxproj
 Programmazione.vcxproj.filters
 Programmazione.vcxproj.user
 x64/
+CMakeLists.txt
 ################
