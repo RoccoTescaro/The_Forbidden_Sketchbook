@@ -59,7 +59,7 @@ namespace Utils
 
 	static void assert(const char* string, bool condition) 
 	{
-		if (!condition)
+		if (!condition) 
 			ERROR(string);
 	}
 
