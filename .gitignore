@@ -33,24 +33,9 @@
 
 
 ################
-build/
-cmake-build-debug/
-.idea/
-CMakeLists.txt
-main.cpp
-Elaborato.sln
-Elaborato.vcxproj
-Elaborato.vcxproj.filters
-Elaborato.vcxproj.user
 .vs/
-.vscode/
-Dependencies/
-bin/
-x64/
-build/
-Debug/
-Elaborato.vcxproj
-Elaborato.vcxproj.filters
-Elaborato.vcxproj.user
-Release/
+Programmazione.sln
+Programmazione.vcxproj
+Programmazione.vcxproj.filters
+Programmazione.vcxproj.user
 ################
