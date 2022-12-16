@@ -23,9 +23,9 @@ public:
     };
 
 
-    void update(const sf::View* view = nullptr);
+    void update();
 
-    const sf::Vector2<float> &getMousePos() const;
+    const sf::Vector2<float> &getMousePos(const sf::View* view = nullptr) const;
     const float &getWheelDelta() const;
     
     bool isKeyPressed(Key key) const;

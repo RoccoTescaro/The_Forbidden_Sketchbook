@@ -11,7 +11,10 @@ public:
 	virtual ~Entity() = default;
 
 
-	virtual void render(); // gets window from application (singleton)
+	virtual void render(){
+   		//sf::RenderWindow &window = Application::getWindow();
+   		//window.draw(sprite;)
+	};
 	virtual void update(Map &map) = 0;
 	virtual void execute(GameCharacter &gameCharacter, Map &map) = 0;
 
