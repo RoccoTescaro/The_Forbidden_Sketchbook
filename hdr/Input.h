@@ -19,13 +19,13 @@ public:
         Space,
         Esc,
         Shift,
-        ENUM_SIZE
+        ENUM_SIZE //last element of the enum, indicates the number of elements in the list
     };
 
 
     void update();
 
-    const sf::Vector2<float> &getMousePos(const sf::View* view = nullptr) ;
+    const sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const ;
     const float &getWheelDelta() const;
     
     bool isKeyPressed(Key key) const;
@@ -35,7 +35,6 @@ public:
 private:
 
     sf::Event event;
-    sf::Vector2<float> mousePos;
     float WheelDelta;
     std::bitset<Key::ENUM_SIZE> oldKeys;   
     std::bitset<Key::ENUM_SIZE> newKeys;       

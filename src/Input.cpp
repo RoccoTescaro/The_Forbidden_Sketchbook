@@ -4,7 +4,7 @@
 
 void Input::update(){
 
-sf::RenderWindow window=Application::getWindow();
+    sf::RenderWindow &window=Application::getWindow();
 
     if(window.hasFocus()){
     //UPDATE MOUSE WHEEL
@@ -31,14 +31,14 @@ sf::RenderWindow window=Application::getWindow();
     }
 }
 
-const sf::Vector2<float>& Input::getMousePos(const sf::View* view) {
+const sf::Vector2<float> Input::getMousePos(const sf::View* view) const{
     
-    
+    sf::RenderWindow &window=Application::getWindow();
+
     if (!view)
         view = &window.getDefaultView();
-    mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window),*view);
-        
-    return mousePos;
+
+    return  window.mapPixelToCoords(sf::Mouse::getPosition(window),*view);
 }
 
 const float& Input::getWheelDelta() const {
