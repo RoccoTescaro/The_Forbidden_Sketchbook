@@ -1,16 +1,18 @@
 #pragma once
-#include "SFML/Graphics.hpp"
+#include "SFML/Window.hpp"
 #include "Utils.h"
 #include "Config.h"
-#include <vector>
+#include "Input.h"
 
 class State;
 
 class Application
 {
 public:
-	inline static State& getState(uint8_t index) { return *app.states[index]; };
-	inline static void addState(const State& state) { app.states.emplace_back(state); };
+	~Application();
+
+	static State& getState(uint8_t index);
+	static void addState(State* state); 
 	inline static void setState(uint8_t index) { app.currentStateIndex = index; };
 	inline static void nextState() { app.currentStateIndex++; };
 	inline static void prevState() { app.currentStateIndex--; };
@@ -24,11 +26,12 @@ private:
 
 	static Application app;
 
-	std::vector<std::unique_ptr<State>> states;
-	uint8_t currentStateIndex;
+	std::vector<State*> states;
+	uint8_t currentStateIndex = 0;
 
-	sf::RenderWindow window;
-	float dt;
+	sf::RenderWindow window{};
+	float dt = 0.f;
+
+	Input input{};
 };
 
-Application Application::app{};

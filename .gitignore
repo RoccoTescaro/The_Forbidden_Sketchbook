@@ -42,4 +42,5 @@ Programmazione.vcxproj.filters
 Programmazione.vcxproj.user
 x64/
 CMakeLists.txt
+Release/
 ################

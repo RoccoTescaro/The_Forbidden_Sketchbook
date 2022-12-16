@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <cmath>
 
 #define DEBUGMODE 0 //for release set to 0, for debug set to 1
 

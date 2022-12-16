@@ -31,7 +31,7 @@ void Input::update(){
     }
 }
 
-const sf::Vector2<float> Input::getMousePos(const sf::View* view) const{
+sf::Vector2<float> Input::getMousePos(const sf::View* view) const{
     
     sf::RenderWindow &window=Application::getWindow();
 

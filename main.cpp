@@ -5,6 +5,6 @@
 
 int main() 
 {
-	LOG("%", Utils::Math::manhattanDistance<int>(sf::Vector2<int>{3, 3}, sf::Vector2<int>{3, 12}));
+	//Application::run();
 	return 0;
 }

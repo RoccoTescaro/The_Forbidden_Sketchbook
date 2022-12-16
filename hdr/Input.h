@@ -6,7 +6,6 @@
 class Input
 {
 public:
-
     enum Key
     {
         W,
@@ -19,13 +18,13 @@ public:
         Space,
         Esc,
         Shift,
-        ENUM_SIZE //last element of the enum, indicates the number of elements in the list
+        ENUM_SIZE //must be mainteined as last element of the enum, indicates the number of elements in the list
     };
 
 
     void update();
 
-    const sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const ;
+    sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const ;
     const float &getWheelDelta() const;
     
     bool isKeyPressed(Key key) const;
