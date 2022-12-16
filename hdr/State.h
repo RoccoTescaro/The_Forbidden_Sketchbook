@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Application.h"
+#include "VignetteEffect.h"
 
 class State 
 {
@@ -17,4 +18,6 @@ private:
 	const float& dt;
 
 	Input& input;
+
+	VignetteEffect transitionEffect;
 };

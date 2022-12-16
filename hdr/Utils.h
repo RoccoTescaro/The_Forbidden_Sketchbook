@@ -95,6 +95,11 @@ namespace Utils
             return pos1 + dt * (pos2 - pos1);
         }
         
+        template<typename Type>
+        static Type clamp(Type min, Type max, Type value)
+        {
+            return std::min(std::max(value,min),max);
+        }
     }
 
 }

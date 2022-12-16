@@ -19,7 +19,7 @@ void Application::run()
 	sf::Clock clock;
 	float dt = 0.0001f;
 
-	State& state = Application::getState(app.currentStateIndex);
+	//State& state = Application::getState(app.currentStateIndex);
 	sf::Event ev{};
 
 	while (app.window.isOpen())
@@ -27,10 +27,10 @@ void Application::run()
 		ASSERT("states got destroyed", state);
 
 		app.input.update();
-		state.update();
+		//state.update();
 
 		app.window.clear();
-		state.render();
+		//state.render();
 		app.window.display();
 
 		dt = fmax(clock.getElapsedTime().asSeconds(), 0.0001f);
@@ -44,6 +44,8 @@ Application::Application()
 	window.setFramerateLimit(Config::fps);
 	states.reserve(0);
 	//#TODO add states
+
+	//run();
 };
 
 Application Application::app{};
