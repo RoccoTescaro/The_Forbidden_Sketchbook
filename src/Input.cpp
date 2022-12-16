@@ -1,6 +1,11 @@
 #include "../hdr/Input.h"
+#include "../hdr/Application.h"
+
 
 void Input::update(){
+
+sf::RenderWindow window=Application::getWindow();
+
     if(window.hasFocus()){
     //UPDATE MOUSE WHEEL
         WheelDelta = 0.f;
@@ -26,7 +31,7 @@ void Input::update(){
     }
 }
 
-const sf::Vector2<float>& Input::getMousePos(const sf::View* view) const {
+const sf::Vector2<float>& Input::getMousePos(const sf::View* view) {
     
     
     if (!view)
