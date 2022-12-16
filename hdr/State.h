@@ -5,7 +5,7 @@
 class State 
 {
 public:
-	State() : window(Application::getWindow()), dt(Application::getDeltaTime()) {};
+	State() : window(Application::getWindow()), dt(Application::getDeltaTime()), input(Application::getInput()) {};
 
 	virtual ~State() = default;
 
@@ -15,4 +15,6 @@ public:
 private:
 	sf::RenderWindow& window;
 	const float& dt;
+
+	Input& input;
 };

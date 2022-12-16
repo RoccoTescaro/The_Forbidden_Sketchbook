@@ -1,5 +1,4 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include <bitset>
 
@@ -24,7 +23,7 @@ public:
 
     void update();
 
-    sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const ;
+    sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const;
     const float &getWheelDelta() const;
     
     bool isKeyPressed(Key key) const;
@@ -33,9 +32,9 @@ public:
 
 private:
 
-    sf::Event event;
-    float WheelDelta;
-    std::bitset<Key::ENUM_SIZE> oldKeys;   
-    std::bitset<Key::ENUM_SIZE> newKeys;       
+    sf::Event event{};
+    float wheelDelta = 0.f;
+    std::bitset<Key::ENUM_SIZE> oldKeys{};
+    std::bitset<Key::ENUM_SIZE> newKeys{};
 
 };

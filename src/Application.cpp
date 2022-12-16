@@ -2,13 +2,6 @@
 #include "SFML/Window.hpp"
 #include "../hdr/State.h"
 
-Application::~Application()
-{
-	for (auto& state : app.states)
-		delete state;
-}
-
-
 State& Application::getState(uint8_t index)
 {
 	return *app.states[index];
