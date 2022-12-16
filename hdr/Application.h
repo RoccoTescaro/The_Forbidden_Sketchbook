@@ -18,38 +18,9 @@ public:
 	inline static sf::RenderWindow& getWindow() { return app.window; };
 	inline static const float& getDeltaTime() { return app.dt; };
 
-	inline static void run() 
-	{
-		sf::Clock clock;
-		float dt = 0.0001f;
-
-		sf::RenderWindow window(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Default);
-		window.setFramerateLimit(Config::fps);
-
-		std::unique_ptr<State>& state = app.states[app.currentStateIndex];
-		sf::Event ev{};
-
-		while (window.isOpen())
-		{
-			ASSERT("states got destroyed", state);
-			
-			//#TODO add input update
-			state->update(); 
-			
-			window.clear();
-			state->render();
-			window.display();
-
-			dt = fmax(clock.getElapsedTime().asSeconds(), 0.0001f);
-			clock.restart();
-		}
-	};
-
+	static void run();
 private:
-	Application() 
-	{
-		//#TODO add states
-	};
+	Application();
 
 	static Application app;
 
