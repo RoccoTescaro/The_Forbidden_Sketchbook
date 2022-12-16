@@ -143,7 +143,7 @@ private:
 	std::fstream file;
 	Mode mode;
 
-	uint32_t nextId = 0;
+	uint32_t nextId = 1; //id = 0 is not valid
 	std::unordered_map<void*, uint32_t> objToId;
 	std::unordered_map<uint32_t, void*> idToObj;
 	std::unordered_map<void*, std::shared_ptr<SerializableBase>> objToShared;
