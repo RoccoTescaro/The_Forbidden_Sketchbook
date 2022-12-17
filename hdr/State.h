@@ -13,7 +13,7 @@ public:
 	virtual void update() = 0;
 	virtual void render() = 0;
 
-private:
+protected:
 	sf::RenderWindow& window;
 	const float& dt;
 

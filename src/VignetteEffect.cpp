@@ -13,29 +13,24 @@ VignetteEffect::VignetteEffect()
 
 void VignetteEffect::update() 
 {
+	time += Application::getDeltaTime();
+
 	sf::RenderWindow& window = Application::getWindow();
 	vignette.setSize(sf::Vector2<float>{window.getSize()});
 
 	if (animationStarted) //CLOSE SCENE
 		intensity = Utils::Math::lerp(intensity, 0.f, Application::getDeltaTime()); 
-	else				  //OSCILLATING RADIUS
-		radius = Utils::Math::clamp(minRadius,														
-									maxRadius,
-									Utils::Math::lerp(radius,
-															radius - (float)std::rand() / RAND_MAX, 
-															Application::getDeltaTime()));
+	else				  //OSCILLATING RADIUS 
+		radius = minRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;
+
 	shader.setUniform("radius",radius);
 	shader.setUniform("intensity", intensity);
 }
 
 void VignetteEffect::render() 
 {
-	sf::RenderWindow& window = Application::getWindow();
-	sf::View preView = window.getView();
-	sf::View newView = sf::View(sf::Vector2<float>{0, 0}, sf::Vector2<float>{window.getSize()});
-	window.setView(newView);
-	window.draw(vignette, &shader);
-	window.setView(preView);
+	//#TODO check view
+	Application::getWindow().draw(vignette, &shader);
 }
 
 void VignetteEffect::startAnimation() 
