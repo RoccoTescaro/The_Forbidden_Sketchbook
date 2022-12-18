@@ -19,10 +19,14 @@ void VignetteEffect::update()
 	vignette.setSize(sf::Vector2<float>{window.getSize()});
 
 	if (animationStarted) //CLOSE SCENE
-		intensity = Utils::Math::lerp(intensity, 0.f, Application::getDeltaTime()); 
+		intensity = Utils::Math::lerp(intensity, 0.f, Application::getDeltaTime());
 	else				  //OSCILLATING RADIUS 
-		radius = minRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;
-
+		radius = minRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;		
+		//more spiky ocillation
+		//Utils::Math::clamp(minRadius, maxRadius,
+		//		Utils::Math::lerp(radius,radius+((float)std::rand()/RAND_MAX - 0.5f)*radiusNoise,Application::getDeltaTime())
+		//					);
+		
 	shader.setUniform("radius",radius);
 	shader.setUniform("intensity", intensity);
 }

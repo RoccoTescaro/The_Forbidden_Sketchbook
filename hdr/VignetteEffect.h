@@ -19,6 +19,8 @@ private:
 	float radius;
 	const float defaultRadius = 1.25f;
 	const float minRadius = 0.75f;
+	//const float maxRadius = 1.75f;
+	//const float radiusNoise = 15.f;
 	const float radiusFrequency = 0.75f;
 	const float radiusAmplitude = 1.25f;
 	float intensity;

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#define DEBUGMODE 0 //for release set to 0, for debug set to 1
+#define DEBUGMODE 1 //for release set to 0, for debug set to 1
 
 #if DEBUGMODE
 

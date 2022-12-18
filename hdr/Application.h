@@ -21,6 +21,7 @@ public:
 	inline static Input& getInput() { return app.input; };
 
 	static void run();
+
 private:
 	Application();
 

@@ -1,4 +1,5 @@
 #include "../hdr/Menu.h"
+#include "../hdr/Config.h"
 
 Menu::Menu() : 
     start({ 0.f, window.getSize().y * 0.5f }, sf::Vector2<int>( window.getSize().x, window.getSize().y * 0.125f )),
@@ -40,8 +41,8 @@ Menu::Menu() :
     exitText.setCharacterSize(window.getSize().y * 0.125f);
     //center allignment
     sf::FloatRect exitBound = exitText.getGlobalBounds();
-    startText.setPosition({ (window.getSize().x - exitBound.width) * 0.5f,(window.getSize().y - exitBound.height) * 0.5f });
-    start.setText(exitText);
+    exitText.setPosition({ (window.getSize().x - exitBound.width) * 0.5f,(window.getSize().y - exitBound.height) * 0.75f });
+    exit.setText(exitText);
 }
 
 void Menu::update() 
@@ -54,7 +55,7 @@ void Menu::update()
     if (start.isMouseOver(input.getMousePos()))
     {
         start.getText().setFillColor(sf::Color(255, 255, 255, 255));
-        if (input.isKeyReleased(Input::Key::MouseL))
+        if (input.isKeyReleased(Input::Key::MouseL)) 
         {
             transitionEffect.startAnimation();
             start.setActive(false); //not allow to press any other button if scene is changing
@@ -74,6 +75,8 @@ void Menu::update()
         //reset transition animation and change application state so that if this state will 
         //be reused it wont be completely black
         transitionEffect.reset();
+        start.setActive(true); 
+        exit.setActive(true);
         Application::nextState(); //#TODO check which button has been pressed and change state according to that
     }
 }
