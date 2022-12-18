@@ -2,13 +2,13 @@
 #include "../hdr/Utils.h"
 #include "../hdr/Application.h"
 
-VignetteEffect::VignetteEffect() 
+VignetteEffect::VignetteEffect() :
+	radius(defaultRadius), intensity(0.f)
 {
 	sf::RenderWindow& window = Application::getWindow();
 	shader.loadFromFile("shd/VignetteEffect.frag", sf::Shader::Fragment);
 	shader.setUniform("resolution", sf::Vector2<float>(window.getSize()));
 	vignette.setPosition(0, 0);
-	reset();
 }
 
 void VignetteEffect::update() 
@@ -18,15 +18,15 @@ void VignetteEffect::update()
 	sf::RenderWindow& window = Application::getWindow();
 	vignette.setSize(sf::Vector2<float>{window.getSize()});
 
-	if (animationStarted) //CLOSE SCENE
-		intensity = Utils::Math::lerp(intensity, 0.f, Application::getDeltaTime());
-	else				  //OSCILLATING RADIUS 
-		radius = minRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;		
-		//more spiky ocillation
-		//Utils::Math::clamp(minRadius, maxRadius,
-		//		Utils::Math::lerp(radius,radius+((float)std::rand()/RAND_MAX - 0.5f)*radiusNoise,Application::getDeltaTime())
-		//					);
-		
+	radius = defaultRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;
+	
+	if (animationStarted)
+	{
+		if (closingAnimation) closingUpdate();	
+		else openingUpdate();
+	}
+	
+
 	shader.setUniform("radius",radius);
 	shader.setUniform("intensity", intensity);
 }
@@ -39,6 +39,7 @@ void VignetteEffect::render()
 
 void VignetteEffect::startAnimation() 
 {
+	closingAnimation = true;
 	animationStarted = true;
 }
 
@@ -47,9 +48,21 @@ bool VignetteEffect::isAnimationEnded() const
 	return intensity <= Config::eps;
 }
 
-void VignetteEffect::reset() 
+void VignetteEffect::openingUpdate()
 {
-	radius = defaultRadius;
-	intensity = defaultIntensity;
-	animationStarted = false;
+	intensity = Utils::Math::lerp(intensity, defaultIntensity, animationSpeed * Application::getDeltaTime());
+
+	if (intensity >= defaultIntensity - Config::eps)
+	{
+		closingAnimation = true;
+		animationStarted = false;
+	}
+}
+
+void VignetteEffect::closingUpdate()
+{
+	intensity = Utils::Math::lerp(intensity, 0.f, animationSpeed * Application::getDeltaTime());
+
+	if (intensity <= Config::eps)
+		closingAnimation = false;
 }

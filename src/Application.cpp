@@ -2,6 +2,7 @@
 #include "SFML/Window.hpp"
 #include "../hdr/State.h"
 #include "../hdr/Menu.h"
+#include "../hdr/Pause.h"
 
 State& Application::getState(uint8_t index)
 {
@@ -24,16 +25,17 @@ void Application::run()
 	//istanciation of the singleton
 
 	app.states.emplace_back(new Menu);
+	app.states.emplace_back(new Pause);
 	app.window.create(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Default);
 
 	sf::Clock clock;
 	app.dt = Config::eps;
 
-	State& state = Application::getState(app.currentStateIndex);
 	sf::Event ev{};
 
 	while (app.window.isOpen())
 	{
+		State& state = Application::getState(app.currentStateIndex);
 		app.input.update();
 		state.update();
 

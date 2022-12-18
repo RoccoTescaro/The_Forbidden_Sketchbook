@@ -74,7 +74,6 @@ void Menu::update()
     {
         //reset transition animation and change application state so that if this state will 
         //be reused it wont be completely black
-        transitionEffect.reset();
         start.setActive(true); 
         exit.setActive(true);
         Application::nextState(); //#TODO check which button has been pressed and change state according to that
