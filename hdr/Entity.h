@@ -6,7 +6,7 @@
 class Map;
 class GameCharacter;
 
-class Entity : public Serializable
+class Entity 
 {
 public:
 	virtual ~Entity() = default;
@@ -23,7 +23,8 @@ public:
 	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 	inline sf::Vector2<float> getPos() const { return sprite.getPosition(); };
 	inline sf::Vector2<float> getCenter() const { return (getPos() + getSize() * 0.5f); };
-
+	inline virtual const bool isSolid() const =0;
+S
 protected:
 
 	inline sf::Vector2<float> getSize() const 
