@@ -5,6 +5,6 @@
 
 int main() 
 {
-	//Application::run();
+	Application::run();
 	return 0;
 }

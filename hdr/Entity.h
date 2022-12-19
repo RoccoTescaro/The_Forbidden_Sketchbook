@@ -1,10 +1,12 @@
 #pragma once 
 #include <SFML/Graphics.hpp>
+#include "Serializable.h"
+
 
 class Map;
 class GameCharacter;
 
-class Entity
+class Entity : public Serializable
 {
 public:
 	virtual ~Entity() = default;
