@@ -13,9 +13,20 @@ public:
 class Wall : public Tile{
 
 public:
+    enum Type
+    {
+        RL,
+        UD,
+        RU,
+        LU,
+        RD,
+        LD,
+        ENUM_SIZE //must be mainteined as last element of the enum, indicates the number of elements in the list
+    };
+
     Wall(uint8_t type);
 
-    virtual void setTexture(uint8_t newType);
+    void setTexture(uint8_t newType);
 
     const bool isSolid() const override;
 
@@ -36,11 +47,8 @@ public:
     ColorPedestral();
 
     const bool isSolid() const override;
-    inline const sf::Color& getColor() const { return color; };
 
-
-    void update(Map &map) override{};
-    void execute(GameCharacter &gameCharacter, Map &map) override{};
+    void execute(GameCharacter &gameCharacter, Map &map) override;//todo
 
 private:
 	sf::Color color; 
