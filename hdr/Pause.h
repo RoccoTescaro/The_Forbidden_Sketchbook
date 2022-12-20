@@ -15,7 +15,7 @@ private:
 
     sf::Font buttonFont;
     Button save;
-    Button backToGame;
-    Button backToMenu;
+    Button back;
+    Button menu;
 };
 

@@ -6,7 +6,7 @@ VignetteEffect::VignetteEffect() :
 	radius(defaultRadius), intensity(0.f)
 {
 	sf::RenderWindow& window = Application::getWindow();
-	shader.loadFromFile("shd/VignetteEffect.frag", sf::Shader::Fragment);
+	shader.loadFromFile(Config::vignetteEffectShaderPath, sf::Shader::Fragment);
 	shader.setUniform("resolution", sf::Vector2<float>(window.getSize()));
 	vignette.setPosition(0, 0);
 }

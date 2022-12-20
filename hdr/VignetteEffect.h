@@ -25,7 +25,7 @@ private:
 	const float radiusAmplitude = 1.25f;
 	float intensity;
 	const float defaultIntensity = 15.f;
-	const float animationSpeed = 1.25f;
+	const float animationSpeed = 1.75f;
 	float time = 0.f;
 	bool animationStarted = true;
 	bool closingAnimation = false; 
