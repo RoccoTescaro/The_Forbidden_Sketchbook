@@ -2,7 +2,13 @@
 
 #include "Entity.h"
 
-class Tile : public Entity{};
+class Tile : public Entity{
+public:
+
+    void update(Map &map) override{};
+    void execute(GameCharacter &gameCharacter, Map &map) override{};
+
+};
 
 class Wall : public Tile{
 
@@ -12,9 +18,6 @@ public:
     virtual void setTexture(uint8_t newType);
 
     const bool isSolid() const override;
-
-    void update(Map &map) override{};
-    void execute(GameCharacter &gameCharacter, Map &map) override{};
 
 private:
     uint8_t type;
@@ -26,10 +29,6 @@ public:
     Hole();
 
     const bool isSolid() const override;
-
-    void update(Map &map) override{};
-    void execute(GameCharacter &gameCharacter, Map &map) override{};
- 
 };
 class ColorPedestral : public Tile{
 
