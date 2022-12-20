@@ -13,6 +13,7 @@ namespace Config
 	const std::string backgroundTexturePath{ "img/paperBackground.jpg" };
 	
 	const std::string vignetteEffectShaderPath{ "shd/VignetteEffect.frag" };
+	const std::string filterShaderPath{ "shaders/Filter.frag" };
 };
 
 
