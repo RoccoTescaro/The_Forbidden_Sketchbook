@@ -16,11 +16,12 @@ void Wall::setTexture(uint8_t newType){
 			texture[i]->loadFromFile("../images/textures/"+std::to_string(i)+".png");
 			texture[i]->generateMipmap();
 		}
-	Wall::type=newType;
 	sprite.setTexture(*texture[type]);
-	sprite.setTextureRect({0,0,1300,1350});
-	sprite.setScale(64.f/1300,64.f/1350);
+	sf::Rect<int> textureRect{0,0,1300,1350};
+	sprite.setTextureRect(textureRect);
+	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
 
+	Wall::type=newType;
 }
 
 

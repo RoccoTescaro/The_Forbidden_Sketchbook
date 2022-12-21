@@ -36,7 +36,7 @@ template<class Type>
 class Serializable : public SerializableBase
 {
 public:
-    inline static SerializableBase* create() const
+    inline static SerializableBase* create() 
     {
         //every class that derives from Serializable MUST have an empty constructor.
         ASSERT("serializable class has not an empty contructor", std::is_default_constructible<Type>::value);
@@ -44,7 +44,7 @@ public:
         return new Type;
     };
 
-    inline static uint32_t getTypeId() const
+    inline static uint32_t getTypeId() 
     {
         return typeid(Type).hash_code();
     };
