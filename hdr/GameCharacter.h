@@ -19,7 +19,7 @@ public:
     void update  (Map &map, const float &dt) override;
     void execute (GameCharacter &gameCharacter, Map &map) override;
     inline void render  () override {   Entity::render();
-                                        if(weapon) weapon->render();    };
+                                        if(weapon)/* weapon->render()*/;    };
 
 
 
@@ -31,7 +31,7 @@ public:
     inline const uint8_t getEnergy()    const   {  return energy;      }
     inline const uint8_t getPriority()  const   {  return priority;    }
     inline const uint8_t getRange()     const   {  if(weapon)
-		                                            return weapon->getRange();
+		                                            /*return weapon->getRange()*/;
 	                                            return 1;           }
 
 //utility functions

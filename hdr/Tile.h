@@ -5,7 +5,7 @@
 class Tile : public Entity{
 public:
 
-    void update(Map &map) override{};
+    void update(Map &map, const float &dt) override{};
     void execute(GameCharacter &gameCharacter, Map &map) override{};
 
 };

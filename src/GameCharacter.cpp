@@ -6,12 +6,13 @@
 
 void GameCharacter::update  (Map &map, const float &dt){}
 void GameCharacter::execute (GameCharacter &gameCharacter, Map &map){}
-const bool GameCharacter::isInRange (Map &map){}
+const bool GameCharacter::isInRange (Map &map){return true;}
 
 void GameCharacter::updateStepQueue (Map &map,const sf::Vector2<float> target){
 
 	if(stepQueue.empty())
-		stepQueue=movementStrategy->findPath(this->getPos(),target,isSolid());
+		//stepQueue=movementStrategy->findPath(this->getPos(),target,isSolid())
+		;
 
 }
 
