@@ -1,10 +1,13 @@
 #pragma once
+#include <memory>
 #include "SFML/Window.hpp"
 #include <algorithm>
 #include <memory>
 #include "Utils.h"
 #include "Config.h"
 #include "Input.h"
+
+
 
 class State;
 
