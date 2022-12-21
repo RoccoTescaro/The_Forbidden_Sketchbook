@@ -110,4 +110,7 @@ public:
     void update(Map &map, const float &dt) override;
 private:
     static BaseStats baseStats;
+//Movement var
+    const float animationDuration;
+    float animationTime;
 };
