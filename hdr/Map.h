@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/System.hpp>
 #include <map>
+#include <memory>
 
 //#TODO remove
 class Tile; 
