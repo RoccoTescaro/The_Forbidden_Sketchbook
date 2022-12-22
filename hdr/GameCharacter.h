@@ -65,13 +65,6 @@ protected:
     //GAMECHARACTERS TYPES
 
 
-struct BaseStats
-{
-    uint8_t maxHealth;
-    uint8_t maxEnergy;
-    uint8_t priority;
-};
-
 
 class Player : public GameCharacter {
 public:
@@ -80,7 +73,6 @@ public:
     inline const sf::Color& getFilterColor() const { return filterColor; };
 
 private:
-    static BaseStats baseStats;
     sf::Color filterColor;
 };
 
@@ -88,8 +80,6 @@ private:
 class Melee : public GameCharacter {
 public:
     Melee(uint8_t health, uint8_t energy);
-private:
-    static BaseStats baseStats;
 };
 
 
@@ -98,8 +88,6 @@ public:
     Bat(uint8_t health, uint8_t energy);
 
     inline const bool isSolid() const  override  { return false; };
-private:
-    static BaseStats baseStats;
 };
 
 
@@ -109,7 +97,6 @@ public:
 
     void update(Map &map, const float &dt) override;
 private:
-    static BaseStats baseStats;
 //Movement var
     const float animationDuration;
     float animationTime;
