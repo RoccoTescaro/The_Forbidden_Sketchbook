@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Config.h"
 #include <iostream>
+#include <cmath>
+
 
 #define ERROR(description) if(Config::debugMode) Utils::error(description); 
 #define LOG(string, ...) if(Config::debugMode) Utils::log(string, __VA_ARGS__); 
