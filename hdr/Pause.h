@@ -13,7 +13,6 @@ private:
     sf::Texture backgroundTexture;
     sf::Sprite background;
 
-    sf::Font buttonFont;
     Button save;
     Button back;
     Button menu;

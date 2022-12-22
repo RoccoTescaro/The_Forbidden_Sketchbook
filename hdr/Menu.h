@@ -16,7 +16,6 @@ private:
     sf::Font titleFont;
     sf::Text title;
 
-    sf::Font buttonFont;
     Button start;
     Button exit;
 };

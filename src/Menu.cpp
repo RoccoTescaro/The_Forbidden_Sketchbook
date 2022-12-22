@@ -22,27 +22,22 @@ Menu::Menu() :
     title.setPosition(window.getSize().x * 0.5f - titleBound.width * 0.5f, window.getSize().y * 0.25f - titleBound.height * 0.5f);
 
     //BUTTONS
-    buttonFont.loadFromFile(Config::buttonFontPath);
-    //start
-    sf::Text startText;
-    startText.setFont(buttonFont);
-    startText.setFillColor(sf::Color(0, 0, 0, 255));
-    startText.setString(" StaRt ");
-    startText.setCharacterSize(window.getSize().y * 0.125f);
-    //center allignment
-    sf::FloatRect startBound = startText.getGlobalBounds();
-    startText.setPosition({ (window.getSize().x - startBound.width) * 0.5f,(window.getSize().y - startBound.height) * 0.5f });
-    start.setText(startText);
-    //exit
-    sf::Text exitText;
-    exitText.setFont(buttonFont);
-    exitText.setFillColor(sf::Color(0, 0, 0, 255));
-    exitText.setString(" ExiT ");
-    exitText.setCharacterSize(window.getSize().y * 0.125f);
-    //center allignment
-    sf::FloatRect exitBound = exitText.getGlobalBounds();
-    exitText.setPosition({ (window.getSize().x - exitBound.width) * 0.5f,(window.getSize().y - exitBound.height) * 0.75f });
-    exit.setText(exitText);
+    start.setFont(Config::buttonFontPath);
+    start.setText(" StaRt ", window.getSize().y * 0.125f);
+    start.getText().setFillColor(sf::Color(0, 0, 0, 255));
+    start.setOnClick([this]() 
+        { 
+            transitionEffect.startAnimation();
+            start.setActive(false); //not allow to press any other button if scene is changing
+            exit.setActive(false); 
+        });
+    start.setOnMouseOver([this]() { start.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
+
+    exit.setFont(Config::buttonFontPath);
+    exit.setText(" ExiT ", window.getSize().y * 0.125f);
+    exit.getText().setFillColor(sf::Color(0, 0, 0, 255));
+    exit.setOnClick([this]() { window.close(); });
+    exit.setOnMouseOver([this]() { exit.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 }
 
 void Menu::update() 
@@ -52,22 +47,8 @@ void Menu::update()
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
     exit.getText().setFillColor(sf::Color(0, 0, 0, 255));
 
-    if (start.isMouseOver(input.getMousePos()))
-    {
-        start.getText().setFillColor(sf::Color(255, 255, 255, 255));
-        if (input.isKeyReleased(Input::Key::MouseL)) 
-        {
-            transitionEffect.startAnimation();
-            start.setActive(false); //not allow to press any other button if scene is changing
-            exit.setActive(false);
-        }
-    }
-    else if (exit.isMouseOver(input.getMousePos())) 
-    {
-        exit.getText().setFillColor(sf::Color(255, 255, 255, 255));
-        if (input.isKeyReleased(Input::Key::MouseL)) 
-            window.close();
-    }
+    start.update();
+    exit.update();
 
     //switch state
     if (transitionEffect.isAnimationEnded()) 

@@ -13,37 +13,29 @@ Pause::Pause() :
     background.setScale(backgroundScale, backgroundScale);
 
     //BUTTONS
-    buttonFont.loadFromFile(Config::buttonFontPath);
-    //save
-    sf::Text saveText;
-    saveText.setFont(buttonFont);
-    saveText.setFillColor(sf::Color(0, 0, 0, 255));
-    saveText.setString(" SavE ");
-    saveText.setCharacterSize(window.getSize().y * 0.125f);
-    //center allignment
-    sf::FloatRect saveBound = saveText.getGlobalBounds();
-    saveText.setPosition({ (window.getSize().x - saveBound.width) * 0.5f,(window.getSize().y - saveBound.height) * 0.15f });
-    save.setText(saveText);
-    //backToGame
-    sf::Text backText;
-    backText.setFont(buttonFont);
-    backText.setFillColor(sf::Color(0, 0, 0, 255));
-    backText.setString(" BaCk");
-    backText.setCharacterSize(window.getSize().y * 0.125f);
-    //center allignment
-    sf::FloatRect backBound = backText.getGlobalBounds();
-    backText.setPosition({ (window.getSize().x - backBound.width) * 0.5f,(window.getSize().y - backBound.height) * 0.43f });
-    back.setText(backText);
-    //backToMenu
-    sf::Text menuText;
-    menuText.setFont(buttonFont);
-    menuText.setFillColor(sf::Color(0, 0, 0, 255));
-    menuText.setString(" MeNu ");
-    menuText.setCharacterSize(window.getSize().y * 0.125f);
-    //center allignment
-    sf::FloatRect menuBound = menuText.getGlobalBounds();
-    menuText.setPosition({ (window.getSize().x - menuBound.width) * 0.5f,(window.getSize().y - menuBound.height) * 0.71f });
-    menu.setText(menuText);
+    save.setFont(Config::buttonFontPath);
+    save.setText(" SavE ", window.getSize().y * 0.125f);
+    save.getText().setFillColor(sf::Color(0, 0, 0, 255));
+
+    save.setOnMouseOver([this]() { save.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
+
+    back.setFont(Config::buttonFontPath);
+    back.setText(" BaCk ", window.getSize().y * 0.125f);
+    back.getText().setFillColor(sf::Color(0, 0, 0, 255));
+    back.setOnClick([this]()
+        {
+            transitionEffect.startAnimation();
+            save.setActive(false); //not allow to press any other button if scene is changing
+            back.setActive(false);
+            menu.setActive(false);
+        });
+    back.setOnMouseOver([this]() { back.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
+
+    menu.setFont(Config::buttonFontPath);
+    menu.setText(" MeNu ", window.getSize().y * 0.125f);
+    menu.getText().setFillColor(sf::Color(0, 0, 0, 255));
+
+    menu.setOnMouseOver([this]() { menu.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 }
 
 void Pause::update()
@@ -54,31 +46,9 @@ void Pause::update()
     back.getText().setFillColor(sf::Color(0, 0, 0, 255));
     menu.getText().setFillColor(sf::Color(0, 0, 0, 255));
 
-    if (save.isMouseOver(input.getMousePos()))
-    {
-        save.getText().setFillColor(sf::Color(255, 255, 255, 255));
-        if (input.isKeyReleased(Input::Key::MouseL))
-        {
-        }
-    }
-    else if (back.isMouseOver(input.getMousePos()))
-    {
-        back.getText().setFillColor(sf::Color(255, 255, 255, 255));
-        if (input.isKeyReleased(Input::Key::MouseL))
-        {
-            transitionEffect.startAnimation();
-            save.setActive(false); //not allow to press any other button if scene is changing
-            back.setActive(false);
-            menu.setActive(false);
-        }
-    }
-    else if (menu.isMouseOver(input.getMousePos()))
-    {
-        menu.getText().setFillColor(sf::Color(255, 255, 255, 255));
-        if (input.isKeyReleased(Input::Key::MouseL))
-        {
-        }
-    }
+    save.update();
+    back.update();
+    menu.update();
 
     //switch state
     if (transitionEffect.isAnimationEnded())

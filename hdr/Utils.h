@@ -1,23 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Config.h"
 #include <iostream>
 
-#define DEBUGMODE 1 //for release set to 0, for debug set to 1
-
-#if DEBUGMODE
-
-#define ERROR(description) { Utils::error(description); }
-#define LOG(string, ...) { Utils::debugLog(string, __VA_ARGS__); }
-#define ASSERT(string, condition) { Utils::assert(string, condition); }
-
-#else
-
-#define ERROR(description)
-#define LOG(string, ...)
-#define ASSERT(string, boolean);
-
-#endif
-
+#define ERROR(description) if(Config::debugMode) Utils::error(description); 
+#define LOG(string, ...) if(Config::debugMode) Utils::log(string, __VA_ARGS__); 
+#define ASSERT(condition, errorMessage) if(Config::debugMode) Utils::assert(condition, errorMessage); 
+#define ASSERT(condition) if(Config::debugMode) Utils::assert(condition, #condition);  //display stringified condition
 
 namespace Utils
 {
@@ -25,42 +14,38 @@ namespace Utils
 	static void error(const char* description)
 	{
 		std::cout << "[ERROR] " << description << std::endl;
+        exit(1);
 	}
 
-    static void log(const char* string)
+    template <typename T>
+    static void print(std::string& text, std::size_t dim, std::size_t pos, T t)
     {
-        std::cout << string << std::endl;
+        std::size_t i = dim - pos;
+        while (text.find("{" + std::to_string(i) + "}") != std::string::npos)
+            text.replace(text.find("{" + std::to_string(i) + "}"), 3, std::to_string(t));
     }
 
-    template<typename T, typename ...Args>
-    static void log(const char* string, T value, Args... args) 
+    template <typename T, typename... Args>
+    static void print(std::string& text, std::size_t dim, std::size_t pos, T t, Args... args)
     {
-
-        for (; *string != '\0'; string++)
-        {
-            //substitute first "%" with first parameter converted to string
-            if (*string == '%') 
-            {
-                std::cout << std::to_string(value);
-                log(string + 1, args...);
-                return;
-            }
-            std::cout << *string;
-        }
-
+        std::size_t i = dim - pos;
+        while (text.find("{" + std::to_string(i) + "}") != std::string::npos)
+            text.replace(text.find("{" + std::to_string(i) + "}"), 3, std::to_string(t));
+        print(text, dim, pos - 1, args...);
     }
 
-    template<typename ...Args>
-    static void debugLog(const char* string, Args... args)
+    template<typename... Args>
+    static void log(const char* text, Args... args)
     {
-        std::cout << "[LOG] ";
-        log(string, args...);
+        std::string string{ text };
+        print(string, sizeof...(args), sizeof...(args)-1, args...);
+        std::cout << "[LOG] " << string << std::endl;
     }
 
-	static void assert(const char* string, bool condition) 
+	static void assert(bool condition, const char * errorMessage)
 	{
-		if (!condition) 
-			ERROR(string);
+        if (!condition) 
+            ERROR(errorMessage);
 	}
 
     namespace Math 
