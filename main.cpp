@@ -4,7 +4,8 @@
 
 int main() 
 {
-	{
+
+	/*{
 		std::vector<std::unique_ptr<Entity>> vec;
 		for (int i = 0; i < 10; i++)
 		{
@@ -28,8 +29,8 @@ int main()
 
 		for (auto& elm : vec)
 			std::cout << elm->getTypeId() << std::endl;
-	}
+	}*/
 
-	//Application::run();
+	Application::run();
 	return 0;
 }

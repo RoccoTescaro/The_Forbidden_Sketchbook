@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define PATH(path) path //"../"##path
+#define PATH(path) "../"##path
 
 namespace Config
 {
