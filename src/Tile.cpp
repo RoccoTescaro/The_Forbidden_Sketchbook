@@ -25,7 +25,7 @@ void Wall::setTexture(uint8_t newType){
 }
 
 
-const bool Wall::isSolid() const{
+bool Wall::isSolid() const{
 	return true;
 }
 
@@ -46,7 +46,7 @@ Hole::Hole(){
 }
 
 
-const bool Hole::isSolid() const {
+bool Hole::isSolid() const {
 	return false;
 }
 
@@ -67,7 +67,7 @@ ColorPedestral::ColorPedestral(){
 	sprite.setScale(64.f/1080,64.f/1080);
 }
 
-const bool ColorPedestral::isSolid() const {
+bool ColorPedestral::isSolid() const {
 	return true;
 }
 

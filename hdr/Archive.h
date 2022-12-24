@@ -1,31 +1,28 @@
 #pragma once
 #include "Serializable.h"
+#include <string>
 #include <fstream>
 #include <vector>
 #include <list>
 #include <map>
 
-//create some expr to enable use of some function at run time 
-//essencialy serialization of Pod (plain old data eg: float, int, bool, ecc.) and Serializable object differs
-template<class Type> constexpr bool is_Pod = std::is_trivial<Type>::value && std::is_standard_layout<Type>::value; 
-template<class Type> constexpr bool is_Serializable = std::is_base_of<Serializable<Type>, Type>::value;
-template<class Type, class RetType = void> using if_Pod = std::enable_if_t<is_Pod<Type>, RetType>;
-template<class Type, class RetType = void> using if_Serializable = std::enable_if_t<is_Serializable<Type>, RetType>;
+
+template<class Type> constexpr bool is_Pod = std::is_trivial<Type>::value && std::is_standard_layout<Type>::value;
+template<class Type> constexpr bool is_Serializable = std::is_base_of<Serializable, Type>::value;
+template<class Type> using if_Pod = std::enable_if_t<is_Pod<Type>, void>;
+template<class Type> using if_Serializable = std::enable_if_t<is_Serializable<Type>, void>;
 
 class Archive
 {
 public:
+
 	enum Mode
 	{
 		Save = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc,
 		Load = std::ios_base::binary | std::ios_base::in,
 	};
 
-	Archive(const char* fileName, Mode mode = Mode::Save) 
-		: file(fileName, mode), mode(mode) 
-	{
-		reset(); 
-	};
+	Archive(const char* fileName, Mode mode = Mode::Save) : file(fileName, mode), mode(mode) { reset(); };
 
 	//serialize
 	template<typename Type> Archive& operator<<(Type& obj);
@@ -33,32 +30,29 @@ public:
 	template<typename Type> Archive& operator>>(Type& obj);
 	//both serialize and deserialize depending on mode
 	template<typename Type> Archive& serialize(Type& obj);
-	
-	inline Mode getMode() const
-	{
-		return mode;
-	};
 
-	inline void setMode(Mode mode) 
+	Mode getMode() const { return mode; }
+
+	inline void setMode(Mode mode)
 	{
 		if (this->mode == mode)
 			return;
 
 		reset();
 
-		switch (mode) 
+		switch (mode)
 		{
 		case Mode::Save: this->mode = Mode::Save; break;
 		case Mode::Load: this->mode = Mode::Load; break;
 		}
 	}
 
-	inline void reset()
+	void reset()
 	{
 		objToShared.clear();
 		idToObj.clear();
 		objToId.clear();
-	};
+	}
 
 private:
 
@@ -67,10 +61,8 @@ private:
 	template<typename Type> if_Serializable<Type> save(Type& obj);
 	template<typename Type> if_Serializable<Type> load(Type& obj);
 
-	template<typename Type, size_t size> if_Pod<Type> save(Type(&array)[size]);
-	template<typename Type, size_t size> if_Pod<Type> load(Type(&array)[size]);
-	template<typename Type, size_t size> if_Serializable<Type> save(Type(&array)[size]);
-	template<typename Type, size_t size> if_Serializable<Type> load(Type(&array)[size]);
+	template<typename Type, size_t size> void save(Type(&array)[size]);
+	template<typename Type, size_t size> void load(Type(&array)[size]);
 
 	template<typename Type> if_Pod<Type> save(Type*& ptr);
 	template<typename Type> if_Pod<Type> load(Type*& ptr);
@@ -99,54 +91,42 @@ private:
 	template<typename Type, size_t size> void load(std::array<Type, size>& array);
 
 	template<typename Key, typename Value> void save(std::map<Key, Value>& map);
-	template<typename Key, typename Value> void load(std::map<Key, Value>& map);
+	template<typename Key, typename Value> void load(std::map<Key, Value>& map);	
+	
+	template<typename Type> void save(sf::Vector2<Type>& vec);
+	template<typename Type> void load(sf::Vector2<Type>& vec);
 
-	template<typename Type> void save(sf::Vector2<Type>& vec2);
-	template<typename Type> void load(sf::Vector2<Type>& vec2);
-
-	template<size_t size> void save(char(&string)[size]);
-	template<size_t size> void load(char(&string)[size]);
-
-	inline void save(std::string& str)
+	inline void save(std::string& string)
 	{
-		uint32_t size = uint32_t(str.length());
-		save(&size, sizeof(uint32_t));
-		if (size)
-			save((void*)str.data(), size);
+		tab();
+		file << "std::string : " << string << std::endl;
 	}
 
-	inline void load(std::string& str)
+	inline void load(std::string& string)
 	{
-		uint32_t size;
-		load(&size, sizeof(uint32_t));
-		str.clear();
-		if (size)
-		{
-			std::string str2(size + 1, '\0');
-			load((void*)str2.data(), size);
-			str.swap(str2);
-		}
+		std::string toParse;
+		std::getline(file, toParse);
+		while (toParse.find("std::string : ") == std::string::npos)
+			std::getline(file, toParse);
+
+		toParse.erase(0, toParse.find("std::string : ") + 14);
+		string = toParse;
 	}
 
-	inline void save(void* data, size_t size) 
+	inline void tab()
 	{
-		ASSERT("trying to save in loading mode", mode == Mode::Save)
-		file.write((char*)data, size);
-	}
-
-	inline void load(void* data, size_t size)
-	{
-		ASSERT("trying to load in saving mode", mode == Mode::Load)
-		file.read((char*)data, size);
+		for (auto i = 0; i < nTab; i++)
+			file << "\t";
 	}
 
 	std::fstream file;
 	Mode mode;
 
-	uint32_t nextId = 1; //id = 0 is not valid
+	uint8_t nTab = 0;
+	uint32_t nextId = 1;
 	std::unordered_map<void*, uint32_t> objToId;
 	std::unordered_map<uint32_t, void*> idToObj;
-	std::unordered_map<void*, std::shared_ptr<SerializableBase>> objToShared;
+	std::unordered_map<void*, std::shared_ptr<Serializable>> objToShared;
 };
 
 template<typename Type>
@@ -178,13 +158,19 @@ inline Archive& Archive::serialize(Type& obj)
 template<typename Type>
 inline if_Pod<Type> Archive::save(Type& obj)
 {
-	save(&obj, sizeof(obj));
+	tab();
+	file << typeid(Type).name() << " : " << obj << std::endl;
 }
 
 template<typename Type>
 inline if_Pod<Type> Archive::load(Type& obj)
 {
-	load(&obj, sizeof(obj));
+	//remove type
+	std::string intro;
+	std::getline(file, intro, ':');
+	std::getline(file, intro, ' ');
+
+	file >> obj;
 }
 
 template<typename Type>
@@ -195,76 +181,62 @@ inline if_Serializable<Type> Archive::save(Type& obj)
 	//actually point to a derived class, here with 
 	//reference, we are sure of the type to deserialize
 	//but improve error handling further more
-	uint32_t typeId = Serializable<Type>::getTypeId();
-	save(&typeId, sizeof(uint32_t));
-	
+	tab();
+	file << typeid(Type).name() << " -" << std::endl;
+	nTab++;
+	std::string typeId = obj.getTypeId();
+	save(typeId);
 	obj.serialize(*this);
+	nTab--;
 }
 
 template<typename Type>
 inline if_Serializable<Type> Archive::load(Type& obj)
 {
-	uint32_t typeId;
-	load(&typeId, sizeof(uint32_t));
-	ASSERT("trying to load wrong serializable object", typeId == Serializable<Type>::getTypeId());
+	std::string className;
+	std::getline(file, className);
+
+	std::string typeId;
+	load(typeId);
 
 	obj.serialize(*this);
 }
 
 template<typename Type, size_t size>
-inline if_Pod<Type> Archive::save(Type(&array)[size])
+inline void Archive::save(Type(&array)[size])
 {
 	//there is no real need to save the size or neither the type 
 	//since in the corresponding load function will receive it as imput anyways
 	//but improve error handling further more
-	save(&size, sizeof(size));
-
-	save(&array, sizeof(array));
+	tab();
+	file << "array of " << typeid(Type).name() << " -" << std::endl;
+	save(size);
+	nTab++;
+	for (auto& elm : array)
+		save(elm);
+	nTab--;
 }
 
 template<typename Type, size_t size>
-inline if_Pod<Type> Archive::load(Type(&array)[size])
+inline void Archive::load(Type(&array)[size])
 {
+	//remove info
+	std::string info;
+	std::getline(file, info);
+
 	size_t savedSize;
-	load(&savedSize, sizeof(size));
-	ASSERT("trying to load an array with wrong size", savedSize == size);
-
-	load(&array, sizeof(array));
-}
-
-template<typename Type, size_t size>
-inline if_Serializable<Type> Archive::save(Type(&array)[size])
-{
-	//there is no real need to save the size or neither the type 
-	//since in the corresponding load function will receive it as imput anyways
-	//but improve error handling further more
-	save(&size, sizeof(size));
-
-	uint32_t typeId = Serializable<Type>::getTypeId();
-	save(&typeId, sizeof(uint32_t));
-
-	for (auto& item : array)
-		item.serialize(*this);
-}
-
-template<typename Type, size_t size>
-inline if_Serializable<Type> Archive::load(Type(&array)[size])
-{
-	size_t savedSize;
-	load(&savedSize, sizeof(size));
-	ASSERT("trying to load an array with wrong size", savedSize == size);
-
-	uint32_t typeId;
-	load(&typeId, sizeof(uint32_t));
-	ASSERT("trying to load wrong serializable object", typeId == Serializable<Type>::getTypeId());
-
-	for (auto& item : array)
-		item.serialize(*this);
+	load(savedSize);
+	ASSERT(savedSize == size, "trying to load an array with wrong size");
+	for (auto& elm : array)
+		load(elm);
 }
 
 template<typename Type>
 inline if_Pod<Type> Archive::save(Type*& ptr)
 {
+	tab();
+	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
+	nTab++;
 	//we can not use variable size id (size_t) since we have no way to deduce it on load 
 	//in reverse of the array case that also means that we can not have virtually infinite id 
 	uint32_t& objId = objToId[ptr];
@@ -273,20 +245,26 @@ inline if_Pod<Type> Archive::save(Type*& ptr)
 	{
 		//obj has already been saved 
 		//we just memorize that someone is pointing to him
-		save(&objId, sizeof(uint32_t));
+		save(objId);
+		nTab--;
 		return;
 	}
 
 	objId = nextId++;
-	save(&objId, sizeof(uint32_t));
+	save(objId);
 	save(*ptr);
+	nTab--;
 }
 
 template<typename Type>
 inline if_Pod<Type> Archive::load(Type*& ptr)
 {
+
+	std::string pointer;
+	std::getline(file, pointer);
+
 	uint32_t objId;
-	load(&objId, sizeof(uint32_t));
+	load(objId);
 
 	ptr = (Type*&)idToObj[objId]; //take it from memory if already deserialized
 	if (!ptr) //else construct it
@@ -296,9 +274,13 @@ inline if_Pod<Type> Archive::load(Type*& ptr)
 	}
 }
 
+
 template<typename Type>
 inline if_Serializable<Type> Archive::save(Type*& ptr)
 {
+	tab();
+	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
+	nTab++;
 	//we can not use variable size id (size_t) since we have no way to deduce it on load in reverse of the array case
 	//that also means that we can not have virtually infinite id 
 	uint32_t& objId = objToId[ptr];
@@ -307,33 +289,38 @@ inline if_Serializable<Type> Archive::save(Type*& ptr)
 	{
 		//obj has already been saved 
 		//we just memorize that someone is pointing to him
-		save(&objId, sizeof(uint32_t));
+		save(objId);
+		nTab--;
 		return;
 	}
 
 	objId = nextId++;
-	save(&objId, sizeof(uint32_t));
-	
-	uint32_t typeId = Serializable<Type>::getTypeId();
-	save(&typeId, sizeof(uint32_t));
+	save(objId);
+
+	std::string typeId = ptr->getTypeId();
+	save(typeId);
 
 	save(*ptr);
+	nTab--;
 }
 
 template<typename Type>
 inline if_Serializable<Type> Archive::load(Type*& ptr)
 {
+	std::string pointer;
+	std::getline(file, pointer);
+
 	uint32_t objId;
-	load(&objId, sizeof(uint32_t));
+	load(objId);
 
 	ptr = (Type*&)idToObj[objId]; //take it from memory if already deserialized
 	if (!ptr) //else construct it
 	{
-		uint32_t typeId;
-		load(&typeId, sizeof(uint32_t));
+		std::string typeId;
+		load(typeId);
 
-		ptr = (Type *)Factory::get(typeId);
-		ptr->serialize(*this);
+		ptr = (Type*)Register::getType(typeId);
+		load(*ptr);
 	}
 }
 
@@ -361,7 +348,7 @@ inline void Archive::load(std::shared_ptr<Type>& ptr)
 template<typename Type>
 inline void Archive::save(std::unique_ptr<Type>& ptr)
 {
-	Type* p = ptr.get();
+	Type* p = (Type*)ptr.get();
 	save(p);
 }
 
@@ -377,67 +364,96 @@ template<typename Type>
 inline void Archive::save(std::vector<Type>& vec)
 {
 	//as for pointers id on load we dont know how many bit we have to read for vector size so we limit it to uint32_t
+	tab();
+	file << "vector of " << typeid(Type).name() << " -" << std::endl;
+	nTab++;
+
 	uint32_t size = uint32_t(vec.size());
-	save(&size, sizeof(uint32_t));
+	save(size);
+
 	for (Type& item : vec)
 		save(item);
+	nTab--;
 }
 
 template<typename Type>
 inline void Archive::load(std::vector<Type>& vec)
 {
+	std::string vector;
+	std::getline(file, vector);
+
 	uint32_t size;
-	load(&size, sizeof(uint32_t));
+	load(size);
 	vec.clear();
 	vec.reserve(size);
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT("serializable class has not an empty contructor", std::is_default_constructible<Type>::value);
+		ASSERT(std::is_default_constructible<Type>::value,"serializable class has not an empty contructor");
 		Type type = {};
 		load(type);
-		vec.push_back(type);
+		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value)
+			vec.push_back(std::move(type));
+		else
+			vec.push_back(type);
 	}
 }
 
 template<typename Type>
 inline void Archive::save(std::list<Type>& list)
 {
+	tab();
+	file << "list of " << typeid(Type).name() << " -" << std::endl;
+	nTab++;
 	//as for pointers id on load we dont know how many bit we have to read for vector size so we limit it to uint32_t
 	uint32_t size = uint32_t(list.size());
-	save(&size, sizeof(uint32_t));
+	save(size);
 	for (Type& item : list)
 		save(item);
+	nTab--;
 }
 
 template<typename Type>
 inline void Archive::load(std::list<Type>& list)
 {
+	std::string listIntro;
+	std::getline(file, listIntro);
+
 	uint32_t size;
-	load(&size, sizeof(uint32_t));
+	load(size);
 	list.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT("serializable class has not an empty contructor", std::is_default_constructible<Type>::value);
+		ASSERT(std::is_default_constructible<Type>::value, "serializable class has not an empty contructor");
 		Type type = {};
 		load(type);
-		list.push_back(type);
+		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value)
+			list.push_back(std::move(type));
+		else
+			list.push_back(type);
 	}
 }
 
 template<typename Type, size_t size>
-inline void Archive::save(std::array<Type, size>& array)
+inline void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (#TODO fix me)
 {
-	save(&size, sizeof(size)); //not really needed
+	tab();
+	file << "array of " << typeid(Type).name() << " -" << std::endl;
+	nTab++;
+	save(size); //not really needed
 	for (Type& item : array)
 		save(item);
+	nTab--;
 }
 
 template<typename Type, size_t size>
 inline void Archive::load(std::array<Type, size>& array)
 {
+	std::string arrayIntro;
+	std::getline(file, arrayIntro);
+
 	size_t savedSize;
-	load(&savedSize, sizeof(size));
-	ASSERT("trying to load an array with wrong size", savedSize == size);
+	load(savedSize);
+	ASSERT(savedSize == size, "trying to load an array with wrong size");
 	for (Type& item : array)
 		load(item);
 }
@@ -445,25 +461,32 @@ inline void Archive::load(std::array<Type, size>& array)
 template<typename Key, typename Value>
 inline void Archive::save(std::map<Key, Value>& map)
 {
+	tab();
+	file << "map of " << typeid(Key).name() << " to " << typeid(Value).name() << " -" << std::endl;
+	nTab++;
 	uint32_t size = uint32_t(map.size());
-	save(&size, sizeof(uint32_t));
+	save(size);
 	for (auto& pair : map)
 	{
 		save(pair.first);
 		save(pair.second);
 	}
+	nTab--;
 }
 
 template<typename Key, typename Value>
-inline void Archive::load(std::map<Key, Value>& map)
+inline void Archive::load(std::map<Key, Value>& map) //TODO test
 {
+	std::string mapIntro;
+	std::getline(file, mapIntro);
+
 	uint32_t size;
-	load(&size, sizeof(uint32_t));
+	load(size);
 	map.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT("key has not an empty contructor", std::is_default_constructible<Type>::value);
-		ASSERT("value has not an empty contructor", std::is_default_constructible<Type>::value);
+		ASSERT(std::is_default_constructible<Key>::value, "key has not an empty contructor");
+		ASSERT(std::is_default_constructible<Value>::value, "value has not an empty contructor");
 		Key key{};
 		Value value{};
 		load(key);
@@ -486,30 +509,3 @@ inline void Archive::load(sf::Vector2<Type>& vec2)
 	load(vec2.y);
 }
 
-template<size_t size>
-inline void Archive::save(char(&string)[size])
-{
-	char* i = string;
-	uint32_t len = 0;
-
-	//check how many of the size char are effectivly defined
-	while (*i++ && size > len++);
-	if (size < len) return ERROR("size < len");
-
-	save(&len, sizeof(uint32_t));
-	if (len)
-		save(string, len);
-}
-
-template<size_t size>
-inline void Archive::load(char(&string)[size])
-{
-	uint32_t len;
-	load(&len, sizeof(uint32_t));
-
-	if (len <= size) return ERROR("size <= len"); 
-
-	if (len)
-		load(string, len);
-	string[len] = '\0';
-}

@@ -28,7 +28,7 @@ public:
 
     void setTexture(uint8_t newType);
 
-    const bool isSolid() const override;
+    bool isSolid() const override;
 
 private:
     uint8_t type;
@@ -39,14 +39,14 @@ class Hole : public Tile{
 public:
     Hole();
 
-    const bool isSolid() const override;
+    bool isSolid() const override;
 };
 class ColorPedestral : public Tile{
 
 public:
     ColorPedestral();
 
-    const bool isSolid() const override;
+    bool isSolid() const override;
 
     void execute(GameCharacter &gameCharacter, Map &map) override;//todo
 

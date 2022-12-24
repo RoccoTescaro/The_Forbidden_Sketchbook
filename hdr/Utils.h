@@ -5,10 +5,9 @@
 #include <cmath>
 
 
-#define ERROR(description) if(Config::debugMode) Utils::error(description); 
-#define LOG(string, ...) if(Config::debugMode) Utils::log(string, __VA_ARGS__); 
-#define ASSERT(condition, errorMessage) if(Config::debugMode) Utils::assert(condition, errorMessage); 
-#define ASSERT(condition) if(Config::debugMode) Utils::assert(condition, #condition);  //display stringified condition
+#define ERROR(description) { if(Config::debugMode) Utils::error(description); } 
+#define LOG(string, ...) { if(Config::debugMode) Utils::log(string, __VA_ARGS__); }
+#define ASSERT(condition, errorMessage) { if(Config::debugMode) { if(errorMessage)Utils::assert(condition, errorMessage);else Utils::assert(condition, #condition);} }
 
 namespace Utils
 {
