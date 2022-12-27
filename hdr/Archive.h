@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <memory>
 #include <list>
 #include <map>
 
@@ -22,7 +23,7 @@ public:
 		Load = std::ios_base::binary | std::ios_base::in,
 	};
 
-	Archive(const char* fileName, Mode mode = Mode::Save) : file(fileName, mode), mode(mode) { reset(); };
+	Archive(const char* fileName, Mode mode = Mode::Save) : file(fileName, static_cast<std::ios_base::openmode>(mode)), mode(mode) { reset(); };
 
 	//serialize
 	template<typename Type> Archive& operator<<(Type& obj);
@@ -201,7 +202,7 @@ inline if_Serializable<Type> Archive::load(Type& obj)
 
 	obj.serialize(*this);
 }
-
+/*
 template<typename Type, size_t size>
 inline void Archive::save(Type(&array)[size])
 {
@@ -230,7 +231,7 @@ inline void Archive::load(Type(&array)[size])
 	for (auto& elm : array)
 		load(elm);
 }
-
+*/
 template<typename Type>
 inline if_Pod<Type> Archive::save(Type*& ptr)
 {
@@ -432,7 +433,7 @@ inline void Archive::load(std::list<Type>& list)
 			list.push_back(type);
 	}
 }
-
+/*
 template<typename Type, size_t size>
 inline void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (#TODO fix me)
 {
@@ -457,7 +458,7 @@ inline void Archive::load(std::array<Type, size>& array)
 	for (Type& item : array)
 		load(item);
 }
-
+*/
 template<typename Key, typename Value>
 inline void Archive::save(std::map<Key, Value>& map)
 {
