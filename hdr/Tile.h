@@ -2,11 +2,13 @@
 
 #include "Entity.h"
 
-class Tile : public Entity{
+class Tile : public Entity
+{
 public:
 
     void update(Map &map, const float &dt) override{};
     void execute(GameCharacter &gameCharacter, Map &map) override{};
+    void serialize(Archive& fs) override { Entity::serialize(fs); };
 
 };
 
@@ -30,8 +32,17 @@ public:
 
     bool isSolid() const override;
 
+    void serialize(Archive& fs) override 
+    {
+        Tile::serialize(fs);
+        fs.serialize(type);
+    }
 private:
+    static Serializable* create() { return new Wall(8); };
+
     uint8_t type;
+
+    static Register regist;
 };
 
 class Hole : public Tile{

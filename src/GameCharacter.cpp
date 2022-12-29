@@ -48,7 +48,7 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 
 	//FILTER
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
-
+	
     //MOVEMENTSTRATEGY
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
 }

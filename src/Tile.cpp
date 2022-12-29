@@ -24,11 +24,11 @@ void Wall::setTexture(uint8_t newType){
 	Wall::type=newType;
 }
 
-
 bool Wall::isSolid() const{
 	return true;
 }
 
+Register Wall::regist{ static_cast<std::string>(typeid(Wall).name()), Wall::create};
 
 //HOLE
 
