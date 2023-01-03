@@ -1,6 +1,4 @@
-
 #include "../hdr/GameCharacter.h"
-
 
 //GAMECHARACTER
 
@@ -53,7 +51,6 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
 }
 
-Register Player::regist{ static_cast<std::string>(typeid(Player).name()), Player::create };
 
 //MELEE
 

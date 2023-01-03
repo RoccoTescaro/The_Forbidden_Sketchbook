@@ -1,10 +1,12 @@
 #pragma once
 #include "Serializable.h"
+#include "Register.h"
 #include <string>
 #include <fstream>
 #include <vector>
 #include <list>
 #include <map>
+#include <unordered_map>
 
 
 template<class Type> constexpr bool is_Pod = std::is_trivial<Type>::value && std::is_standard_layout<Type>::value;

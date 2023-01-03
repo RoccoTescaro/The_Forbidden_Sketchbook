@@ -28,8 +28,6 @@ bool Wall::isSolid() const{
 	return true;
 }
 
-Register Wall::regist{ static_cast<std::string>(typeid(Wall).name()), Wall::create};
-
 //HOLE
 
 Hole::Hole(){

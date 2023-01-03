@@ -27,6 +27,7 @@ public:
     };
 
     Wall(uint8_t type);
+    Wall() {};
 
     void setTexture(uint8_t newType);
 
@@ -38,11 +39,8 @@ public:
         fs.serialize(type);
     }
 private:
-    static Serializable* create() { return new Wall(8); };
-
     uint8_t type;
-
-    static Register regist;
+    REGIST(Wall);
 };
 
 class Hole : public Tile{
@@ -51,7 +49,10 @@ public:
     Hole();
 
     bool isSolid() const override;
+private:
+    REGIST(Hole);
 };
+
 class ColorPedestral : public Tile{
 
 public:

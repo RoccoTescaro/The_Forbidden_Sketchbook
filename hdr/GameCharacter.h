@@ -3,6 +3,7 @@
 #include <queue>
 #include <memory>
 #include "Entity.h"
+#include "Register.h"
 
 class Weapon;
 class PathAlgorithm {};
@@ -77,10 +78,8 @@ public:
         //fs.serialize(filterColor);
     }
 private:
-    sf::Color filterColor;
-
-    static Serializable* create() { return new Player; }; //not really necessary, can be directly defined with a lambda function
-    static Register regist;
+    sf::Color filterColor; 
+    REGIST(Player);
 };
 
 
