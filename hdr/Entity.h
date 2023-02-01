@@ -28,7 +28,8 @@ protected:
 
 	inline sf::Vector2<float> getSize() const 
 	{ 
-		return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; 
+		return { 20,20 };
+		//return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; 
 	};
 
 	sf::Sprite sprite;

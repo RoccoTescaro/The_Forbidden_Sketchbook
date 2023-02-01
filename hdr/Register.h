@@ -3,11 +3,9 @@
 #include <functional>
 
 #define REGIST(Class) \
-		public :\
-		inline virtual std::string getTypeId() const override { return #Class; };\
 		private:\
 		inline static Serializable* create() { return new Class; };\
-		inline static Register Class##Registration{#Class,Class::create}
+		inline static Register Class##Registration{typeid(Class).hash_code(),Class::create}
 
 class Serializable;
 

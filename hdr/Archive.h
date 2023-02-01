@@ -1,4 +1,5 @@
 #pragma once
+#include "Utils.h"
 #include "Serializable.h"
 #include "Register.h"
 #include <string>
@@ -498,16 +499,16 @@ inline void Archive::load(std::map<Key, Value>& map) //TODO test
 }
 
 template<typename Type>
-inline void Archive::save(sf::Vector2<Type>& vec2)
+inline void Archive::save(sf::Vector2<Type>& vec)
 {
-	save(vec2.x);
-	save(vec2.y);
+	save(vec.x);
+	save(vec.y);
 }
 
 template<typename Type>
-inline void Archive::load(sf::Vector2<Type>& vec2)
+inline void Archive::load(sf::Vector2<Type>& vec)
 {
-	load(vec2.x);
-	load(vec2.y);
+	load(vec.x);
+	load(vec.y);
 }
 

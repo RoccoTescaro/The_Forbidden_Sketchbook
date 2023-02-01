@@ -1,36 +1,35 @@
 #include "hdr/Config.h"
 #include "hdr/Utils.h"
 #include "hdr/Tile.h"
+#include  "hdr/Map.h"
 
 int main() 
 {
 
 	{
-		std::vector<std::unique_ptr<Entity>> vec;
-		for (int i = 0; i < 10; i++)
+		Map map;
+
+		for (int i = 0; i < 10; i++) 
 		{
-			std::unique_ptr<Entity> ptr = static_cast<std::unique_ptr<Entity>>(new Wall{0});
-			vec.push_back(std::move(ptr));
+			std::shared_ptr<Wall> newWall{ new Wall{0} };
+			newWall->setPos(sf::Vector2<float>{std::rand()*0.25f,std::rand()*0.25f});
+			map.add(newWall);
 		}
 
 
 		Archive arc("test.tfs", Archive::Save);
-		arc << vec;
+		arc << map;
 
-		for (auto& elm : vec)
-			std::cout << elm->getTypeId() << std::endl;
 	}
 
 	std::cout << std::endl;
 	
 	{
-		std::vector<std::unique_ptr<Entity>> vec;
+		Map map;
 
 		Archive arc("test.tfs", Archive::Load);
-		arc >> vec;
+		arc >> map;
 
-		for (auto& elm : vec)
-			std::cout << elm->getTypeId() << std::endl;
 	}
 
 	Application::run();
