@@ -52,7 +52,7 @@ Map& Map::addTile(const std::shared_ptr<Tile>&tile)
 Map& Map::addGameCharacter(const std::shared_ptr<GameCharacter>&gameCharacter)
 {
 	sf::Vector2<int> pos = posFloatToInt(gameCharacter->getCenter());
-	if (gameCharacters.at(pos))
+	if (gameCharacters.count(pos))
 		removeGameCharacter(pos);
 
 	gameCharacters[pos] = static_cast<std::shared_ptr<GameCharacter>>(gameCharacter);

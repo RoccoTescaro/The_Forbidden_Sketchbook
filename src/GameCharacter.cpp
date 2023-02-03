@@ -64,7 +64,7 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	if (!texture)
 	{
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/Melee.png");
+		texture->loadFromFile("../img/Melee.png");
 		texture->generateMipmap();
 	}
 

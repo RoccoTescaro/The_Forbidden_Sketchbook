@@ -1,6 +1,8 @@
 #include "hdr/Config.h"
 #include "hdr/Utils.h"
 #include "hdr/GameCharacter.h"
+#include "hdr/Map.h"
+
 
 int main() 
 {
@@ -31,6 +33,13 @@ int main()
 			std::cout << elm->getTypeId() << std::endl;
 	}*/
 
-	Application::run();
+	//Application::run();
+
+	Map map;
+	std::shared_ptr<GameCharacter> gc (new Melee(1,1));
+	gc.get()->setPos({7,0});
+	map.addGameCharacter(gc);
+	sf::Vector2f pos=map.getGameCharacter({1,1}).get()->getPos();
+	std::cout<<pos.x<<std::endl;
 	return 0;
 }
