@@ -24,11 +24,9 @@ void Wall::setTexture(uint8_t newType){
 	Wall::type=newType;
 }
 
-
 bool Wall::isSolid() const{
 	return true;
 }
-
 
 //HOLE
 

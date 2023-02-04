@@ -23,12 +23,19 @@ public:
 	inline sf::Vector2<float> getCenter() const { return (getPos() + getSize() * 0.5f); };
 	virtual bool isSolid() const = 0;
 
-	void serialize(Archive& fs) override { }//fs.serialize(sprite.getPosition()); };
+	void serialize(Archive& fs) override 
+	{ 
+		sf::Vector2<float> pos = sprite.getPosition();
+		fs.serialize(pos); 
+		if (fs.getMode() == Archive::Load)
+			sprite.setPosition(pos);
+	};
 protected:
 
 	inline sf::Vector2<float> getSize() const 
 	{ 
-		return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; 
+		return { 20,20 };
+		//return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; 
 	};
 
 	sf::Sprite sprite;

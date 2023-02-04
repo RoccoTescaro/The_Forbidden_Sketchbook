@@ -44,4 +44,5 @@ x64/
 CMakeLists.txt
 Release/
 Debug/
+test.tfs
 ################
