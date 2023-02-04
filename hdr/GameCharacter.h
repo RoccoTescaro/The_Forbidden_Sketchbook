@@ -3,7 +3,6 @@
 #include <queue>
 #include <memory>
 #include "Entity.h"
-#include "Register.h"
 
 class Weapon;
 class PathAlgorithm {};
@@ -77,9 +76,11 @@ public:
         GameCharacter::serialize(fs);
         //fs.serialize(filterColor);
     }
+
 private:
+    static Serializable* create() { return new Player; };
+    static Register registration;
     sf::Color filterColor; 
-    REGIST(Player);
 };
 
 

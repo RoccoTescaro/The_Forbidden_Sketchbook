@@ -30,17 +30,17 @@ std::shared_ptr<Player> Map::getPlayer()
 	return player;
 }
 
-Map& Map::add(const std::shared_ptr<Entity>& entity)
+Map& Map::add(Entity* entity)
 {
-	std::shared_ptr<Tile> ptrTile{ dynamic_cast<Tile*>(entity.get()) };
-	std::shared_ptr<GameCharacter> ptrGameCharacter{ dynamic_cast<GameCharacter*>(entity.get()) };
+	Tile* ptrTile = dynamic_cast<Tile*>(entity);
+	GameCharacter* ptrGameCharacter = dynamic_cast<GameCharacter*>(entity);
 	if (ptrTile) addTile(ptrTile);
 	else if (ptrGameCharacter) addGameCharacter(ptrGameCharacter);
 	else ERROR("no suitable conversion for entity");
 	return *this;
 }
 
-Map& Map::addTile(const std::shared_ptr<Tile>& tile)
+Map& Map::addTile(Tile* tile)
 {
 	sf::Vector2<int> pos = posFloatToInt(tile->getCenter());
 	if (tiles.count(pos))
@@ -49,14 +49,14 @@ Map& Map::addTile(const std::shared_ptr<Tile>& tile)
 	return *this;
 }
 
-Map& Map::addGameCharacter(const std::shared_ptr<GameCharacter>& gameCharacter)
+Map& Map::addGameCharacter(GameCharacter* gameCharacter)
 {
 	sf::Vector2<int> pos = posFloatToInt(gameCharacter->getCenter());
-	if (gameCharacters.at(pos))
+	if (gameCharacters.count(pos))
 		removeGameCharacter(pos);
-
 	gameCharacters[pos] = static_cast<std::shared_ptr<GameCharacter>>(gameCharacter);
-	Player* ptrPlayer = dynamic_cast<Player*>(gameCharacter.get());
+	
+	Player* ptrPlayer = dynamic_cast<Player*>(gameCharacter);
 	if (ptrPlayer) 
 		player = static_cast<std::shared_ptr<Player>>(ptrPlayer);
 	return *this;
@@ -93,12 +93,12 @@ bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
 	return getTile(pos) && (getTile(pos).get()->isSolid() || solid); 
 }
 
-inline sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>& pos)
+sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>& pos)
 {
 	return sf::Vector2<float>(pos.x * cellDim.x, pos.y * cellDim.y);
 }
 
-inline sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>& pos)
+sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>& pos)
 {
 	return sf::Vector2<int>(std::floor(pos.x / cellDim.x), std::floor(pos.y / cellDim.y));
 }
@@ -107,26 +107,24 @@ void Map::serialize(Archive& fs)
 {
 	//can't easily serialize the tiles and gamecharacters maps becoude of compare function
 	//but we can save each entity one by one
-	switch (fs.getMode())
-	{
-	case Archive::Save:
+	if (fs.getMode() == Archive::Save) 
 	{
 		uint32_t sizeTiles = tiles.size();
 		fs.serialize(sizeTiles);
 		for (auto& tile : tiles)
-			fs.serialize(*tile.second.get());
+			fs.serialize(tile.second);
 		uint32_t sizeGameCharacters = gameCharacters.size();
 		fs.serialize(sizeGameCharacters);
 		for (auto& gameCharacter : gameCharacters)
 			fs.serialize(gameCharacter.second);
 	}
-	case Archive::Load:
+	else 
 	{
 		uint32_t sizeTiles;
 		fs.serialize(sizeTiles);
 		for (uint32_t i = 0; i < sizeTiles; i++)
 		{
-			std::shared_ptr<Tile> tile;
+			Tile* tile;
 			fs.serialize(tile);
 			addTile(tile);
 		}
@@ -134,11 +132,10 @@ void Map::serialize(Archive& fs)
 		fs.serialize(sizeGameCharacters);
 		for (uint32_t i = 0; i < sizeGameCharacters; i++)
 		{
-			std::shared_ptr<GameCharacter> gameCharacter;
+			GameCharacter* gameCharacter;
 			fs.serialize(gameCharacter);
 			addGameCharacter(gameCharacter);
 		}
 	}
-	}
-
+	
 }

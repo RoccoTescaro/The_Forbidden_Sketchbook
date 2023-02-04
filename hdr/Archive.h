@@ -1,7 +1,6 @@
 #pragma once
 #include "Utils.h"
 #include "Serializable.h"
-#include "Register.h"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -58,7 +57,6 @@ public:
 	}
 
 private:
-
 	template<typename Type> if_Pod<Type> save(Type& obj);
 	template<typename Type> if_Pod<Type> load(Type& obj);
 	template<typename Type> if_Serializable<Type> save(Type& obj);
@@ -133,21 +131,21 @@ private:
 };
 
 template<typename Type>
-inline Archive& Archive::operator<<(Type& obj)
+Archive& Archive::operator<<(Type& obj)
 {
 	save(obj);
 	return *this;
 }
 
 template<typename Type>
-inline Archive& Archive::operator>>(Type& obj)
+Archive& Archive::operator>>(Type& obj)
 {
 	load(obj);
 	return *this;
 }
 
 template<typename Type>
-inline Archive& Archive::serialize(Type& obj)
+Archive& Archive::serialize(Type& obj)
 {
 	switch (mode)
 	{
@@ -159,14 +157,14 @@ inline Archive& Archive::serialize(Type& obj)
 }
 
 template<typename Type>
-inline if_Pod<Type> Archive::save(Type& obj)
+if_Pod<Type> Archive::save(Type& obj)
 {
 	tab();
 	file << typeid(Type).name() << " : " << obj << std::endl;
 }
 
 template<typename Type>
-inline if_Pod<Type> Archive::load(Type& obj)
+if_Pod<Type> Archive::load(Type& obj)
 {
 	//remove type
 	std::string intro;
@@ -177,7 +175,7 @@ inline if_Pod<Type> Archive::load(Type& obj)
 }
 
 template<typename Type>
-inline if_Serializable<Type> Archive::save(Type& obj)
+if_Serializable<Type> Archive::save(Type& obj)
 {
 	//there is no real need to save the type 
 	//since unlike for pointers where a Base class pointer could
@@ -194,7 +192,7 @@ inline if_Serializable<Type> Archive::save(Type& obj)
 }
 
 template<typename Type>
-inline if_Serializable<Type> Archive::load(Type& obj)
+if_Serializable<Type> Archive::load(Type& obj)
 {
 	std::string className;
 	std::getline(file, className);
@@ -206,7 +204,7 @@ inline if_Serializable<Type> Archive::load(Type& obj)
 }
 
 template<typename Type, size_t size>
-inline void Archive::save(Type(&array)[size])
+void Archive::save(Type(&array)[size])
 {
 	//there is no real need to save the size or neither the type 
 	//since in the corresponding load function will receive it as imput anyways
@@ -221,7 +219,7 @@ inline void Archive::save(Type(&array)[size])
 }
 
 template<typename Type, size_t size>
-inline void Archive::load(Type(&array)[size])
+void Archive::load(Type(&array)[size])
 {
 	//remove info
 	std::string info;
@@ -235,7 +233,7 @@ inline void Archive::load(Type(&array)[size])
 }
 
 template<typename Type>
-inline if_Pod<Type> Archive::save(Type*& ptr)
+if_Pod<Type> Archive::save(Type*& ptr)
 {
 	tab();
 	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
@@ -260,7 +258,7 @@ inline if_Pod<Type> Archive::save(Type*& ptr)
 }
 
 template<typename Type>
-inline if_Pod<Type> Archive::load(Type*& ptr)
+if_Pod<Type> Archive::load(Type*& ptr)
 {
 
 	std::string pointer;
@@ -279,8 +277,9 @@ inline if_Pod<Type> Archive::load(Type*& ptr)
 
 
 template<typename Type>
-inline if_Serializable<Type> Archive::save(Type*& ptr)
+if_Serializable<Type> Archive::save(Type*& ptr)
 {
+	ASSERT(ptr != nullptr, "nullptr");
 	tab();
 	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
 	nTab++;
@@ -308,7 +307,7 @@ inline if_Serializable<Type> Archive::save(Type*& ptr)
 }
 
 template<typename Type>
-inline if_Serializable<Type> Archive::load(Type*& ptr)
+if_Serializable<Type> Archive::load(Type*& ptr)
 {
 	std::string pointer;
 	std::getline(file, pointer);
@@ -328,14 +327,14 @@ inline if_Serializable<Type> Archive::load(Type*& ptr)
 }
 
 template<typename Type>
-inline void Archive::save(std::shared_ptr<Type>& ptr)
+void Archive::save(std::shared_ptr<Type>& ptr)
 {
 	Type* p = ptr.get();
 	save(p);
 }
 
 template<typename Type>
-inline void Archive::load(std::shared_ptr<Type>& ptr)
+void Archive::load(std::shared_ptr<Type>& ptr)
 {
 	Type* p = nullptr;
 	load(p);
@@ -349,14 +348,14 @@ inline void Archive::load(std::shared_ptr<Type>& ptr)
 }
 
 template<typename Type>
-inline void Archive::save(std::unique_ptr<Type>& ptr)
+void Archive::save(std::unique_ptr<Type>& ptr)
 {
 	Type* p = (Type*)ptr.get();
 	save(p);
 }
 
 template<typename Type>
-inline void Archive::load(std::unique_ptr<Type>& ptr)
+void Archive::load(std::unique_ptr<Type>& ptr)
 {
 	Type* pType = nullptr;
 	load(pType);
@@ -364,7 +363,7 @@ inline void Archive::load(std::unique_ptr<Type>& ptr)
 }
 
 template<typename Type>
-inline void Archive::save(std::vector<Type>& vec)
+void Archive::save(std::vector<Type>& vec)
 {
 	//as for pointers id on load we dont know how many bit we have to read for vector size so we limit it to uint32_t
 	tab();
@@ -380,7 +379,7 @@ inline void Archive::save(std::vector<Type>& vec)
 }
 
 template<typename Type>
-inline void Archive::load(std::vector<Type>& vec)
+void Archive::load(std::vector<Type>& vec)
 {
 	std::string vector;
 	std::getline(file, vector);
@@ -402,7 +401,7 @@ inline void Archive::load(std::vector<Type>& vec)
 }
 
 template<typename Type>
-inline void Archive::save(std::list<Type>& list)
+void Archive::save(std::list<Type>& list)
 {
 	tab();
 	file << "list of " << typeid(Type).name() << " -" << std::endl;
@@ -416,7 +415,7 @@ inline void Archive::save(std::list<Type>& list)
 }
 
 template<typename Type>
-inline void Archive::load(std::list<Type>& list)
+void Archive::load(std::list<Type>& list)
 {
 	std::string listIntro;
 	std::getline(file, listIntro);
@@ -437,7 +436,7 @@ inline void Archive::load(std::list<Type>& list)
 }
 
 template<typename Type, size_t size>
-inline void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (#TODO fix me)
+void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (#TODO fix me)
 {
 	tab();
 	file << "array of " << typeid(Type).name() << " -" << std::endl;
@@ -449,7 +448,7 @@ inline void Archive::save(std::array<Type, size>& array) //is not allowed with T
 }
 
 template<typename Type, size_t size>
-inline void Archive::load(std::array<Type, size>& array)
+void Archive::load(std::array<Type, size>& array)
 {
 	std::string arrayIntro;
 	std::getline(file, arrayIntro);
@@ -462,7 +461,7 @@ inline void Archive::load(std::array<Type, size>& array)
 }
 
 template<typename Key, typename Value>
-inline void Archive::save(std::map<Key, Value>& map)
+void Archive::save(std::map<Key, Value>& map)
 {
 	tab();
 	file << "map of " << typeid(Key).name() << " to " << typeid(Value).name() << " -" << std::endl;
@@ -478,7 +477,7 @@ inline void Archive::save(std::map<Key, Value>& map)
 }
 
 template<typename Key, typename Value>
-inline void Archive::load(std::map<Key, Value>& map) //TODO test
+void Archive::load(std::map<Key, Value>& map) //TODO test
 {
 	std::string mapIntro;
 	std::getline(file, mapIntro);
@@ -499,16 +498,15 @@ inline void Archive::load(std::map<Key, Value>& map) //TODO test
 }
 
 template<typename Type>
-inline void Archive::save(sf::Vector2<Type>& vec)
+void Archive::save(sf::Vector2<Type>& vec)
 {
 	save(vec.x);
 	save(vec.y);
 }
 
 template<typename Type>
-inline void Archive::load(sf::Vector2<Type>& vec)
+void Archive::load(sf::Vector2<Type>& vec)
 {
 	load(vec.x);
 	load(vec.y);
 }
-

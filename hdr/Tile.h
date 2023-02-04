@@ -38,9 +38,11 @@ public:
         Tile::serialize(fs);
         fs.serialize(type);
     }
+
 private:
+    static Serializable* create() { return new Wall; };
+    static Register registration;
     uint8_t type = 0;
-    REGIST(Wall);
 };
 
 class Hole : public Tile{
@@ -49,8 +51,10 @@ public:
     Hole();
 
     bool isSolid() const override;
+
 private:
-    REGIST(Hole);
+    static Serializable* create() { return new Hole; };
+    static Register registration;
 };
 
 class ColorPedestral : public Tile{

@@ -1,7 +1,7 @@
 #include "hdr/Config.h"
 #include "hdr/Utils.h"
+#include "hdr/Map.h"
 #include "hdr/Tile.h"
-#include  "hdr/Map.h"
 
 int main() 
 {
@@ -11,7 +11,7 @@ int main()
 
 		for (int i = 0; i < 10; i++) 
 		{
-			std::shared_ptr<Wall> newWall{ new Wall{0} };
+			Wall* newWall = new Wall{0};
 			newWall->setPos(sf::Vector2<float>{std::rand()*0.25f,std::rand()*0.25f});
 			map.add(newWall);
 		}
@@ -32,7 +32,7 @@ int main()
 
 	}
 
-	Application::run();
+	//Application::run();
 	return 0;
 
 }
