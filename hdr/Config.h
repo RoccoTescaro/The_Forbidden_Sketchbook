@@ -15,10 +15,10 @@ namespace Config
 
 	const std::string backgroundTexturePath{ PATH("img/paperBackground.jpg") };
 	const std::string playerTexturePath{ PATH("img/Player.png") };
-	
+
 	const std::string vignetteEffectShaderPath{ PATH("shd/VignetteEffect.frag") };
 	const std::string filterShaderPath{ PATH("shaders/Filter.frag") };
-
+	const std::string barShaderPath{ PATH("shaders/Bar.frag") };
 };
 
 
