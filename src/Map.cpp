@@ -93,12 +93,12 @@ bool Map::isOccupied(const sf::Vector2<int>&pos, bool solid)
 	return getTile(pos) && (getTile(pos).get()->isSolid() || solid);
 }
 
-inline sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>&pos)
+sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>&pos)
 {
 	return sf::Vector2<float>(pos.x * cellDim.x, pos.y * cellDim.y);
 }
 
-inline sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>&pos)
+sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>&pos)
 {
 	return sf::Vector2<int>(std::floor(pos.x / cellDim.x), std::floor(pos.y / cellDim.y));
 }

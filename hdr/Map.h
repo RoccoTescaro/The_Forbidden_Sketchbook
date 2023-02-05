@@ -50,8 +50,8 @@ public:
 
 	bool isOccupied(const sf::Vector2<int>& pos, bool solid);
 
-	inline sf::Vector2<float> posIntToFloat(const sf::Vector2<int>& pos);
-	inline sf::Vector2<int> posFloatToInt(const sf::Vector2<float>& pos); //convert world coord to grided one
+	sf::Vector2<float> posIntToFloat(const sf::Vector2<int>& pos);
+	sf::Vector2<int> posFloatToInt(const sf::Vector2<float>& pos); //convert world coord to grided one
 
 	//void serialize(Archive& fs) override; //#TODO fix sf::Vector2 save
 private:
