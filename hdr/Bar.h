@@ -28,6 +28,10 @@ public:
 		window.draw(text);
 	};
 
+	void setValue(float* value) { this->value = value; };
+	void setTargetValue(float targetValue) { this->targetValue = targetValue; };
+
+	//TEXTURE
 	void setTexture(const std::string& path) 
 	{
 		texture.loadFromFile(path);
@@ -36,25 +40,20 @@ public:
 		sprite.setTexture(texture);
 	};
 
-	void setPos(const sf::Vector2<int>& pos) { sprite.setPosition(pos.x,pos.y); };
+	void setTextureRect(const sf::Rect<int>& rect) { sprite.setTextureRect(rect); };
 	void setScale(float x, float y) { sprite.setScale(x,y); };
-	void setColorMask(const sf::Color& color) {	shader.setUniform("colorMask", sf::Glsl::Vec3(color.r/256, color.g/256, color.b/256)); };
+	void setPos(const sf::Vector2<int>& pos) { sprite.setPosition(pos.x,pos.y); };
 	
+	//MASK
+	void setColorMask(const sf::Color& color) {	shader.setUniform("colorMask", sf::Glsl::Vec3(color.r/256, color.g/256, color.b/256)); };
+	void setThreshold(float threshold) { shader.setUniform("threshold", threshold); };
+
 	void setMask(const std::string& path) 
 	{	
 		mask.loadFromFile(path); 
 		shader.setUniform("textureMask", mask);
 	};
-	
-	void setFont(const std::string& path) 
-	{
-		font.loadFromFile(path);
-		text.setFont(font);
-	};
 
-	void setCharacterSize(uint32_t size) { text.setCharacterSize(size); };
-	void setTextPos(const sf::Vector2<int>& pos) { relativeTextCenteredPos = pos; };
-	
 	void setChargingLine(const sf::Vector2<int>& start, const sf::Vector2<int>& end)
 	{
 		chargingLineStart = start;
@@ -63,23 +62,35 @@ public:
 		shader.setUniform("end", sf::Glsl::Vec2(static_cast<sf::Vector2<int>>(sprite.getPosition()) + chargingLineEnd));
 	};
 	
-	void setValue(float* value)	{ this->value = value; };
-	void setTargetValue(float targetValue) { this->targetValue = targetValue; };
+	//TEXT
+	void setFont(const std::string& path) 
+	{
+		font.loadFromFile(path);
+		text.setFont(font);
+	};
 
+	void setTextColor(const sf::Color& color) { text.setColor(color); };
+	void setCharacterSize(uint32_t size) { text.setCharacterSize(size); };
+	void setTextPos(const sf::Vector2<int>& pos) { relativeTextCenteredPos = pos; };
+	
 private:
+
+	float* value;
+	float targetValue;
+	float transitionSpeed;
+
+	//TEXTURE
 	sf::Texture texture;
 	sf::Sprite sprite;
 	
+	//MASK
 	sf::Texture mask;
 	sf::Shader shader;
 	sf::Vector2<int> chargingLineStart;
 	sf::Vector2<int> chargingLineEnd;
 	
+	//TEXT
 	sf::Font font;
 	sf::Text text;
 	sf::Vector2<int> relativeTextCenteredPos;
-
-	float* value;
-	float targetValue;
-	float transitionSpeed;
 };
