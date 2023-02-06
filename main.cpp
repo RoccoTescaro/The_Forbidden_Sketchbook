@@ -13,8 +13,7 @@ int main()
 		for (int i = 0; i < 10; i++) 
 		{
 			Wall* newWall = new Wall{0};
-			newWall->setPos(sf::Vector2<float>{std::rand()*0.25f,std::rand()*0.25f});
-			map.add(newWall);
+			map.add(map.posFloatToInt(sf::Vector2<float>{std::rand()*0.25f,std::rand()*0.25f}),newWall);
 		}
 
 

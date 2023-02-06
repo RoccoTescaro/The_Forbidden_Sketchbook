@@ -21,12 +21,24 @@ public:
 
     void next()
     {
+        if (!visible) return;
         bufferIndex++;
         charIndex = 0;
+        if (bufferIndex >= dialogueBuffer.size()) //reset
+        {
+            visible = false;
+            dialogueBuffer.clear();
+            bufferIndex = 0;
+        }
     };
+
+    void show() { visible = true; };
+    void unshow() { visible = false; };
 
     void update(const float& dt)
     {
+        if (!visible) return;
+
         auto& currentText = dialogueBuffer[bufferIndex];
         timer += dt;
 
@@ -77,6 +89,7 @@ public:
 
     void render(sf::RenderWindow& window)
     {
+        if (!visible) return;
         window.draw(sprite);
         window.draw(text);
     };
@@ -120,6 +133,7 @@ private:
     uint32_t charIndex = 0;
     float typingSpeed = 0.075f;
     float timer = 0.f;
+    bool visible = false;
 
     //TEXTURE
     sf::Texture texture;

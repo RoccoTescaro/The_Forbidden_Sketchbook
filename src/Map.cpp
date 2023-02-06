@@ -30,28 +30,28 @@ std::shared_ptr<Player> Map::getPlayer()
 	return player;
 }
 
-Map& Map::add(Entity* entity)
+Map& Map::add(const sf::Vector2<int>& pos, Entity* entity)
 {
 	Tile* ptrTile = dynamic_cast<Tile*>(entity);
 	GameCharacter* ptrGameCharacter = dynamic_cast<GameCharacter*>(entity);
-	if (ptrTile) addTile(ptrTile);
-	else if (ptrGameCharacter) addGameCharacter(ptrGameCharacter);
+	if (ptrTile) addTile(pos, ptrTile);
+	else if (ptrGameCharacter) addGameCharacter(pos, ptrGameCharacter);
 	else ERROR("no suitable conversion for entity");
 	return *this;
 }
 
-Map& Map::addTile(Tile* tile)
+Map& Map::addTile(const sf::Vector2<int>& pos, Tile* tile)
 {
-	sf::Vector2<int> pos = posFloatToInt(tile->getCenter());
+	tile->setPos(posIntToFloat(pos));
 	if (tiles.count(pos))
 		removeTile(pos);
 	tiles[pos] = static_cast<std::shared_ptr<Tile>>(tile);		
 	return *this;
 }
 
-Map& Map::addGameCharacter(GameCharacter* gameCharacter)
+Map& Map::addGameCharacter(const sf::Vector2<int>& pos, GameCharacter* gameCharacter)
 {
-	sf::Vector2<int> pos = posFloatToInt(gameCharacter->getCenter());
+	gameCharacter->setPos(posIntToFloat(pos));
 	if (gameCharacters.count(pos))
 		removeGameCharacter(pos);
 	gameCharacters[pos] = static_cast<std::shared_ptr<GameCharacter>>(gameCharacter);
@@ -126,7 +126,7 @@ void Map::serialize(Archive& fs)
 		{
 			Tile* tile;
 			fs.serialize(tile);
-			addTile(tile);
+			addTile(posFloatToInt(tile->getPos()), tile);
 		}
 		uint32_t sizeGameCharacters;
 		fs.serialize(sizeGameCharacters);
@@ -134,7 +134,7 @@ void Map::serialize(Archive& fs)
 		{
 			GameCharacter* gameCharacter;
 			fs.serialize(gameCharacter);
-			addGameCharacter(gameCharacter);
+			addGameCharacter(posFloatToInt(gameCharacter->getPos()), gameCharacter);
 		}
 	}
 	

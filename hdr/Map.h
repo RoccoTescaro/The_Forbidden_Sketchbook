@@ -17,7 +17,7 @@ class Map : public Serializable
 	{
 		bool operator() (const sf::Vector2<int>& pos1, const sf::Vector2<int>& pos2) const
 		{
-			return pos1.y < pos2.y;
+			return pos1.y < pos2.y || (pos1.y == pos2.y && pos1.x < pos2.x);
 		}
 	};
 
@@ -38,9 +38,9 @@ public:
 
 	inline const sf::Vector2<int>& getCellDim() const { return cellDim; };
 
-	Map& add(Entity* entity);
-	Map& addTile(Tile* tile);
-	Map& addGameCharacter(GameCharacter* gameCharacter);
+	Map& add(const sf::Vector2<int>& pos, Entity* entity);
+	Map& addTile(const sf::Vector2<int>& pos, Tile* tile);
+	Map& addGameCharacter(const sf::Vector2<int>& pos, GameCharacter* gameCharacter);
 
 	Map& remove(const sf::Vector2<int>& pos);
 	Map& removeTile(const sf::Vector2<int>& pos);
