@@ -27,8 +27,7 @@ public:
 	{ 
 		sf::Vector2<float> pos = sprite.getPosition();
 		fs.serialize(pos); 
-		if (fs.getMode() == Archive::Load)
-			sprite.setPosition(pos);
+		sprite.setPosition(pos);
 	};
 protected:
 
