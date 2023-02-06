@@ -7,8 +7,8 @@ static std::string path(const std::string& path)
 	return prefix + path;
 };
 
-#define LAPO 0
-#if LAPO
+#define VSC 0
+#if VSC
 #define PATH(string) path(string) 
 #else
 #define PATH(string) string 
