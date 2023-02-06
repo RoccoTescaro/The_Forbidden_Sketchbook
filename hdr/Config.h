@@ -1,7 +1,18 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define PATH(path) "../"##path
+static std::string path(const std::string& path)
+{
+	std::string prefix = "..\\";
+	return prefix + path;
+};
+
+#define LAPO 0
+#if LAPO
+#define PATH(string) path(string) 
+#else
+#define PATH(string) string 
+#endif
 
 namespace Config
 {
