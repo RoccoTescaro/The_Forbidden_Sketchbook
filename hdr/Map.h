@@ -10,7 +10,7 @@
 
 //#TODO remove
 
-class Map //: public Serializable
+class Map : public Serializable
 {
 	struct Compare
 	{
@@ -37,9 +37,9 @@ public:
 
 	inline const sf::Vector2<int>& getCellDim() const { return cellDim; };
 
-	Map& add(const std::shared_ptr<Entity>& entity);
-	Map& addTile(const std::shared_ptr<Tile>& tile);
-	Map& addGameCharacter(const std::shared_ptr<GameCharacter>& gameCharacter);
+	Map& add(const sf::Vector2<int>& pos, Entity* entity);
+	Map& addTile(const sf::Vector2<int>& pos, Tile* tile);
+	Map& addGameCharacter(const sf::Vector2<int>& pos, GameCharacter* gameCharacter);
 
 	Map& remove(const sf::Vector2<int>& pos);
 	Map& removeTile(const sf::Vector2<int>& pos);
@@ -52,9 +52,10 @@ public:
 	sf::Vector2<float> posIntToFloat(const sf::Vector2<int>& pos);
 	sf::Vector2<int> posFloatToInt(const sf::Vector2<float>& pos); //convert world coord to grided one
 
-	//void serialize(Archive& fs) override; //#TODO fix sf::Vector2 save
+	void serialize(Archive& fs) override; //#TODO fix sf::Vector2 save
 private:
-	//REGIST(Map);
+	static Serializable* create() { return new Map; };
+	static Register registration;
 
 	Tiles tiles;
 	GameCharacters gameCharacters;

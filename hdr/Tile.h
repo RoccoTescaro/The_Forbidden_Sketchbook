@@ -2,11 +2,13 @@
 
 #include "Entity.h"
 
-class Tile : public Entity{
+class Tile : public Entity
+{
 public:
 
     void update(Map &map, const float &dt) override{};
     void execute(GameCharacter &gameCharacter, Map &map) override{};
+    void serialize(Archive& fs) override { Entity::serialize(fs); };
 
 };
 
@@ -25,13 +27,22 @@ public:
     };
 
     Wall(uint8_t type);
+    Wall() {};
 
     void setTexture(uint8_t newType) ;
 
     bool isSolid() const override;
 
+    void serialize(Archive& fs) override 
+    {
+        Tile::serialize(fs);
+        fs.serialize(type);
+    }
+
 private:
-    uint8_t type;
+    static Serializable* create() { return new Wall; };
+    static Register registration;
+    uint8_t type = 0;
 };
 
 class Hole : public Tile{
@@ -40,7 +51,12 @@ public:
     Hole();
 
     bool isSolid() const override;
+
+private:
+    static Serializable* create() { return new Hole; };
+    static Register registration;
 };
+
 class ColorPedestral : public Tile{
 
 public:

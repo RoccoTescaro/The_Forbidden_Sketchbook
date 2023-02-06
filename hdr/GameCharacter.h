@@ -14,7 +14,7 @@ class GameCharacter : public Entity
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
         : maxHealth(maxHealth), health(health), maxEnergy(maxEnergy), energy(energy), priority(priority) {};
-    GameCharacter() {};
+    GameCharacter() : energy(0), priority(0) {};
 
     void update(Map &map, const float &dt) override;
     void execute(GameCharacter &gameCharacter, Map &map) override;
@@ -53,8 +53,8 @@ protected:
     const uint8_t maxHealth = 0; //#TODO make it mutable to serialization
     const uint8_t maxEnergy = 0;
     const uint8_t priority = 0;
-    uint8_t health;
-    uint8_t energy;
+    uint8_t health = 0;
+    uint8_t energy = 0;
     //Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 
     //MOVEMENT
@@ -76,11 +76,11 @@ public:
         GameCharacter::serialize(fs);
         //fs.serialize(filterColor);
     }
-private:
-    sf::Color filterColor;
 
-    static Serializable* create() { return new Player; }; //not really necessary, can be directly defined with a lambda function
-    static Register regist;
+private:
+    static Serializable* create() { return new Player; };
+    static Register registration;
+    sf::Color filterColor; 
 };
 
 
@@ -126,6 +126,6 @@ public:
         fs.serialize(animationTime);
     }
 private:
-    const float animationDuration = 0;
-    float animationTime;
+    const float animationDuration = 0.f;
+    float animationTime = 0.f;
 };

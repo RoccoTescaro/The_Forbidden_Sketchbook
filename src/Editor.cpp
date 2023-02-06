@@ -44,10 +44,7 @@ void Editor::update()
  
     //EDIT
     if(input.isKeyReleased(Input::Key::MouseL)){
-        auto p=std::shared_ptr<Tile>(new Wall(1));
-        p.get()->setPos(map.posIntToFloat(mouseGriddedPos));
-        std::cout<<p.get()->getPos().x<<"-"<<p.get()->getPos().y<<std::endl;
-        map.addTile(p);
+        map.addTile(mouseGriddedPos,new Wall(1));
 
     }
 

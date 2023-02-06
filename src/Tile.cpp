@@ -4,9 +4,7 @@
 
 Wall::Wall(uint8_t type):type(type)
 {
-	        std::cout<<"a"<<std::endl;
     setTexture(type);
-	        std::cout<<"b"<<std::endl;
 
 }
 
@@ -28,11 +26,9 @@ void Wall::setTexture(uint8_t newType){
 
 }
 
-
 bool Wall::isSolid() const{
 	return true;
 }
-
 
 //HOLE
 
