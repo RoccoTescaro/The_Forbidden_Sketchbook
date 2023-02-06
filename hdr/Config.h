@@ -9,7 +9,6 @@ namespace Config
 	const sf::Vector2<int> windowDim{ 1290,720 };
 	const uint8_t fps{ 60 };
 	const float eps{ 0.0005f };
-	const uint8_t nTypingSounds = 5;
 
 	const std::string titleFontPath{ PATH("fnt/titleFont2.ttf") };
 	const std::string buttonFontPath{ PATH("fnt/buttonFont1.ttf") };
@@ -21,6 +20,7 @@ namespace Config
 	const std::string filterShaderPath{ PATH("shd/Filter.frag") };
 	const std::string barShaderPath{ PATH("shd/Bar.frag") };
 
+	const uint8_t nTypingSounds = 5;
 	const std::string typingSoundPathBuffer[nTypingSounds]{ 
 		PATH("aud/typing1.wav"),
 		PATH("aud/typing2.wav"),
