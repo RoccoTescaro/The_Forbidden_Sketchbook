@@ -13,7 +13,7 @@ void Wall::setTexture(uint8_t newType){
 		if (!texture[i])
 		{
 			texture[i] = new sf::Texture;
-			texture[i]->loadFromFile("../images/textures/"+std::to_string(i)+".png");
+			texture[i]->loadFromFile("../img/"+std::to_string(i)+".png");
 			texture[i]->generateMipmap();
 		}
 	sprite.setTexture(*texture[type]);
@@ -35,7 +35,7 @@ Hole::Hole(){
 	static sf::Texture* texture;
 	if(!texture){
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/hole.png");
+		texture->loadFromFile("../img/hole.png");
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);
@@ -57,7 +57,7 @@ ColorPedestral::ColorPedestral(){
 	static sf::Texture* texture;
 	if(!texture){
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/colorPedestral.png");
+		texture->loadFromFile("../img/colorPedestral.png");
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);

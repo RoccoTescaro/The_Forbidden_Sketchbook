@@ -1,9 +1,17 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+static std::string path(std::string path){
+	return "../"+path;
+}
+
+#define PATH(string) path(string)
+
 
 namespace Config
 {
+
+
 	const bool debugMode = true;
 	const sf::Vector2<int> windowDim{ 1290,720 };
 	const uint8_t fps{ 60 };
