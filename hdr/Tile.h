@@ -37,6 +37,7 @@ public:
     {
         Tile::serialize(fs);
         fs.serialize(type);
+        setTexture(type);
     }
 
 private:
