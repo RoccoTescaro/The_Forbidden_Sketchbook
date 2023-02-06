@@ -86,7 +86,7 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	if (!texture)
 	{
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/Bat.png");
+		texture->loadFromFile("../img/Bat.png");
 		texture->generateMipmap();
 	}
 
@@ -109,7 +109,7 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	if (!texture)
 	{
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/Ranged.png");
+		texture->loadFromFile("../img/Ranged.png");
 		texture->generateMipmap();
 	}
 

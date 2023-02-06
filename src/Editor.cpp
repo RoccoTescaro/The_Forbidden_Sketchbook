@@ -42,6 +42,14 @@ void Editor::update()
     float backgroundScale = (float) bgSize.x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);
  
+    //EDIT
+    if(input.isKeyReleased(Input::Key::MouseL)){
+        auto p=std::shared_ptr<Tile>(new Wall(1));
+        p.get()->setPos(map.posIntToFloat(mouseGriddedPos));
+        std::cout<<p.get()->getPos().x<<"-"<<p.get()->getPos().y<<std::endl;
+        map.addTile(p);
+
+    }
 
 }
 
@@ -54,3 +62,4 @@ void Editor::render()
     window.draw(mousePosText);
     window.setView(gui);
 }
+

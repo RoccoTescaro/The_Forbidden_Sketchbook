@@ -4,12 +4,11 @@
 #include "Archive.h"
 #include <map>
 #include <memory>
+#include "GameCharacter.h"
+#include "Tile.h"
+
 
 //#TODO remove
-class Entity;
-class Tile;
-class GameCharacter;
-class Player;
 
 class Map //: public Serializable
 {
@@ -17,7 +16,7 @@ class Map //: public Serializable
 	{
 		bool operator() (const sf::Vector2<int>& pos1, const sf::Vector2<int>& pos2) const
 		{
-			return pos1.y < pos2.y;
+			return (pos1.y < pos2.y||(pos1.y == pos2.y && pos1.x <pos2.x ));
 		}
 	};
 
@@ -61,5 +60,5 @@ private:
 	GameCharacters gameCharacters;
 	std::shared_ptr<Player> player;
 
-	sf::Vector2<int> cellDim{ 32,32 };
+	sf::Vector2<int> cellDim{ 64,64 };
 };

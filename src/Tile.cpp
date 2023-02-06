@@ -2,26 +2,30 @@
 
 //WALL
 
-Wall::Wall(uint8_t type){
+Wall::Wall(uint8_t type):type(type)
+{
+	        std::cout<<"a"<<std::endl;
     setTexture(type);
+	        std::cout<<"b"<<std::endl;
+
 }
 
 void Wall::setTexture(uint8_t newType){
-    
-    static sf::Texture* texture[Type::ENUM_SIZE];
+
+    static std::array<sf::Texture*,Type::ENUM_SIZE> texture;
 	for (int i = 0; i < Type::ENUM_SIZE; i++)
 		if (!texture[i])
 		{
 			texture[i] = new sf::Texture;
-			texture[i]->loadFromFile("../images/textures/"+std::to_string(i)+".png");
+			texture[i]->loadFromFile("../img/"+std::to_string(i)+".png");
 			texture[i]->generateMipmap();
 		}
+	Wall::type=newType;
 	sprite.setTexture(*texture[type]);
 	sf::Rect<int> textureRect{0,0,1300,1350};
-	sprite.setTextureRect(textureRect);
+	sprite.setTextureRect(textureRect);	
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
 
-	Wall::type=newType;
 }
 
 
@@ -37,7 +41,7 @@ Hole::Hole(){
 	static sf::Texture* texture;
 	if(!texture){
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/hole.png");
+		texture->loadFromFile("../img/hole.png");
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);
@@ -59,7 +63,7 @@ ColorPedestral::ColorPedestral(){
 	static sf::Texture* texture;
 	if(!texture){
 		texture = new sf::Texture;
-		texture->loadFromFile("../images/textures/colorPedestral.png");
+		texture->loadFromFile("../img/colorPedestral.png");
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);
