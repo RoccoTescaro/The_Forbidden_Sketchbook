@@ -1,12 +1,7 @@
 #include "..\hdr\Hud.h"
 
-Hud::Hud(Map& map)
+Hud::Hud()
 {
-	player = map.getPlayer();
-	auto shrPlayer = player.lock();
-	
-	filter.setTargetColor(shrPlayer->getFilterColor());
-
 	playerHealth.setTexture(Config::healthBarTexturePath);
 	playerHealth.setPos({ 8,128 }); //#TODO decide if define parameters here or in config
 	playerHealth.setScale(0.25f,0.25f);
@@ -16,8 +11,6 @@ Hud::Hud(Map& map)
 	playerHealth.setFont(Config::barFontPath);
 	playerHealth.setCharacterSize(32);
 	playerHealth.setTextPos({ 55,40 });
-	playerHealth.setTargetValue(&(shrPlayer->getHealth()));
-	playerHealth.setTargetMaxValue(&(shrPlayer->getMaxHealth()));
 
 	playerEnergy.setTexture(Config::energyBarTexturePath);
 	playerEnergy.setPos({ 16,0 });
@@ -28,11 +21,20 @@ Hud::Hud(Map& map)
 	playerEnergy.setFont(Config::barFontPath);
 	playerEnergy.setCharacterSize(32);
 	playerEnergy.setTextPos({ 144,370 });
-	playerEnergy.setTargetValue(&(shrPlayer->getEnergy()));
-	playerEnergy.setTargetMaxValue(&(shrPlayer->getMaxEnergy()));
 
 	dialogueManager.setFont(Config::dialogueFontPath);
 	dialogueManager.setTexture(Config::dialogueTexturePath);
+}
+
+void Hud::setPlayer(const std::shared_ptr<Player>& player) 
+{
+	this->player = player;
+	filter.setTargetColor(player->getFilterColor());
+	playerHealth.setTargetValue(&(player->getHealth()));
+	playerHealth.setTargetMaxValue(player->getMaxHealth());
+	playerEnergy.setTargetValue(&(player->getEnergy()));
+	playerEnergy.setTargetMaxValue(player->getMaxEnergy());
+
 }
 
 void Hud::update(const float& dt)
@@ -51,6 +53,8 @@ void Hud::update(const float& dt)
 
 void Hud::render(sf::RenderWindow& window)
 {
+	window.setView(gui);
+
 	filter.render(window);
 	
 	auto shrPlayer = player.lock();

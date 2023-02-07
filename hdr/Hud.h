@@ -8,12 +8,16 @@
 class Hud 
 {
 public:
-	Hud(Map& map);
+	Hud();
+
+	inline void setView(const sf::View& view) { gui = view; };
+	void setPlayer(const std::shared_ptr<Player>& player);
 
 	void update(const float& dt);
 
 	void render(sf::RenderWindow& window);
 private:
+	sf::View gui;
 	Filter filter;
 	std::weak_ptr<Player> player;
 	Bar playerHealth;

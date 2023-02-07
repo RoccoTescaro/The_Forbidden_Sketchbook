@@ -29,7 +29,7 @@ public:
 	};
 
 	void setTargetValue(const uint8_t* targetValue) { this->targetValue = targetValue; };
-	void setTargetMaxValue(const uint8_t* targetMaxValue) { this->targetMaxValue = targetMaxValue; };
+	void setTargetMaxValue(uint8_t targetMaxValue) { this->targetMaxValue = targetMaxValue; };
 
 	//TEXTURE
 	void setTexture(const std::string& path) 
@@ -77,7 +77,7 @@ private:
 
 	float value;
 	const uint8_t* targetValue; //#TODO maybe should be done by making this template 
-	const uint8_t* targetMaxValue; //#TODO maybe should be done by making this template 
+	uint8_t targetMaxValue; //#TODO maybe should be done by making this template 
 	float transitionSpeed;
 
 	//TEXTURE

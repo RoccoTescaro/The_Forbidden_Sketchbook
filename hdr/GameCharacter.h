@@ -25,8 +25,8 @@ public:
     };
     
     inline bool isSolid() const override { return true; };
-    inline const uint8_t& getMaxHealth() const { return maxHealth; }; //need to return as a reference and not by copy to allow hud auto update
-    inline const uint8_t& getMaxEnergy() const { return maxEnergy; };
+    inline uint8_t getMaxHealth() const { return maxHealth; }; //need to return as a reference and not by copy to allow hud auto update
+    inline uint8_t getMaxEnergy() const { return maxEnergy; };
     inline const uint8_t& getHealth() const { return health; };
     inline const uint8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
@@ -71,6 +71,7 @@ public:
     Player() {};
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
+  
     void serialize(Archive& fs) override 
     {
         GameCharacter::serialize(fs);

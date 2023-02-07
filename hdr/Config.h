@@ -37,15 +37,18 @@ namespace Config
 	const std::string vignetteEffectShaderPath{ PATH("shd/VignetteEffect.frag") };
 	const std::string filterShaderPath{ PATH("shd/Filter.frag") };
 	const std::string barShaderPath{ PATH("shd/Bar.frag") };
+	const std::string backgroundShaderPath{ PATH("shd/Background.frag") };
 
 	const uint8_t nTypingSounds = 5;
 	const std::string typingSoundPathBuffer[nTypingSounds]{ 
-		PATH("aud/typing1.wav"),
-		PATH("aud/typing2.wav"),
-		PATH("aud/typing3.wav"),
-		PATH("aud/typing4.wav"),
-		PATH("aud/typing5.wav")
+		PATH("aud/Typing1.wav"),
+		PATH("aud/Typing2.wav"),
+		PATH("aud/Typing3.wav"),
+		PATH("aud/Typing4.wav"),
+		PATH("aud/Typing5.wav")
 	};
+
+	const std::string gameMapPath{ PATH("test.tfs") };
 };
 
 

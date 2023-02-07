@@ -25,7 +25,7 @@ public:
 		Load = std::ios_base::binary | std::ios_base::in,
 	};
 
-	Archive(const char* fileName, Mode mode = Mode::Save) : file(fileName, static_cast<std::ios_base::openmode>(mode)), mode(mode) { reset(); };
+	Archive(const std::string& path, Mode mode = Mode::Save) : file(path.c_str(), static_cast<std::ios_base::openmode>(mode)), mode(mode) { reset(); };
 
 	//serialize
 	template<typename Type> Archive& operator<<(Type& obj);

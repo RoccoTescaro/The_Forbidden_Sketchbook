@@ -7,7 +7,7 @@ class GameCharacter; //#TODO remove
 class Camera
 {
 public:
-	Camera(const sf::Vector2<float>& viewSize) : input(Application::getInput()), view(viewSize * 0.5f, viewSize) {};
+	Camera() : input(Application::getInput()) { setView(Application::getWindow().getSize()); };
 
 	void update();
 
@@ -18,8 +18,10 @@ public:
 	inline void lock() { locked = !locked; }; //toggle without parameters
 
 	inline bool isLocked() { return locked; };
+	
+	inline void setView(const sf::Vector2u& viewPort) { view.setSize(viewPort.x, viewPort.y); };
 
-	inline const sf::View& getView() const { return view; }
+	inline const sf::View& getView() const { return view; };
 
 private:
 	sf::View view;

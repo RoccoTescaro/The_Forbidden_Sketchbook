@@ -12,6 +12,7 @@ public:
 
 	virtual void update() = 0;
 	virtual void render() = 0;
+	//#TODO onResize function
 
 protected:
 	sf::RenderWindow& window;
