@@ -69,7 +69,7 @@ public:
 		text.setFont(font);
 	};
 
-	void setTextColor(const sf::Color& color) { text.setColor(color); };
+	void setTextColor(const sf::Color& color) { text.setFillColor(color); };
 	void setCharacterSize(uint32_t size) { text.setCharacterSize(size); };
 	void setTextPos(const sf::Vector2<int>& pos) { relativeTextCenteredPos = pos; };
 	

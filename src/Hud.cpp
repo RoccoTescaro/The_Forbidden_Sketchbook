@@ -11,7 +11,7 @@ Hud::Hud(Map& map)
 	playerHealth.setPos({ 8,128 }); //#TODO decide if define parameters here or in config
 	playerHealth.setScale(0.25f,0.25f);
 	playerHealth.setMask(Config::healthBarMaskTexturePath);
-	playerHealth.setColorMask({ 242.25f,0.f,0.f });
+	playerHealth.setColorMask({ 242,0,0 });
 	playerHealth.setChargingLine({55,85}, {55,310});
 	playerHealth.setFont(Config::barFontPath);
 	playerHealth.setCharacterSize(32);
@@ -23,7 +23,7 @@ Hud::Hud(Map& map)
 	playerEnergy.setPos({ 16,0 });
 	playerEnergy.setScale(0.25f, 0.25f);
 	playerEnergy.setMask(Config::energyBarMaskTexturePath);
-	playerEnergy.setColorMask({ 0.f,0.f,0.f });
+	playerEnergy.setColorMask({ 0,0,0 });
 	playerEnergy.setChargingLine({ 110,35 }, { 143,428 });
 	playerEnergy.setFont(Config::barFontPath);
 	playerEnergy.setCharacterSize(32);
