@@ -25,10 +25,10 @@ public:
     };
     
     inline bool isSolid() const override { return true; };
-    inline uint8_t getMaxHealth() const { return maxHealth; };
-    inline uint8_t getMaxEnergy() const { return maxEnergy; };
-    inline uint8_t getHealth() const { return health; };
-    inline uint8_t getEnergy() const { return energy; };
+    inline const uint8_t& getMaxHealth() const { return maxHealth; }; //need to return as a reference and not by copy to allow hud auto update
+    inline const uint8_t& getMaxEnergy() const { return maxEnergy; };
+    inline const uint8_t& getHealth() const { return health; };
+    inline const uint8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
     inline uint8_t getRange() const { return 0; /*return weapon->getRange()*/};
 

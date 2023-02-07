@@ -5,17 +5,17 @@
 class Bar 
 {
 public: 
-	Bar(float transitionSpeed) : transitionSpeed(transitionSpeed) 
+	Bar(float transitionSpeed = 5.f) : transitionSpeed(transitionSpeed) 
 	{
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
 	};
 
 	void update(const float& dt) 
 	{
-		*value += transitionSpeed * dt * (targetValue - *value);
+		value += transitionSpeed * dt * (*targetValue - value);
 		
-		shader.setUniform("value", *value/targetValue);
-		text.setString(std::to_string(*value));
+		shader.setUniform("value", value/(*targetMaxValue));
+		text.setString(std::to_string(value));
 	};
 	
 	void render(sf::RenderWindow& window) 
@@ -28,8 +28,8 @@ public:
 		window.draw(text);
 	};
 
-	void setValue(float* value) { this->value = value; };
-	void setTargetValue(float targetValue) { this->targetValue = targetValue; };
+	void setTargetValue(const uint8_t* targetValue) { this->targetValue = targetValue; };
+	void setTargetMaxValue(const uint8_t* targetMaxValue) { this->targetMaxValue = targetMaxValue; };
 
 	//TEXTURE
 	void setTexture(const std::string& path) 
@@ -45,7 +45,7 @@ public:
 	void setPos(const sf::Vector2<int>& pos) { sprite.setPosition(pos.x,pos.y); };
 	
 	//MASK
-	void setColorMask(const sf::Color& color) {	shader.setUniform("colorMask", sf::Glsl::Vec3(color.r/256, color.g/256, color.b/256)); };
+	void setColorMask(const sf::Color& color) {	shader.setUniform("colorMask", sf::Glsl::Vec3(color.r/255, color.g/255, color.b/255)); };
 	void setThreshold(float threshold) { shader.setUniform("threshold", threshold); };
 
 	void setMask(const std::string& path) 
@@ -75,8 +75,9 @@ public:
 	
 private:
 
-	float* value;
-	float targetValue;
+	float value;
+	const uint8_t* targetValue; //#TODO maybe should be done by making this template 
+	const uint8_t* targetMaxValue; //#TODO maybe should be done by making this template 
 	float transitionSpeed;
 
 	//TEXTURE

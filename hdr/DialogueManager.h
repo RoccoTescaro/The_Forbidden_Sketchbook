@@ -8,10 +8,8 @@
 class DialogueManager
 {
 public:
-    DialogueManager(const sf::Rect<int>& textBox) : textBox(textBox)
+    DialogueManager() 
     {
-        text.setPosition(textBox.left, textBox.top);
-
         for (auto i = 0; i < Config::nTypingSounds; i++)
         {
             soundBuffer.emplace_back(sf::SoundBuffer{});
@@ -142,7 +140,7 @@ private:
     //TEXT
     sf::Font font;
     sf::Text text;
-    sf::Rect<int> textBox;
+    sf::Rect<int> textBox{0,0,0,0};
 
     //SOUND
     std::vector<sf::SoundBuffer> soundBuffer;

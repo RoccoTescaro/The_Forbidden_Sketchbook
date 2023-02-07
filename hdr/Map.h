@@ -2,14 +2,11 @@
 #include <SFML/System.hpp>
 #include "Serializable.h"
 #include "Archive.h"
+#include "Entity.h"
+#include "Tile.h"
+#include "GameCharacter.h"
 #include <map>
 #include <memory>
-
-//#TODO remove
-class Entity;
-class Tile; 
-class GameCharacter;
-class Player;
 
 class Map : public Serializable
 {
@@ -53,7 +50,7 @@ public:
 	sf::Vector2<float> posIntToFloat(const sf::Vector2<int>& pos);
 	sf::Vector2<int> posFloatToInt(const sf::Vector2<float>& pos); //convert world coord to grided one
 
-	void serialize(Archive& fs) override; //#TODO fix sf::Vector2 save
+	void serialize(Archive& fs) override; 
 private:
 	static Serializable* create() { return new Map; };
 	static Register registration;

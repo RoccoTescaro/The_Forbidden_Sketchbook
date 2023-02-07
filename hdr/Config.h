@@ -16,18 +16,23 @@ static std::string path(const std::string& path)
 
 namespace Config
 {
-
-
 	const bool debugMode = true;
 	const sf::Vector2<int> windowDim{ 1290,720 };
 	const uint8_t fps{ 60 };
 	const float eps{ 0.0005f };
 
-	const std::string titleFontPath{ "../fnt/titleFont2.ttf" };
-	const std::string buttonFontPath{ "../fnt/buttonFont1.ttf" };
+	const std::string titleFontPath{ PATH("fnt/TitleFont.ttf") };
+	const std::string buttonFontPath{ PATH("fnt/ButtonFont.ttf") };
+	const std::string barFontPath{ PATH("fnt/BarFont.ttf") };
+	const std::string dialogueFontPath{ PATH("fnt/DialogueFont.ttf") };
 
-	const std::string backgroundTexturePath{ PATH("img/paperBackground.jpg") };
+	const std::string backgroundTexturePath{ PATH("img/Background.jpg") };
 	const std::string playerTexturePath{ PATH("img/Player.png") };
+	const std::string healthBarTexturePath{ PATH("img/HealthBar.png") };
+	const std::string healthBarMaskTexturePath{ PATH("img/HealthBarMask.png") };
+	const std::string energyBarTexturePath{ PATH("img/EnergyBar.png") };
+	const std::string energyBarMaskTexturePath{ PATH("img/EnergyBarMask.png") };
+	const std::string dialogueTexturePath{ PATH("img/Dialogue.png") };
 
 	const std::string vignetteEffectShaderPath{ PATH("shd/VignetteEffect.frag") };
 	const std::string filterShaderPath{ PATH("shd/Filter.frag") };

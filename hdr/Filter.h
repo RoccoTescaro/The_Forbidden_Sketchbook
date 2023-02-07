@@ -14,15 +14,14 @@ public:
         shader.setUniform("targetColor", sf::Glsl::Vec4(targetColor));
     };
 
-    inline void update() 
+    inline void update(const float& dt) 
     {
-        threshold += Application::getDeltaTime() * 0.1f;
+        threshold += dt * 0.1f;
         shader.setUniform("threshold", threshold);
     };
 
-    void render() 
+    void render(sf::RenderWindow& window) 
     {
-        sf::RenderWindow& window = Application::getWindow();
         texture.create(window.getSize().x, window.getSize().y); 
         sprite.setTexture(texture.getTexture());
         window.draw(sprite, state);
