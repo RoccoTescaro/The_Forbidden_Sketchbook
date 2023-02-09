@@ -36,3 +36,7 @@ void Game::update()
 
 
 }
+
+void Game::onResize()
+{
+}

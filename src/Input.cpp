@@ -8,13 +8,16 @@ void Input::update()
     if (!window.hasFocus())
         return;
     
-    //UPDATE MOUSE WHEEL
+    //UPDATE WINDOW RESIZE AND MOUSE WHEEL 
+    resized = false;
     wheelDelta = 0.f;
     while (window.pollEvent(event)) 
     { //handle Wheel changes but also other events
         if (event.type == sf::Event::Closed) window.close();
         else if (event.type == sf::Event::MouseWheelMoved)
             wheelDelta = static_cast<float>(event.mouseWheel.delta);
+        else if (event.type == sf::Event::Resized)
+            resized = true;
     }
 
     //UPDATE KEYS

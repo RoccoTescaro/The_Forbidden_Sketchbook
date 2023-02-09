@@ -1,8 +1,7 @@
 #pragma once
 #include "Application.h"
 #include <SFML/System.hpp>
-
-class GameCharacter; //#TODO remove
+#include "GameCharacter.h"
 
 class Camera
 {

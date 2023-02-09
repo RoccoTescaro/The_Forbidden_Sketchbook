@@ -9,6 +9,8 @@ public:
 
     void update() override;
     void render() override;
+
+    void onResize() override;
 private:
     sf::Texture backgroundTexture;
     sf::Sprite background;

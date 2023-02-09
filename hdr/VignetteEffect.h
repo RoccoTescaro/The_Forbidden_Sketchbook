@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class VignetteEffect 
+class VignetteEffect //TODO at the moment is a bit to dependent to Application, should make it more indipendet
 {
 public:
 	VignetteEffect();

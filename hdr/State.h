@@ -10,10 +10,10 @@ public:
 
 	virtual ~State() = default;
 
-	virtual void update() = 0;
+	virtual void update() { if (input.resizeEvent()) onResize(); };
 	virtual void render() = 0;
-	//#TODO onResize function
 
+	virtual void onResize() {};
 protected:
 	sf::RenderWindow& window;
 	const float& dt;

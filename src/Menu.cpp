@@ -42,6 +42,7 @@ Menu::Menu() :
 
 void Menu::update() 
 {
+    State::update();
     transitionEffect.update();
 
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
@@ -68,4 +69,21 @@ void Menu::render()
     start.render();
     exit.render();
     transitionEffect.render();
+}
+
+void Menu::onResize() 
+{
+    //BACKGROUND
+    float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
+    background.setScale(backgroundScale, backgroundScale);
+
+    //TITLE
+    title.setCharacterSize(int(window.getSize().y * 0.125));
+    //center allignment
+    sf::FloatRect titleBound = title.getGlobalBounds();
+    title.setPosition(window.getSize().x * 0.5f - titleBound.width * 0.5f, window.getSize().y * 0.25f - titleBound.height * 0.5f);
+
+    //BUTTONS
+    start.setText(" StaRt ", window.getSize().y * 0.125f);
+    exit.setText(" ExiT ", window.getSize().y * 0.125f);
 }

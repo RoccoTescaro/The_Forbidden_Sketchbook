@@ -478,7 +478,7 @@ void Archive::save(std::map<Key, Value>& map)
 }
 
 template<typename Key, typename Value>
-void Archive::load(std::map<Key, Value>& map) //TODO test
+void Archive::load(std::map<Key, Value>& map) 
 {
 	std::string mapIntro;
 	std::getline(file, mapIntro);

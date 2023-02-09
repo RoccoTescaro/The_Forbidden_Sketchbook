@@ -40,6 +40,7 @@ Pause::Pause() :
 
 void Pause::update()
 {
+    State::update();
     transitionEffect.update();
 
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
@@ -71,4 +72,16 @@ void Pause::render()
     back.render();
     menu.render();
     transitionEffect.render();
+}
+
+void Pause::onResize()
+{
+    //BACKGROUND
+    float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
+    background.setScale(backgroundScale, backgroundScale);
+
+    //BUTTONS
+    save.setText(" SavE ", window.getSize().y * 0.125f);
+    back.setText(" BaCk ", window.getSize().y * 0.125f);
+    menu.setText(" MeNu ", window.getSize().y * 0.125f);
 }

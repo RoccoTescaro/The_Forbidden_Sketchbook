@@ -14,13 +14,13 @@ public:
 	{
 		value += transitionSpeed * dt * (*targetValue - value);
 		
-		shader.setUniform("value", value/(*targetMaxValue));
+		shader.setUniform("value", value/(targetMaxValue));
 		text.setString(std::to_string(value));
 	};
 	
 	void render(sf::RenderWindow& window) 
 	{
-		shader.setUniform("windowHeight", window.getView().getSize().y); //#TODO check if view or default view
+		shader.setUniform("windowHeight", window.getView().getSize().y); //TODO test/check if view or default view
 		window.draw(sprite, &shader);
 		//fix text pos according to number of digits
 		text.setPosition(sprite.getPosition().x + relativeTextCenteredPos.x - static_cast<int>(text.getGlobalBounds().width * 0.5f),  //cast to int fix the text position to an int value preventing antialiasing blur effect
@@ -76,8 +76,8 @@ public:
 private:
 
 	float value;
-	const uint8_t* targetValue; //#TODO maybe should be done by making this template 
-	uint8_t targetMaxValue; //#TODO maybe should be done by making this template 
+	const uint8_t* targetValue; //TODO maybe should be done by making this template 
+	uint8_t targetMaxValue; //TODO maybe should be done by making this template, maybe should be dynamic
 	float transitionSpeed;
 
 	//TEXTURE
