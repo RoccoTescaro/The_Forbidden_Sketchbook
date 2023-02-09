@@ -32,9 +32,13 @@ public:
     inline uint8_t getPriority() const { return priority; };
     inline uint8_t getRange() const { return 0; /*return weapon->getRange()*/};
 
+
+    inline void setEnergy(const uint8_t newEnergy) { energy=newEnergy; };
+
     bool isInRange(Map &map) const;
     void updateStepQueue(Map &map, const sf::Vector2<float> target);
-    
+    //stepQueueEmpty?
+
     inline void roundReset()
     {   
         energy = maxEnergy;

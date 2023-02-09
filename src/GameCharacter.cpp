@@ -1,10 +1,12 @@
 #include "../hdr/GameCharacter.h"
+#include "../hdr/Map.h"
 
 //GAMECHARACTER
 
 void GameCharacter::update(Map &map, const float &dt)
 {
-
+	std::cout<<getPos().x<<"-"<<getPos().y<<std::endl;
+	setEnergy(0);
 }
 
 void GameCharacter::execute(GameCharacter &gameCharacter, Map &map)

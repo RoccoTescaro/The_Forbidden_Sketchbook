@@ -1,8 +1,20 @@
 #include "../hdr/Editor.h"
 #include "../hdr/Config.h"
 
-Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y})
+Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y}), turnSystem(map)
 {
+
+    map.addGameCharacter({5,5}, new Player(1,1,1,1,1));
+    turnSystem.initQueue();
+
+    //ENTITIES ADD
+
+    map.addGameCharacter({8,8}, new Melee(1,1));
+    map.addGameCharacter({3,3}, new Melee(1,1));
+    map.addGameCharacter({8,3}, new Melee(1,1));
+
+    actor=turnSystem.getActor();
+
     //BACKGROUND
     backgroundTexture.loadFromFile(Config::backgroundTexturePath);
     background.setTexture(backgroundTexture);
@@ -43,10 +55,16 @@ void Editor::update()
     background.setScale(backgroundScale, backgroundScale);
  
     //EDIT
+    /*
     if(input.isKeyReleased(Input::Key::MouseL)){
-        map.addTile(mouseGriddedPos,new Wall(1));
+        map.addGameCharacter(mouseGriddedPos,new Player(1,1,1,1,1));
 
     }
+    */
+    //TURNSYSTEM
+    if(actor.lock().get()->getEnergy()==0)
+        actor=turnSystem.getActor();
+    actor.lock().get()->update(map, Application::getDeltaTime());
 
 }
 

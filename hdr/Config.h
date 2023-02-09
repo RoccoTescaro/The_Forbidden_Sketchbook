@@ -23,6 +23,8 @@ namespace Config
 	const uint8_t fps{ 60 };
 	const float eps{ 0.0005f };
 
+	const float maxActivationDistance{2048};
+
 	const std::string titleFontPath{ "../fnt/titleFont2.ttf" };
 	const std::string buttonFontPath{ "../fnt/buttonFont1.ttf" };
 
