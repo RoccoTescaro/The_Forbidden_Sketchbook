@@ -24,7 +24,7 @@ Game::Game()
 	//actor = turnSystem.getActor();
 
 	cam.lock(false);
-	//cam.setTarget(actor); //#TODO setCenter might be needed.
+	//cam.setTarget(actor); //TODO setCenter might be needed.
 
 	hud.setView(cam.getView());
 	hud.setPlayer(map.getPlayer());
@@ -37,6 +37,14 @@ void Game::update()
 
 }
 
+void Game::render() 
+{
+
+}
+
+
 void Game::onResize()
 {
+	State::onResize();
+
 }

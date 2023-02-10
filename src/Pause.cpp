@@ -61,7 +61,7 @@ void Pause::update()
         menu.setActive(true);
         
         if(back.isClicked())
-            Application::prevState(); //#TODO check which button has been pressed and change state according to that
+            Application::prevState(); //TODO check which button has been pressed and change state according to that
     }
 }
 
@@ -76,6 +76,8 @@ void Pause::render()
 
 void Pause::onResize()
 {
+    State::onResize();
+    
     //BACKGROUND
     float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);

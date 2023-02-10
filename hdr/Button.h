@@ -4,7 +4,7 @@
 #include "Application.h"
 #include <functional>
 
-class Button 
+class Button //TODO make it indipendent from Application
 {
 public:
     enum TextAlignment

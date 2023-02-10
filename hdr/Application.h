@@ -34,7 +34,7 @@ private:
 
 	std::vector<std::unique_ptr<State>> states;
 	uint8_t currentStateIndex = 0;
-	uint8_t previousStateIndex = -1; //#TODO fix me
+	uint8_t previousStateIndex = -1; //TODO fix me
 
 	sf::RenderWindow window{};
 	float dt = 0.f;

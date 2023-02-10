@@ -9,14 +9,12 @@ VignetteEffect::VignetteEffect() :
 	shader.loadFromFile(Config::vignetteEffectShaderPath, sf::Shader::Fragment);
 	shader.setUniform("resolution", sf::Vector2<float>(window.getSize()));
 	vignette.setPosition(0, 0);
+	vignette.setSize(sf::Vector2<float>{window.getSize()});
 }
 
 void VignetteEffect::update() 
 {
 	time += Application::getDeltaTime();
-
-	sf::RenderWindow& window = Application::getWindow();
-	vignette.setSize(sf::Vector2<float>{window.getSize()});
 
 	radius = defaultRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;
 	
@@ -33,7 +31,7 @@ void VignetteEffect::update()
 
 void VignetteEffect::render() 
 {
-	//#TODO check view
+	//TODO test/check view
 	Application::getWindow().draw(vignette, &shader);
 }
 
@@ -41,6 +39,13 @@ void VignetteEffect::startAnimation()
 {
 	closingAnimation = true;
 	animationStarted = true;
+}
+
+void VignetteEffect::onResize()
+{
+	sf::RenderWindow& window = Application::getWindow();
+	shader.setUniform("resolution", sf::Vector2<float>(window.getSize()));
+	vignette.setSize(sf::Vector2<float>{window.getSize()});
 }
 
 bool VignetteEffect::isAnimationEnded() const 

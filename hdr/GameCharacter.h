@@ -50,7 +50,7 @@ public:
     }
 protected:
     //STATS
-    const uint8_t maxHealth = 0; //#TODO make it mutable to serialization
+    const uint8_t maxHealth = 0; //TODO make it mutable to serialization
     const uint8_t maxEnergy = 0;
     const uint8_t priority = 0;
     uint8_t health = 0;

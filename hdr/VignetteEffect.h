@@ -9,6 +9,8 @@ public:
 	void update();
 	void render();
 
+	void onResize();
+
 	void startAnimation();
 	bool isAnimationEnded() const;
 

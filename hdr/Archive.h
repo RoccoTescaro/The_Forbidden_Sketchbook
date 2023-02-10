@@ -78,7 +78,7 @@ private:
 	template<typename Type> void save(std::shared_ptr<Type>& ptr);
 	template<typename Type> void load(std::shared_ptr<Type>& ptr);
 
-	//#TODO add a save and load for weak_ptr
+	//TODO add a save and load for weak_ptr
 
 	template<typename Type> void save(std::unique_ptr<Type>& ptr);
 	template<typename Type> void load(std::unique_ptr<Type>& ptr);
@@ -437,7 +437,7 @@ void Archive::load(std::list<Type>& list)
 }
 /*
 template<typename Type, size_t size>
-void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (#TODO fix me)
+void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (TODO fix me)
 {
 	tab();
 	file << "array of " << typeid(Type).name() << " -" << std::endl;

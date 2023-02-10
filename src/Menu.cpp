@@ -58,7 +58,7 @@ void Menu::update()
         //be reused it wont be completely black
         start.setActive(true); 
         exit.setActive(true);
-        Application::nextState(); //#TODO check which button has been pressed and change state according to that
+        Application::nextState(); //TODO check which button has been pressed and change state according to that
     }
 }
 
@@ -73,6 +73,8 @@ void Menu::render()
 
 void Menu::onResize() 
 {
+    State::onResize();
+
     //BACKGROUND
     float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);

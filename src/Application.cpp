@@ -17,7 +17,7 @@ void Application::addState(State* state)
 
 void Application::run()
 {
-	//#TODO add all the states
+	//TODO add all the states
 	//its important that all the states are appended here and not in the Costructor
 	//couse most of the code is based on config, which are static variables, and the costructor
 	//of the singleton is called aswell as a static variable. Static variable are declare and define

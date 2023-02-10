@@ -23,7 +23,7 @@ public:
 
     void update();
 
-    bool resizeEvent() const { return resized; }; //#TODO find better name
+    bool resizeEvent() const { return resized; }; //TODO find better name
 
     sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const;
     const float &getWheelDelta() const;
