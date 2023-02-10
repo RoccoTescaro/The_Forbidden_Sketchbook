@@ -5,29 +5,22 @@ TurnSystem::TurnSystem (Map& map): map(map){
 };
 //inti
 
-std::weak_ptr<GameCharacter> TurnSystem::getActor(){
+std::shared_ptr<GameCharacter> TurnSystem::getActor(){
 
-    std::weak_ptr<GameCharacter> actor = gameCharacterQueue.top();
-
-    while (actor.expired())
-    {
-        gameCharacterQueue.pop();
-        std::weak_ptr<GameCharacter> actor = gameCharacterQueue.top();
-    }
-    gameCharacterQueue.pop();
-    
-    if(gameCharacterQueue.empty()){
+    while (turnQueue.top().expired())
+        turnQueue.pop();
+    if(turnQueue.empty()){
         updateQueue();
-        std::weak_ptr<GameCharacter> actor = gameCharacterQueue.top();
     }
-
-    return actor;
+    std::weak_ptr<GameCharacter> actor = turnQueue.top();
+    turnQueue.pop();
+    return actor.lock();
 
 }
 
 bool TurnSystem::isPlayerTurn(){
 
-    return gameCharacterQueue.size()==1;
+    return turnQueue.size()==1;
 }
 
 void TurnSystem::updateQueue(){
@@ -36,7 +29,7 @@ void TurnSystem::updateQueue(){
     for(auto &gcs:gameCharacters){
         auto gc=gcs.second;
         if(Config::maxActivationDistance>Utils::Math::distance(map.getPlayer().get()->getPos(),gc.get()->getPos())){
-            gameCharacterQueue.push(gc);
+            turnQueue.push(gc);
             //gc.roundReset();
         }
     }
@@ -44,6 +37,6 @@ void TurnSystem::updateQueue(){
 
 void TurnSystem::initQueue(){
 
-    gameCharacterQueue.push(map.getPlayer());
+    turnQueue.push(map.getPlayer());
 }
 

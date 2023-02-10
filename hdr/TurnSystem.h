@@ -12,7 +12,7 @@ public:
 
     TurnSystem(Map &map);
 
-    std::weak_ptr<GameCharacter> getActor();
+    std::shared_ptr<GameCharacter> getActor();
     bool isPlayerTurn();
     void updateQueue();
     void initQueue();
@@ -27,7 +27,7 @@ private:
     };
 
     Map &map;
-    std::priority_queue<std::weak_ptr<GameCharacter>,std::vector<std::weak_ptr<GameCharacter>>,PriorityCompare> gameCharacterQueue;
+    std::priority_queue<std::weak_ptr<GameCharacter>,std::vector<std::weak_ptr<GameCharacter>>,PriorityCompare> turnQueue;
 
 
 };
