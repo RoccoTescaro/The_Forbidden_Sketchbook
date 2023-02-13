@@ -29,7 +29,7 @@ public:
     Wall(uint8_t type);
     Wall() {};
 
-    void setTexture(uint8_t newType);
+    void setTexture(uint8_t newType) ;
 
     bool isSolid() const override;
 

@@ -16,6 +16,8 @@ public:
         : maxHealth(maxHealth), health(health), maxEnergy(maxEnergy), energy(energy), priority(priority) {};
     GameCharacter() : energy(0), priority(0) {};
 
+
+    //ENTITY
     void update(Map &map, const float &dt) override;
     void execute(GameCharacter &gameCharacter, Map &map) override;
     inline void render() override 
@@ -24,6 +26,7 @@ public:
         //weapon->render();    
     };
     
+    //GAMECHARACTER GET&SET
     inline bool isSolid() const override { return true; };
     inline uint8_t getMaxHealth() const { return maxHealth; }; //need to return as a reference and not by copy to allow hud auto update
     inline uint8_t getMaxEnergy() const { return maxEnergy; };
@@ -32,14 +35,16 @@ public:
     inline uint8_t getPriority() const { return priority; };
     inline uint8_t getRange() const { return 0; /*return weapon->getRange()*/};
 
+
+    inline void setEnergy(const uint8_t newEnergy) { energy=newEnergy; };
+
+
+    //GAMECHARACTER FUNCTIONS
     bool isInRange(Map &map) const;
-    void updateStepQueue(Map &map, const sf::Vector2<float> target);
-    
-    inline void roundReset()
-    {   
-        energy = maxEnergy;
-        //stepQueue.clear();  
-    }
+    void updateStepQueue(const sf::Vector2<float> target);
+    inline void turnReset(){    setEnergy(getMaxEnergy());
+                                stepQueue.clear();                  };
+    inline bool isStepQueueEmpty(){     return stepQueue.empty();   };
 
     inline void serialize(Archive& fs) 
     {
@@ -60,7 +65,7 @@ protected:
     //MOVEMENT
     //std::unique_ptr<PathAlgorithm> movementStrategy;
     const float animationSpeed = 300.f;
-    //std::deque<sf::Vector2<float>> stepQueue;
+    std::deque<sf::Vector2<float>> stepQueue;
 };
 
 

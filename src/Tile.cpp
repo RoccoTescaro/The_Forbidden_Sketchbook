@@ -2,13 +2,15 @@
 
 //WALL
 
-Wall::Wall(uint8_t type){
+Wall::Wall(uint8_t type):type(type)
+{
     setTexture(type);
+
 }
 
 void Wall::setTexture(uint8_t newType){
-    
-    static sf::Texture* texture[Type::ENUM_SIZE];
+
+    static std::array<sf::Texture*,Type::ENUM_SIZE> texture;
 	for (int i = 0; i < Type::ENUM_SIZE; i++)
 		if (!texture[i])
 		{
@@ -16,12 +18,12 @@ void Wall::setTexture(uint8_t newType){
 			texture[i]->loadFromFile("../img/"+std::to_string(i)+".png");
 			texture[i]->generateMipmap();
 		}
+	Wall::type=newType;
 	sprite.setTexture(*texture[type]);
 	sf::Rect<int> textureRect{0,0,1300,1350};
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
-	Wall::type=newType;
 }
 
 bool Wall::isSolid() const{
