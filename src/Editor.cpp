@@ -1,7 +1,7 @@
 #include "../hdr/Editor.h"
 #include "../hdr/Config.h"
 
-Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y}), turnSystem(map)
+Editor::Editor() : cam(), turnSystem(map)
 {
 
     map.addGameCharacter({5,5}, new Player(1,1,1,1,1));

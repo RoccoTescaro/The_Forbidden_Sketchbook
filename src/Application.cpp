@@ -3,7 +3,6 @@
 #include "../hdr/State.h"
 #include "../hdr/Menu.h"
 #include "../hdr/Pause.h"
-#include "../hdr/Editor.h"
 
 State& Application::getState(uint8_t index)
 {
@@ -26,8 +25,9 @@ void Application::run()
 	//istanciation of the singleton
 
 	app.states.emplace_back(new Menu);
-	app.states.emplace_back(new Editor);
 	app.states.emplace_back(new Pause);
+	//app.states.emplace_back(new Game);
+	//app.states.emplace_back(new Editor);
 	app.window.create(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Default);
 
 	sf::Clock clock;

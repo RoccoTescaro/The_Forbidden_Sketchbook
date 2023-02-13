@@ -8,7 +8,6 @@ void GameCharacter::update(Map &map, const float &dt)
 	while(!isStepQueueEmpty()){
 	setPos(getPos()+stepQueue.at(0));
 	stepQueue.pop_front();
-	sleep(1/3);
 	setEnergy(0);
 	}
 }

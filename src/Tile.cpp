@@ -1,4 +1,5 @@
 #include "../hdr/Tile.h"
+#include <array>
 
 //WALL
 
@@ -10,7 +11,7 @@ Wall::Wall(uint8_t type):type(type)
 
 void Wall::setTexture(uint8_t newType){
 
-    static std::array<sf::Texture*,Type::ENUM_SIZE> texture;
+    static std::array<sf::Texture*, Type::ENUM_SIZE> texture;
 	for (int i = 0; i < Type::ENUM_SIZE; i++)
 		if (!texture[i])
 		{

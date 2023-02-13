@@ -3,7 +3,7 @@
 #include <SFML/System.hpp>
 #include "GameCharacter.h"
 
-class Camera
+class Camera //TODO make indipendent from application
 {
 public:
 	Camera() : input(Application::getInput()) { setView(Application::getWindow().getSize()); };
