@@ -26,6 +26,6 @@ private:
     sf::Text mousePosText;
 
     TurnSystem turnSystem;
-    std::weak_ptr<GameCharacter> actor;
+    std::shared_ptr<GameCharacter> actor;
 
 };

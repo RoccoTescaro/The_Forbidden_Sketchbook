@@ -5,7 +5,7 @@ Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y}), turnSystem(m
 {
 
     map.addGameCharacter({5,5}, new Player(1,1,1,1,1));
-    turnSystem.initQueue();
+    turnSystem.newRound();
 
     //ENTITIES ADD
 
@@ -62,9 +62,18 @@ void Editor::update()
     }
     */
     //TURNSYSTEM
-    if(actor.lock().get()->getEnergy()==0)
+    if(actor.get()->getEnergy()==0)
         actor=turnSystem.getActor();
-    actor.lock().get()->update(map, Application::getDeltaTime());
+    if(!turnSystem.isPlayerTurn()){
+        actor.get()->updateStepQueue(map.getPlayer().get()->getPos());
+    }
+    else{
+        if(actor.get()->isStepQueueEmpty()&&input.isKeyReleased(Input::MouseL)){
+                    actor.get()->updateStepQueue(map.posIntToFloat(mouseGriddedPos));
+        }
+    }
+    if(input.isKeyReleased(Input::MouseR)){
+    actor.get()->update(map, Application::getDeltaTime());}
 
 }
 
