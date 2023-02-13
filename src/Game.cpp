@@ -32,7 +32,7 @@ Game::Game()
 
 void Game::update()
 {
-	transitionEffect.update();
+	transitionEffect.update(dt);
 
 
 }
@@ -42,9 +42,3 @@ void Game::render()
 
 }
 
-
-void Game::onResize()
-{
-	State::onResize();
-
-}

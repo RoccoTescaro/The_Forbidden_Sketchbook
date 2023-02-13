@@ -50,7 +50,7 @@ public:
     }
 protected:
     //STATS
-    const uint8_t maxHealth = 0; //TODO make it mutable to serialization
+    const uint8_t maxHealth = 0;  
     const uint8_t maxEnergy = 0;
     const uint8_t priority = 0;
     uint8_t health = 0;
@@ -68,7 +68,7 @@ class Player : public GameCharacter
 {
 public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
-    Player() {};
+    Player() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
   
@@ -89,7 +89,7 @@ class Melee : public GameCharacter
 {
 public:
     Melee(uint8_t health, uint8_t energy);
-    Melee() {};
+    Melee() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     void serialize(Archive& fs) override
     {
@@ -117,7 +117,7 @@ class Ranged : public GameCharacter
 {
 public:
     Ranged(uint8_t health, uint8_t energy);
-    Ranged() {};
+    Ranged() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     void update(Map &map, const float &dt) override;
 

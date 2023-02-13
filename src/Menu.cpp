@@ -42,14 +42,13 @@ Menu::Menu() :
 
 void Menu::update() 
 {
-    State::update();
-    transitionEffect.update();
+    transitionEffect.update(dt);
 
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
     exit.getText().setFillColor(sf::Color(0, 0, 0, 255));
 
-    start.update();
-    exit.update();
+    start.update(input);
+    exit.update(input);
 
     //switch state
     if (transitionEffect.isAnimationEnded()) 
@@ -66,26 +65,7 @@ void Menu::render()
 {
     window.draw(background);
     window.draw(title);
-    start.render();
-    exit.render();
-    transitionEffect.render();
-}
-
-void Menu::onResize() 
-{
-    State::onResize();
-
-    //BACKGROUND
-    float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
-    background.setScale(backgroundScale, backgroundScale);
-
-    //TITLE
-    title.setCharacterSize(int(window.getSize().y * 0.125));
-    //center allignment
-    sf::FloatRect titleBound = title.getGlobalBounds();
-    title.setPosition(window.getSize().x * 0.5f - titleBound.width * 0.5f, window.getSize().y * 0.25f - titleBound.height * 0.5f);
-
-    //BUTTONS
-    start.setText(" StaRt ", window.getSize().y * 0.125f);
-    exit.setText(" ExiT ", window.getSize().y * 0.125f);
+    start.render(window);
+    exit.render(window);
+    transitionEffect.render(window);
 }

@@ -40,16 +40,15 @@ Pause::Pause() :
 
 void Pause::update()
 {
-    State::update();
-    transitionEffect.update();
+    transitionEffect.update(dt);
 
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
     back.getText().setFillColor(sf::Color(0, 0, 0, 255));
     menu.getText().setFillColor(sf::Color(0, 0, 0, 255));
 
-    save.update();
-    back.update();
-    menu.update();
+    save.update(input);
+    back.update(input);
+    menu.update(input);
 
     //switch state
     if (transitionEffect.isAnimationEnded())
@@ -68,22 +67,8 @@ void Pause::update()
 void Pause::render()
 {
     window.draw(background);
-    save.render();
-    back.render();
-    menu.render();
-    transitionEffect.render();
-}
-
-void Pause::onResize()
-{
-    State::onResize();
-    
-    //BACKGROUND
-    float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
-    background.setScale(backgroundScale, backgroundScale);
-
-    //BUTTONS
-    save.setText(" SavE ", window.getSize().y * 0.125f);
-    back.setText(" BaCk ", window.getSize().y * 0.125f);
-    menu.setText(" MeNu ", window.getSize().y * 0.125f);
+    save.render(window);
+    back.render(window);
+    menu.render(window);
+    transitionEffect.render(window);
 }

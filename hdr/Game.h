@@ -12,8 +12,6 @@ public:
 	void update() override;
 	void render() override;
 
-	void onResize() override;
-
 	void save();
 	void load();
 private:

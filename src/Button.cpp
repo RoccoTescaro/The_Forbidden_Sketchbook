@@ -52,31 +52,31 @@ void Button::setSprite(sf::Texture& texture)
     sprite.setScale(texture.getSize().x / dim.x, texture.getSize().y / dim.y); 
 }
 
-bool Button::isMouseOver() const 
+bool Button::isMouseOver(const Input& input) const 
 {
     sf::Rect<float> bounds{ pos, sf::Vector2<float>(dim) };
-    return bounds.contains(Application::getInput().getMousePos());
+    return bounds.contains(input.getMousePos());
 }
 
-void Button::update() 
+void Button::update(const Input& input)
 {
     if (!active) return;
 
     sprite.setColor(sf::Color::Black);
 
-    if (isMouseOver()) 
+    if (isMouseOver(input)) 
     {
         sprite.setColor(sf::Color::White);
 
         if (onMouseOver) 
             onMouseOver();
-        if (Application::getInput().isKeyReleased(Input::Key::MouseL) && onClick)
+        if (input.isKeyReleased(Input::Key::MouseL) && onClick)
             onClick();
     }
 }
 
-void Button::render()
+void Button::render(sf::RenderWindow& window)
 {
-    Application::getWindow().draw(sprite);
-    Application::getWindow().draw(text);
+    window.draw(sprite);
+    window.draw(text);
 }

@@ -65,7 +65,7 @@ public:
 
     bool isSolid() const override;
 
-    void execute(GameCharacter &gameCharacter, Map &map) override;//todo
+    void execute(GameCharacter &gameCharacter, Map &map) override;
 
 private:
 	sf::Color color; 

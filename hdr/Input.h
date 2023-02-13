@@ -23,8 +23,6 @@ public:
 
     void update();
 
-    bool resizeEvent() const { return resized; }; //TODO find better name
-
     sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const;
     const float &getWheelDelta() const;
     
@@ -35,7 +33,6 @@ public:
 private:
 
     sf::Event event{};
-    bool resized = false;
     float wheelDelta = 0.f;
     std::bitset<Key::ENUM_SIZE> oldKeys{};
     std::bitset<Key::ENUM_SIZE> newKeys{};

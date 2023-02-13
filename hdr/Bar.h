@@ -2,16 +2,25 @@
 #include "Application.h"
 #include <SFML/Graphics.hpp>
 
+template<typename Type>
 class Bar 
 {
 public: 
-	Bar(float transitionSpeed = 5.f) : transitionSpeed(transitionSpeed) 
+	Bar(float transitionSpeed = 5.f)
+		: transitionSpeed(transitionSpeed)
 	{
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
 	};
 
+	Bar(const Type* targetValue, const Type& targetMaxValue, float transitionSpeed = 5.f) 
+		: Bar(transitionSpeed), targetValue(targetValue), targetMaxValue(targetMaxValue)
+	{
+	};
+
 	void update(const float& dt) 
 	{
+		if (!targetValue) return; //handled died
+
 		value += transitionSpeed * dt * (*targetValue - value);
 		
 		shader.setUniform("value", value/(targetMaxValue));
@@ -28,8 +37,8 @@ public:
 		window.draw(text);
 	};
 
-	void setTargetValue(const uint8_t* targetValue) { this->targetValue = targetValue; };
-	void setTargetMaxValue(uint8_t targetMaxValue) { this->targetMaxValue = targetMaxValue; };
+	void setTargetValue(const Type* targetValue) { this->targetValue = targetValue; };
+	void setTargetMaxValue(const Type& targetMaxValue) { this->targetMaxValue = targetMaxValue; };
 
 	//TEXTURE
 	void setTexture(const std::string& path) 
@@ -76,8 +85,8 @@ public:
 private:
 
 	float value;
-	const uint8_t* targetValue; //TODO maybe should be done by making this template 
-	uint8_t targetMaxValue; //TODO maybe should be done by making this template, maybe should be dynamic
+	const Type* targetValue;  
+	Type targetMaxValue; 
 	float transitionSpeed;
 
 	//TEXTURE

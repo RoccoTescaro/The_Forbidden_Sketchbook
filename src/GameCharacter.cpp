@@ -42,7 +42,7 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
+	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
 	//FILTER
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
@@ -68,7 +68,7 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
+	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
    //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
@@ -90,7 +90,7 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
+	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
@@ -113,7 +113,7 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
+	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new DiglettMovement());

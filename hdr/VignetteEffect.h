@@ -1,15 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class VignetteEffect //TODO at the moment is a bit to dependent to Application, should make it more indipendet
+class VignetteEffect 
 {
 public:
 	VignetteEffect();
 
-	void update();
-	void render();
-
-	void onResize();
+	void update(const float& dt);
+	void render(sf::RenderWindow& window);
 
 	void startAnimation();
 	bool isAnimationEnded() const;
