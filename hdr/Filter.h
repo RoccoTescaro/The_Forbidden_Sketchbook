@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Application.h"
 
-class Filter //TODO test properly
+class Filter 
 {
 public:
     Filter() 
@@ -29,7 +29,7 @@ public:
 
     void setTargetColor(const sf::Color& color)
     {
-        if (threshold <= 1.f || targetColor == color) //last animation not ended yet
+        if (threshold < 1.f || targetColor == color) //last animation not ended yet
             return;
 
         previousColor = targetColor;
@@ -44,7 +44,7 @@ private:
     sf::RenderStates state;
     sf::Sprite  sprite;
     sf::Shader  shader;
-    float threshold = 0.f;
+    float threshold = 1.f;
     sf::Color previousColor{0.f,0.f,0.f,255.f};
     sf::Color targetColor;
 };

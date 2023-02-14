@@ -3,7 +3,7 @@
 #include "../hdr/Application.h"
 
 VignetteEffect::VignetteEffect() :
-	radius(defaultRadius), intensity(0.f)
+	radius(defaultRadius), intensity(Config::eps), openingInterpolationFactor(Config::eps)
 {
 	sf::RenderWindow& window = Application::getWindow();
 	shader.loadFromFile(Config::vignetteEffectShaderPath, sf::Shader::Fragment);
@@ -31,7 +31,6 @@ void VignetteEffect::update(const float& dt)
 
 void VignetteEffect::render(sf::RenderWindow& window) 
 {
-	//TODO test/check view
 	window.draw(vignette, &shader);
 }
 
@@ -43,15 +42,18 @@ void VignetteEffect::startAnimation()
 
 bool VignetteEffect::isAnimationEnded() const 
 {
-	return intensity <= Config::eps;
+	return intensity < Config::eps;
 }
 
-void VignetteEffect::openingUpdate() //FIX
+void VignetteEffect::openingUpdate() 
 {
-	intensity = Utils::Math::lerp(intensity, defaultIntensity, animationSpeed * Application::getDeltaTime());
+	openingInterpolationFactor *= openingAnimationSpeed;
+	openingInterpolationProgress += Application::getDeltaTime() * openingInterpolationFactor;
+    intensity = Utils::Math::lerp(intensity, defaultIntensity, openingInterpolationProgress);
 
 	if (intensity >= defaultIntensity - Config::eps)
 	{
+		intensity = defaultIntensity;
 		closingAnimation = true;
 		animationStarted = false;
 	}
@@ -59,7 +61,7 @@ void VignetteEffect::openingUpdate() //FIX
 
 void VignetteEffect::closingUpdate()
 {
-	intensity = Utils::Math::lerp(intensity, 0.f, animationSpeed * Application::getDeltaTime());
+	intensity = Utils::Math::lerp(intensity, 0.f, closingAnimationSpeed * Application::getDeltaTime());
 
 	if (intensity <= Config::eps)
 		closingAnimation = false;
