@@ -16,7 +16,7 @@ Editor::Editor() : cam(), turnSystem(map)
     actor=turnSystem.getActor();
 
     //BACKGROUND
-    backgroundTexture.loadFromFile(Config::backgroundTexturePath);
+    backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
     background.setTexture(backgroundTexture);
     float backgroundScale = (float) window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);
@@ -81,7 +81,7 @@ void Editor::render()
 {
     window.setView(cam.getView());
     window.draw(background);
-    map.render();
+    map.render(window);
     window.draw(mouseIndicator);
     window.draw(mousePosText);
     window.setView(gui);

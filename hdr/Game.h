@@ -1,6 +1,8 @@
 #pragma once
 #include "State.h"
 #include "Map.h"
+#include "TurnSystem.h"
+#include "GameCharacter.h"
 #include "Camera.h"
 #include "Hud.h"
 
@@ -25,8 +27,8 @@ private:
 	sf::RectangleShape mouseIndicator;
 
 	Map map;
-	//turnSystem
-	//actor
+	TurnSystem turnSystem;
+	std::shared_ptr<GameCharacter> actor;
 	Camera cam;
 	Hud hud;
 };

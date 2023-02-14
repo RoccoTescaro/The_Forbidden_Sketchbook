@@ -7,7 +7,7 @@ Pause::Pause() :
     menu({ 0.f, window.getSize().y * 0.71f }, sf::Vector2<int>(window.getSize().x, window.getSize().y * 0.14f))
 {
     //BACKGROUND
-    backgroundTexture.loadFromFile(Config::backgroundTexturePath);
+    backgroundTexture.loadFromFile(Config::menuBackgroundTexturePath);
     background.setTexture(backgroundTexture);
     float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);

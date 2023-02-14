@@ -1,8 +1,9 @@
 #include "..\hdr\Game.h"
 
-Game::Game() 
+Game::Game()
+	: turnSystem(map)
 {
-	backgroundTexture.loadFromFile(Config::backgroundTexturePath);
+	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
 	backgroundShader.setUniform("resolution", sf::Glsl::Vec2(backgroundTexture.getSize()));
@@ -16,15 +17,18 @@ Game::Game()
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
+	/*
 	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> map; // >> turnSystem;
-	ASSERT(map.getPlayer().get(), "Doesn't exist a player in the map")
-	
-	//turnSystem.load("maps/loadFile.txt");
-	//actor = turnSystem.getActor();
+	arc >> map >> turnSystem;
+	ASSERT(map.getPlayer().get(), "Doesn't exist a player in the map");
+	*/
 
-	cam.lock(false);
-	//cam.setTarget(actor); //TODO setCenter might be needed.
+	map.add({ 0,0 }, new Player); //TODO remove this initialization
+
+	actor = turnSystem.getActor(); //we need to initialize the actor to update him
+
+	cam.lock(true);
+	cam.setTarget(actor); //TODO setCenter might be needed.
 
 	hud.setView(cam.getView());
 	hud.setPlayer(map.getPlayer());
@@ -33,12 +37,56 @@ Game::Game()
 void Game::update()
 {
 	transitionEffect.update(dt);
+	
+	input.update(); //update respectivly to the cam view
 
+	//MOUSE
+	mousePos = map.posFloatToInt(input.getMousePos());
+	mouseIndicator.setPosition(map.posIntToFloat(mousePos));
+	mousePosText.setString(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+	mousePosText.setPosition(mouseIndicator.getPosition() + 
+		sf::Vector2<float>{ map.getCellDim().x - mousePosText.getGlobalBounds().width, 
+							map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
+
+	//CAMERA
+	cam.update(); 
+
+	if (input.isKeyPressed(Input::Space))
+		cam.lock();
+
+	if (input.isKeyPressed(Input::MouseR) && map.getGameCharacter(mousePos).get())
+		cam.setTarget(map.getGameCharacter(mousePos));
+
+
+	//HUD 
+	hud.update(dt);
+
+	//BACKGROUND
+	sf::Vector2<float> bgSize = cam.getView().getSize();
+	sf::Vector2<float> bgPos = cam.getView().getCenter() - bgSize * 0.5f;
+	backgroundSprite.setSize(bgSize);
+	backgroundSprite.setPosition(bgPos);
+	backgroundShader.setUniform("viewPos", sf::Glsl::Vec2(bgPos));
+	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
+
+	//UPDATE ACTOR
+	if (actor->getEnergy() == 0)
+	{
+		actor->turnReset();
+		actor = turnSystem.getActor();
+		if (cam.isLocked())
+			cam.setTarget(actor);
+	}
 
 }
 
 void Game::render() 
 {
-
+	window.setView(cam.getView());
+	window.draw(backgroundSprite, &backgroundShader);
+	map.render(window);
+	window.draw(mouseIndicator);
+	window.draw(mousePosText);
+	hud.render(window);
 }
 

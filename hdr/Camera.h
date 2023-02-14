@@ -10,7 +10,7 @@ public:
 
 	void update();
 
-	void setTarget(std::shared_ptr<GameCharacter>& target);
+	void setTarget(const std::shared_ptr<GameCharacter>& target);
 
 	inline void lock(bool condition) { locked = condition; };
 

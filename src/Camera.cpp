@@ -29,7 +29,7 @@ void Camera::update()
 	view.move(viewDirX * viewMovementSpeed * dt, viewDirY * viewMovementSpeed * dt);
 }
 
-void Camera::setTarget(std::shared_ptr<GameCharacter>& target)
+void Camera::setTarget(const std::shared_ptr<GameCharacter>& target)
 {
 	locked = true;
 	this->target = target;

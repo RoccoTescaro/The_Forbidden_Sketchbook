@@ -27,7 +27,8 @@ namespace Config
 	const std::string barFontPath{ PATH("fnt/BarFont.ttf") };
 	const std::string dialogueFontPath{ PATH("fnt/DialogueFont.ttf") };
 
-	const std::string backgroundTexturePath{ PATH("img/Background.jpg") };
+	const std::string menuBackgroundTexturePath{ PATH("img/MenuBackground.jpg") };
+	const std::string gameBackgroundTexturePath{ PATH("img/GameBackground.jpg") };
 	const std::string playerTexturePath{ PATH("img/Player.png") };
 	const std::string healthBarTexturePath{ PATH("img/HealthBar.png") };
 	const std::string healthBarMaskTexturePath{ PATH("img/HealthBarMask.png") };

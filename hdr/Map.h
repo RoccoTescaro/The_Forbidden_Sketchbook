@@ -24,7 +24,7 @@ class Map : public Serializable
 	using GameCharacters = std::map<sf::Vector2<int>, std::shared_ptr<GameCharacter>, Compare>;
 
 public:
-	void render();
+	void render(sf::RenderWindow& window);
 
 	inline Tiles& getTiles() { return tiles; };
 	inline const Tiles& getTiles() const { return tiles; };
