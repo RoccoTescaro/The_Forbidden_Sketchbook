@@ -6,6 +6,7 @@ Game::Game()
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); //FIX bg
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
+	backgroundShader.setUniform("viewPortDim", sf::Glsl::Vec2(window.getSize()));
 	backgroundShader.setUniform("resolution", sf::Glsl::Vec2(backgroundTexture.getSize()));
 	backgroundShader.setUniform("texture", backgroundTexture);
 
