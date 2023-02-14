@@ -5,15 +5,15 @@ Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y}), turnSystem(m
 {
 
     map.addGameCharacter({5,5}, new Player(1,1,1,1,1));
-    turnSystem.newRound();
 
+    actor=turnSystem.getActor();
+    
     //ENTITIES ADD
 
     map.addGameCharacter({8,8}, new Melee(1,1));
     map.addGameCharacter({3,3}, new Melee(1,1));
     map.addGameCharacter({8,3}, new Melee(1,1));
 
-    actor=turnSystem.getActor();
 
     //BACKGROUND
     backgroundTexture.loadFromFile(Config::backgroundTexturePath);
@@ -65,11 +65,11 @@ void Editor::update()
     if(actor.get()->getEnergy()==0)
         actor=turnSystem.getActor();
     if(!turnSystem.isPlayerTurn()){
-        actor.get()->updateStepQueue(map.getPlayer().get()->getPos());
+        actor.get()->updateStepQueue(map, map.getPlayer().get()->getPos());
     }
     else{
         if(actor.get()->isStepQueueEmpty()&&input.isKeyReleased(Input::MouseL)){
-                    actor.get()->updateStepQueue(map.posIntToFloat(mouseGriddedPos));
+                    actor.get()->updateStepQueue(map, map.posIntToFloat(mouseGriddedPos));
         }
     }
     if(input.isKeyReleased(Input::MouseR)){

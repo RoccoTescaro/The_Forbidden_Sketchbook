@@ -3,11 +3,9 @@
 #include <queue>
 #include <memory>
 #include "Entity.h"
+#include "PathFinding.h"
 
 class Weapon;
-class PathAlgorithm {};
-class AStar : public PathAlgorithm{};
-class DiglettMovement : public PathAlgorithm{};
 
 class GameCharacter : public Entity
 {
@@ -41,7 +39,7 @@ public:
 
     //GAMECHARACTER FUNCTIONS
     bool isInRange(Map &map) const;
-    void updateStepQueue(const sf::Vector2<float> target);
+    void updateStepQueue(const Map &map, const sf::Vector2<float> target);
     inline void turnReset(){    setEnergy(getMaxEnergy());
                                 stepQueue.clear();                  };
     inline bool isStepQueueEmpty(){     return stepQueue.empty();   };
@@ -63,7 +61,7 @@ protected:
     //Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 
     //MOVEMENT
-    //std::unique_ptr<PathAlgorithm> movementStrategy;
+    std::unique_ptr<PathAlgorithm> movementStrategy;
     const float animationSpeed = 300.f;
     std::deque<sf::Vector2<float>> stepQueue;
 };

@@ -14,7 +14,6 @@ public:
 
     std::shared_ptr<GameCharacter> getActor();
     bool isPlayerTurn();
-    void newRound();
 
 private:
     struct PriorityCompare
@@ -28,5 +27,6 @@ private:
     Map &map;
     std::priority_queue<std::weak_ptr<GameCharacter>,std::vector<std::weak_ptr<GameCharacter>>,PriorityCompare> turnQueue;
 
+    void newRound();
 
 };

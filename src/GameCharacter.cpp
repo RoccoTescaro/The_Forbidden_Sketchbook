@@ -23,7 +23,7 @@ bool GameCharacter::isInRange(Map &map) const
 	return true;
 }
 
-void GameCharacter::updateStepQueue(const sf::Vector2<float> target)
+void GameCharacter::updateStepQueue(const Map &map, const sf::Vector2<float> target)
 {
 	if(stepQueue.empty())
 		stepQueue={{0,64},{64,0},{0,64}};
@@ -52,7 +52,7 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
 	
     //MOVEMENTSTRATEGY
-    //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
 }
 
 
@@ -75,7 +75,7 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
 
     //MOVEMENTSTRATEGY
-   //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+   	movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
 }
 
 //BAT
@@ -97,7 +97,7 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
 
     //MOVEMENTSTRATEGY
-    //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
 }
 
 //RANGED
@@ -120,7 +120,7 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
 
     //MOVEMENTSTRATEGY
-    //movementStrategy = std::unique_ptr<PathAlgorithm>(new DiglettMovement());
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new DigletMovement());
 }
 
 void Ranged::update(Map &map, const float &dt)

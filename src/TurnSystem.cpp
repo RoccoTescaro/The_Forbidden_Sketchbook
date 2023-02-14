@@ -1,15 +1,16 @@
 #include "../hdr/TurnSystem.h"
 
 TurnSystem::TurnSystem (Map& map): map(map){
-newRound();
 };
 //inti
 
 std::shared_ptr<GameCharacter> TurnSystem::getActor(){
-
-    while (turnQueue.top().expired())
-        turnQueue.pop();
-    if(turnQueue.empty()){
+    
+    if(!turnQueue.empty()){
+        while (turnQueue.top().expired())
+            turnQueue.pop();
+    }
+    else{
         newRound();
     }
     std::weak_ptr<GameCharacter> actor = turnQueue.top();
