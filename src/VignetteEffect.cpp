@@ -46,7 +46,7 @@ bool VignetteEffect::isAnimationEnded() const
 	return intensity <= Config::eps;
 }
 
-void VignetteEffect::openingUpdate()
+void VignetteEffect::openingUpdate() //FIX
 {
 	intensity = Utils::Math::lerp(intensity, defaultIntensity, animationSpeed * Application::getDeltaTime());
 

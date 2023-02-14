@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Application.h"
 
-class Filter 
+class Filter //TODO test properly
 {
 public:
     Filter() 

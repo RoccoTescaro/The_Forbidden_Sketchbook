@@ -3,7 +3,7 @@
 Game::Game()
 	: turnSystem(map)
 {
-	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
+	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); //FIX bg
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
 	backgroundShader.setUniform("resolution", sf::Glsl::Vec2(backgroundTexture.getSize()));
@@ -12,6 +12,7 @@ Game::Game()
 	mouseIndicator.setOutlineThickness(3);
 	mouseIndicator.setSize(sf::Vector2<float>(map.getCellDim()));
 	mouseIndicator.setFillColor(sf::Color(0, 0, 0, 0));
+	mouseIndicator.setOutlineColor(sf::Color(255,255,255,255));
 	mouseFont.loadFromFile(Config::dialogueFontPath);
 	mousePosText.setFont(mouseFont);
 	mousePosText.setCharacterSize(16);
@@ -28,7 +29,7 @@ Game::Game()
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 	cam.lock(true);
-	cam.setTarget(actor); //TODO setCenter might be needed.
+	cam.setTarget(actor); 
 
 	hud.setView(cam.getView());
 	hud.setPlayer(map.getPlayer());
@@ -37,11 +38,9 @@ Game::Game()
 void Game::update()
 {
 	transitionEffect.update(dt);
-	
-	input.update(); //update respectivly to the cam view
 
 	//MOUSE
-	mousePos = map.posFloatToInt(input.getMousePos());
+	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));
 	mouseIndicator.setPosition(map.posIntToFloat(mousePos));
 	mousePosText.setString(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	mousePosText.setPosition(mouseIndicator.getPosition() + 
@@ -49,14 +48,14 @@ void Game::update()
 							map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
 
 	//CAMERA
-	cam.update(); 
 
 	if (input.isKeyPressed(Input::Space))
 		cam.lock();
 
-	if (input.isKeyPressed(Input::MouseR) && map.getGameCharacter(mousePos).get())
+	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
 		cam.setTarget(map.getGameCharacter(mousePos));
 
+	cam.update(); 
 
 	//HUD 
 	hud.update(dt);
@@ -88,5 +87,6 @@ void Game::render()
 	window.draw(mouseIndicator);
 	window.draw(mousePosText);
 	hud.render(window);
+	transitionEffect.render(window);
 }
 

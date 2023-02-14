@@ -61,5 +61,5 @@ private:
 	GameCharacters gameCharacters;
 	std::shared_ptr<Player> player;
 
-	sf::Vector2<int> cellDim{ 64,64 };
+	sf::Vector2<int> cellDim{ 64,32 };
 };

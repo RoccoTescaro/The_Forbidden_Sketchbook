@@ -24,7 +24,7 @@ public:
 		value += transitionSpeed * dt * (*targetValue - value);
 		
 		shader.setUniform("value", value/(targetMaxValue));
-		text.setString(std::to_string(value));
+		text.setString(std::to_string(static_cast<Type>(round(value))));
 	};
 	
 	void render(sf::RenderWindow& window) 

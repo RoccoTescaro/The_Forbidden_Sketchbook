@@ -73,7 +73,7 @@ class Player : public GameCharacter
 {
 public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
-    Player() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
+    Player() : Player(100,100,245,245,245) {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
   

@@ -20,11 +20,11 @@ private:
 	sf::Shader shader;
 	sf::RectangleShape vignette;
 	float radius;
-	const float defaultRadius = 1.f;
-	const float radiusFrequency = 1.f;
-	const float radiusAmplitude = 1.25f;
+	const float defaultRadius = 0.2f; //1-radius
+	const float radiusFrequency = 0.75f;
+	const float radiusAmplitude = 0.1f;
 	float intensity;
-	const float defaultIntensity = 15.f;
+	const float defaultIntensity = 20.f;
 	const float animationSpeed = 1.75f;
 	float time = 0.f;
 	bool animationStarted = true;

@@ -6,7 +6,7 @@
 class Camera //TODO make indipendent from application
 {
 public:
-	Camera() : input(Application::getInput()) { setView(Application::getWindow().getSize()); };
+	Camera();
 
 	void update();
 
@@ -17,6 +17,8 @@ public:
 	inline void lock() { locked = !locked; }; //toggle without parameters
 
 	inline bool isLocked() { return locked; };
+
+	inline void setCenter(const sf::Vector2<int>& center) { view.setCenter(center.x, center.y); };
 	
 	inline void setView(const sf::Vector2u& viewPort) { view.setSize(viewPort.x, viewPort.y); };
 
