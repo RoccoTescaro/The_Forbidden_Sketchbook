@@ -72,8 +72,7 @@ void Editor::update()
                     actor.get()->updateStepQueue(map, map.posIntToFloat(mouseGriddedPos));
         }
     }
-    if(input.isKeyReleased(Input::MouseR)){
-    actor.get()->update(map, Application::getDeltaTime());}
+    actor.get()->update(map, Application::getDeltaTime());
 
 }
 

@@ -5,12 +5,59 @@
 
 void GameCharacter::update(Map &map, const float &dt)
 {
-	while(!isStepQueueEmpty()){
-	setPos(getPos()+stepQueue.at(0));
-	stepQueue.pop_front();
-	sleep(1/3);
-	setEnergy(0);
+	if(!stepQueue.empty()&&this->getEnergy()>0){
+		bool apSpent=false;
+			if(stepQueue.size()>1){
+				if(isInRange(map)){
+					if(getEnergy()>=2){
+
+						apSpent=true;
+						/*if(weapon){
+							if(weapon->animation(dt,stepQueue.back(), map.getCellDim())){
+								this->ap-=2;
+								map.get<GameCharacter>(map.worldCoordToPos(stepQueue.back()))->execute(weapon,map,turnSystem);
+								if(!map.get<GameCharacter>(map.worldCoordToPos(stepQueue.back())))
+									stepQueue.clear();
+							}
+						}else{
+							this->energy-=2;
+							map.getGameCharacter(map.worldCoordToPos(stepQueue.back()))->execute(nullptr,map,turnSystem);
+							if(!map.get<GameCharacter>(map.worldCoordToPos(stepQueue.back())))
+									stepQueue.clear();
+						}*/
+						
+					}
+				}else{
+					apSpent=true;
+					sf::Vector2<float> &nextStep =stepQueue[1];
+					sf::Vector2<float> pos = this->getPos();
+					sf::Vector2<float> direction=nextStep-pos;
+					if(!(Utils::Math::distance(pos,nextStep)>64)){
+						direction={direction.x/map.getCellDim().x,direction.y/map.getCellDim().y};
+						pos+={direction.x*dt*300,direction.y*dt*300};
+						sprite.setPosition(pos);
+						//if(weapon)
+						//	weapon->setPosition(pos);
+						if(Utils::Math::distance(sprite.getPosition(),nextStep)<3){
+							sprite.setPosition(nextStep);
+							this->energy-=1;
+							map.move(map.posFloatToInt(stepQueue.front()),map.posFloatToInt(nextStep));
+							stepQueue.pop_front();
+						}
+					}else{
+            			stepQueue.pop_front();
+					}
+					if(stepQueue.size()==1){
+						stepQueue.clear();}
+				}
+			}
+		if(!apSpent){
+			this->energy=0;}
 	}
+							std::cout<<int(energy)<<std::endl;
+
+						std::cout<<"\n"<<std::endl;
+
 }
 
 void GameCharacter::execute(GameCharacter &gameCharacter, Map &map)
@@ -20,19 +67,23 @@ void GameCharacter::execute(GameCharacter &gameCharacter, Map &map)
 
 bool GameCharacter::isInRange(Map &map) const
 {
-	return true;
+	return false;
 }
 
-void GameCharacter::updateStepQueue(const Map &map, const sf::Vector2<float> target)
+void GameCharacter::updateStepQueue( Map &map, const sf::Vector2<float> target)
 {
-	if(stepQueue.empty())
-		stepQueue={{0,64},{64,0},{0,64}};
+	if(stepQueue.empty()){
+		stepQueue=movementStrategy->findPath(map, getPos(), target, isSolid());
+	for(auto &n:stepQueue){
+		std::cout<<n.x<<"-"<<n.y<<std::endl;
+	}
+	}
 }
 
 //PLAYER
 
 Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB)
-	: GameCharacter(100,health,100,energy,0) 
+	: GameCharacter(100,health,20,energy,0) 
 {
 
 	static sf::Texture* texture;

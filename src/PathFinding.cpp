@@ -22,12 +22,12 @@ std::deque<sf::Vector2<float>> AStar::tracePath(Map &map, std::unordered_map<sf:
     //aggiungo il target al percorso e mi sposto sul nodo genitore
     while (!(nodeInfo[target].parentPos.x == target.x && nodeInfo[target].parentPos.y == target.y))
     {
-        finalPath.emplace_front(target.x*map.getCellDim().x,target.y*map.getCellDim().y);
+        finalPath.emplace_front(map.posIntToFloat(target));
         target = nodeInfo[target].parentPos;
     }
 
     //aggiungo il nodo di partenza
-    finalPath.emplace_front(target.x*map.getCellDim().x,target.y*map.getCellDim().y);
+    finalPath.emplace_front(map.posIntToFloat(target));
     return finalPath;
 };
 

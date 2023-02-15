@@ -4,6 +4,7 @@
 #include <memory>
 #include "Entity.h"
 #include "PathFinding.h"
+#include "Utils.h"
 
 class Weapon;
 
@@ -39,9 +40,10 @@ public:
 
     //GAMECHARACTER FUNCTIONS
     bool isInRange(Map &map) const;
-    void updateStepQueue(const Map &map, const sf::Vector2<float> target);
+    void updateStepQueue( Map &map, const sf::Vector2<float> target);
     inline void turnReset(){    setEnergy(getMaxEnergy());
-                                stepQueue.clear();                  };
+                                stepQueue.clear();   
+                                std::cout<<"tr"<<std::endl;           };
     inline bool isStepQueueEmpty(){     return stepQueue.empty();   };
 
     inline void serialize(Archive& fs) 

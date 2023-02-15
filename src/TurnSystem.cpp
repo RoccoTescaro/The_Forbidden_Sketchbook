@@ -11,6 +11,8 @@ std::shared_ptr<GameCharacter> TurnSystem::getActor(){
             turnQueue.pop();
     }
     else{
+
+        //
         newRound();
     }
     std::weak_ptr<GameCharacter> actor = turnQueue.top();
