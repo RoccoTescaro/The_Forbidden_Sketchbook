@@ -38,7 +38,14 @@ Game::Game()
 
 void Game::update()
 {
+	//TRANSITION EFFECT
 	transitionEffect.update(dt);
+
+	if (input.isKeyPressed(Input::Enter))
+		transitionEffect.start();
+
+	if (transitionEffect.isEnded())
+		Application::nextState();
 
 	//MOUSE
 	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));

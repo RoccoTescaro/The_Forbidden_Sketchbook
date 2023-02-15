@@ -7,8 +7,6 @@
 #include "Config.h"
 #include "Input.h"
 
-
-
 class State;
 
 class Application

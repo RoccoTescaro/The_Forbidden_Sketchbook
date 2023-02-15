@@ -24,7 +24,7 @@ Pause::Pause() :
     back.getText().setFillColor(sf::Color(0, 0, 0, 255));
     back.setOnClick([this]()
         {
-            transitionEffect.startAnimation();
+            transitionEffect.start();
             save.setActive(false); //not allow to press any other button if scene is changing
             back.setActive(false);
             menu.setActive(false);
@@ -51,7 +51,7 @@ void Pause::update()
     menu.update(input);
 
     //switch state
-    if (transitionEffect.isAnimationEnded())
+    if (transitionEffect.isEnded())
     {
         //reset transition animation and change application state so that if this state will 
         //be reused it wont be completely black

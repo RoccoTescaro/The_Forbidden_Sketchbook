@@ -27,7 +27,7 @@ Menu::Menu() :
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
     start.setOnClick([this]() 
         { 
-            transitionEffect.startAnimation();
+            transitionEffect.start();
             start.setActive(false); //not allow to press any other button if scene is changing
             exit.setActive(false); 
         });
@@ -51,7 +51,7 @@ void Menu::update()
     exit.update(input);
 
     //switch state
-    if (transitionEffect.isAnimationEnded()) 
+    if (transitionEffect.isEnded()) 
     {
         //reset transition animation and change application state so that if this state will 
         //be reused it wont be completely black

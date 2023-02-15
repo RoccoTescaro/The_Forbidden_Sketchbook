@@ -3,7 +3,7 @@
 #include "../hdr/Application.h"
 
 VignetteEffect::VignetteEffect() :
-	radius(defaultRadius), intensity(Config::eps), openingInterpolationFactor(Config::eps)
+	radius(defaultRadius), intensity(0.f)
 {
 	sf::RenderWindow& window = Application::getWindow();
 	shader.loadFromFile(Config::vignetteEffectShaderPath, sf::Shader::Fragment);
@@ -16,14 +16,32 @@ void VignetteEffect::update(const float& dt)
 {
 	time += dt;
 
-	radius = defaultRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;
+	radius = defaultRadius + std::sin(time * radiusOscillationFrequency) * radiusOscillationAmplitude;
 	
-	if (animationStarted)
+	if (!waiting) 
 	{
-		if (closingAnimation) closingUpdate();	
-		else openingUpdate();
+		if (ended)
+		{
+			animationProgress += dt * animationSpeed;
+			intensity = std::min(defaultIntensity, std::powf(animationProgress,8));
+			if (intensity >= defaultIntensity)
+			{
+				waiting = true;
+				intensity = defaultIntensity;
+			}
+		}
+		else
+		{
+			animationProgress -= dt * animationSpeed;
+			intensity = std::max(0.f, std::powf(animationProgress, 8));
+			if (animationProgress <= 0.f)
+			{
+				ended = true;
+				intensity = 0.f;
+				animationProgress = 0.f;
+			}
+		}
 	}
-	
 
 	shader.setUniform("radius",radius);
 	shader.setUniform("intensity", intensity);
@@ -34,17 +52,20 @@ void VignetteEffect::render(sf::RenderWindow& window)
 	window.draw(vignette, &shader);
 }
 
-void VignetteEffect::startAnimation() 
+void VignetteEffect::start() 
 {
-	closingAnimation = true;
-	animationStarted = true;
+	ended = false;
+	waiting = false;
 }
 
-bool VignetteEffect::isAnimationEnded() const 
+bool VignetteEffect::isEnded() const 
 {
-	return intensity < Config::eps;
+	return ended && intensity <= 0.f;
 }
 
+
+
+/*
 void VignetteEffect::openingUpdate() 
 {
 	openingInterpolationFactor *= openingAnimationSpeed;
@@ -66,3 +87,4 @@ void VignetteEffect::closingUpdate()
 	if (intensity <= Config::eps)
 		closingAnimation = false;
 }
+*/

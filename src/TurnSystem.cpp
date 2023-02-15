@@ -34,7 +34,7 @@ void TurnSystem::newRound()
     {
         auto gc = gcs.second;
 
-        if(Config::maxActivationDistance>Utils::Math::distance(map.getPlayer()->getPos(),gc->getPos()))
+        if(Config::maxActivationDistance > Utils::Math::distance(map.getPlayer()->getPos(),gc->getPos()))
         {
             turnQueue.push(gc);
             gc->turnReset();
