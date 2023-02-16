@@ -1,32 +1,33 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <cmath>
+
 
 class VignetteEffect 
 {
 public:
 	VignetteEffect();
 
-	void update();
-	void render();
+	void update(const float& dt);
+	void render(sf::RenderWindow& window);
 
-	void startAnimation();
-	bool isAnimationEnded() const;
+	void start();
+	bool isEnded() const;
 
 private:
-
-	void openingUpdate();
-	void closingUpdate();
-
 	sf::Shader shader;
 	sf::RectangleShape vignette;
-	float radius;
-	const float defaultRadius = 1.f;
-	const float radiusFrequency = 1.f;
-	const float radiusAmplitude = 1.25f;
-	float intensity;
+
+	const float defaultRadius = 0.8f;
 	const float defaultIntensity = 15.f;
-	const float animationSpeed = 1.75f;
-	float time = 0.f;
-	bool animationStarted = true;
-	bool closingAnimation = false; 
+	const float radiusOscillationAmplitude = 0.1f;
+	const float radiusOscillationFrequency = 1.f;
+	const float animationSpeed = 0.75f;
+
+	float time;
+	float radius;
+	float intensity;
+	float animationProgress = 0.f;
+	bool ended = true;
+	bool waiting = false;
 };

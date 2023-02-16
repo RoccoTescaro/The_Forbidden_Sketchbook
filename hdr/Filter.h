@@ -14,15 +14,14 @@ public:
         shader.setUniform("targetColor", sf::Glsl::Vec4(targetColor));
     };
 
-    inline void update() 
+    inline void update(const float& dt) 
     {
-        threshold += Application::getDeltaTime() * 0.1f;
+        threshold += dt * 0.1f;
         shader.setUniform("threshold", threshold);
     };
 
-    void render() 
+    void render(sf::RenderWindow& window) 
     {
-        sf::RenderWindow& window = Application::getWindow();
         texture.create(window.getSize().x, window.getSize().y); 
         sprite.setTexture(texture.getTexture());
         window.draw(sprite, state);
@@ -30,7 +29,7 @@ public:
 
     void setTargetColor(const sf::Color& color)
     {
-        if (threshold <= 1.f || targetColor == color) //last animation not ended yet
+        if (threshold < 1.f || targetColor == color) //last animation not ended yet
             return;
 
         previousColor = targetColor;
@@ -45,7 +44,7 @@ private:
     sf::RenderStates state;
     sf::Sprite  sprite;
     sf::Shader  shader;
-    float threshold;
-    sf::Color previousColor{0.f,0.f,0.f,255.f};
+    float threshold = 1.f;
+    sf::Color previousColor{0,0,0,255};
     sf::Color targetColor;
 };

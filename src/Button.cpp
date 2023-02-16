@@ -2,29 +2,30 @@
 
 void Button::setTextAlignment(TextAlignment hAlignment, TextAlignment vAlignment)
 {
-    float xoffset;
-    switch (hAlignment)
+    sf::Rect<float> textBounds = text.getLocalBounds();
+    float xOffset, yOffset;
+
+    switch (hAlignment) 
     {
-    case LEFT: xoffset = 0; break;
-    case RIGHT: xoffset = dim.x - this->text.getLocalBounds().width; break;
+    case LEFT: xOffset = 0; break;
+    case RIGHT: xOffset = dim.x - textBounds.width; break;
     case CENTER:
     default:
-        xoffset = (dim.x - this->text.getLocalBounds().width) * 0.5f;
+        xOffset = (dim.x - textBounds.width) * 0.5f;
         break;
     }
 
-    float yoffset;
-    switch (vAlignment)
+    switch (vAlignment) 
     {
-    case TOP: yoffset = 0; break;
-    case BOTTOM: yoffset = dim.y - this->text.getLocalBounds().height; break;
+    case TOP: yOffset = 0; break;
+    case BOTTOM: yOffset = dim.y - textBounds.height; break;
     case CENTER:
     default:
-        yoffset = (dim.y - this->text.getLocalBounds().height) * 0.5f;
+        yOffset = (dim.y - textBounds.height) * 0.5f;
         break;
     }
 
-    this->text.setPosition(pos.x + xoffset, pos.y + yoffset);
+    text.setPosition(pos.x + xOffset - text.getGlobalBounds().left, pos.y + yOffset - text.getGlobalBounds().top);
 }
 
 void Button::setText(const std::string& text, int charSize, TextAlignment hAlignment, TextAlignment vAlignment)
@@ -51,31 +52,31 @@ void Button::setSprite(sf::Texture& texture)
     sprite.setScale(texture.getSize().x / dim.x, texture.getSize().y / dim.y); 
 }
 
-bool Button::isMouseOver() const 
+bool Button::isMouseOver(const Input& input) const 
 {
     sf::Rect<float> bounds{ pos, sf::Vector2<float>(dim) };
-    return bounds.contains(Application::getInput().getMousePos());
+    return bounds.contains(input.getMousePos());
 }
 
-void Button::update() 
+void Button::update(const Input& input)
 {
     if (!active) return;
 
     sprite.setColor(sf::Color::Black);
 
-    if (isMouseOver()) 
+    if (isMouseOver(input)) 
     {
         sprite.setColor(sf::Color::White);
 
         if (onMouseOver) 
             onMouseOver();
-        if (Application::getInput().isKeyReleased(Input::Key::MouseL) && onClick)
+        if (input.isKeyReleased(Input::Key::MouseL) && onClick)
             onClick();
     }
 }
 
-void Button::render() 
+void Button::render(sf::RenderWindow& window)
 {
-    Application::getWindow().draw(sprite);
-    Application::getWindow().draw(text);
+    window.draw(sprite);
+    window.draw(text);
 }

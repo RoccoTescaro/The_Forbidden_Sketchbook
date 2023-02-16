@@ -3,10 +3,10 @@
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
 
-void Map::render()
+void Map::render(sf::RenderWindow& window)
 {
 	for (auto& tile : tiles)
-		tile.second->render(); 
+		tile.second->render(); //TODO make indipendent from application 
 	for (auto& gameCharacter : gameCharacters)
 		gameCharacter.second->render();
 };

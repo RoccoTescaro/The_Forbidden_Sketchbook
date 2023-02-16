@@ -20,6 +20,7 @@ public:
 	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 	
 	inline sf::Vector2<float> getPos() const { return sprite.getPosition(); };
+	inline sf::Vector2<float> getSize() const { return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; };
 	inline sf::Vector2<float> getCenter() const { return (getPos() + getSize() * 0.5f); };
 	virtual bool isSolid() const = 0;
 
@@ -29,13 +30,7 @@ public:
 		fs.serialize(pos); 
 		sprite.setPosition(pos);
 	};
+
 protected:
-
-	inline sf::Vector2<float> getSize() const 
-	{ 
-		return { 20,20 };
-		//return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; 
-	};
-
 	sf::Sprite sprite;
 };

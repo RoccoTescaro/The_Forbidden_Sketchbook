@@ -27,10 +27,10 @@ public:
     
     //GAMECHARACTER GET&SET
     inline bool isSolid() const override { return true; };
-    inline uint8_t getMaxHealth() const { return maxHealth; };
+    inline uint8_t getMaxHealth() const { return maxHealth; }; //need to return as a reference and not by copy to allow hud auto update
     inline uint8_t getMaxEnergy() const { return maxEnergy; };
-    inline uint8_t getHealth() const { return health; };
-    inline uint8_t getEnergy() const { return energy; };
+    inline const uint8_t& getHealth() const { return health; };
+    inline const uint8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
     inline uint8_t getRange() const { return 0; /*return weapon->getRange()*/};
 
@@ -55,7 +55,7 @@ public:
     }
 protected:
     //STATS
-    const uint8_t maxHealth = 0; //#TODO make it mutable to serialization
+    const uint8_t maxHealth = 0;  
     const uint8_t maxEnergy = 0;
     const uint8_t priority = 0;
     uint8_t health = 0;
@@ -73,9 +73,10 @@ class Player : public GameCharacter
 {
 public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
-    Player() {};
+    Player() : Player(100,100,255,255,255) {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
+  
     void serialize(Archive& fs) override 
     {
         GameCharacter::serialize(fs);
@@ -93,7 +94,7 @@ class Melee : public GameCharacter
 {
 public:
     Melee(uint8_t health, uint8_t energy);
-    Melee() {};
+    Melee() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     void serialize(Archive& fs) override
     {
@@ -121,7 +122,7 @@ class Ranged : public GameCharacter
 {
 public:
     Ranged(uint8_t health, uint8_t energy);
-    Ranged() {};
+    Ranged() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     void update(Map &map, const float &dt) override;
 

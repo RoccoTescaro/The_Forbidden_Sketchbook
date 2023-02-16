@@ -1,7 +1,7 @@
 #include "../hdr/Editor.h"
 #include "../hdr/Config.h"
 
-Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y}), turnSystem(map)
+Editor::Editor() : cam(), turnSystem(map)
 {
 
     map.addGameCharacter({5,5}, new Player(1,1,1,1,1));
@@ -16,7 +16,7 @@ Editor::Editor() : cam({Config::windowDim.x, Config::windowDim.y}), turnSystem(m
 
 
     //BACKGROUND
-    backgroundTexture.loadFromFile(Config::backgroundTexturePath);
+    backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
     background.setTexture(backgroundTexture);
     float backgroundScale = (float) window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);
@@ -80,7 +80,7 @@ void Editor::render()
 {
     window.setView(cam.getView());
     window.draw(background);
-    map.render();
+    map.render(window);
     window.draw(mouseIndicator);
     window.draw(mousePosText);
     window.setView(gui);

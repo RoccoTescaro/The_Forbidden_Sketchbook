@@ -8,7 +8,7 @@ void Input::update()
     if (!window.hasFocus())
         return;
     
-    //UPDATE MOUSE WHEEL
+    //UPDATE WINDOW RESIZE AND MOUSE WHEEL 
     wheelDelta = 0.f;
     while (window.pollEvent(event)) 
     { //handle Wheel changes but also other events

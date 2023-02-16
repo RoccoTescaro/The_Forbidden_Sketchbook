@@ -1,17 +1,16 @@
 #pragma once
 #include "Application.h"
 #include <SFML/System.hpp>
+#include "GameCharacter.h"
 
-class GameCharacter; //#TODO remove
-
-class Camera
+class Camera //TODO make indipendent from application
 {
 public:
-	Camera(const sf::Vector2<float>& viewSize) : input(Application::getInput()), view(viewSize * 0.5f, viewSize) {};
+	Camera();
 
 	void update();
 
-	void setTarget(std::shared_ptr<GameCharacter>& target);
+	void setTarget(const std::shared_ptr<GameCharacter>& target);
 
 	inline void lock(bool condition) { locked = condition; };
 
@@ -19,7 +18,11 @@ public:
 
 	inline bool isLocked() { return locked; };
 
-	inline const sf::View& getView() const { return view; }
+	inline void setCenter(const sf::Vector2<int>& center) { view.setCenter(center.x, center.y); };
+	
+	inline void setView(const sf::Vector2u& viewPort) { view.setSize(viewPort.x, viewPort.y); };
+
+	inline const sf::View& getView() const { return view; };
 
 private:
 	sf::View view;

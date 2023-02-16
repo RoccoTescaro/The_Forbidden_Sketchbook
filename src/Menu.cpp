@@ -6,7 +6,7 @@ Menu::Menu() :
     exit({ 0.f, window.getSize().y * 0.75f }, sf::Vector2<int>( window.getSize().x, window.getSize().y * 0.125f ))
 {
     //BACKGROUND
-    backgroundTexture.loadFromFile(Config::backgroundTexturePath);
+    backgroundTexture.loadFromFile(Config::menuBackgroundTexturePath);
     background.setTexture(backgroundTexture);
     float backgroundScale = (float) window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);
@@ -27,7 +27,7 @@ Menu::Menu() :
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
     start.setOnClick([this]() 
         { 
-            transitionEffect.startAnimation();
+            transitionEffect.start();
             start.setActive(false); //not allow to press any other button if scene is changing
             exit.setActive(false); 
         });
@@ -42,22 +42,22 @@ Menu::Menu() :
 
 void Menu::update() 
 {
-    transitionEffect.update();
+    transitionEffect.update(dt);
 
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
     exit.getText().setFillColor(sf::Color(0, 0, 0, 255));
 
-    start.update();
-    exit.update();
+    start.update(input);
+    exit.update(input);
 
     //switch state
-    if (transitionEffect.isAnimationEnded()) 
+    if (transitionEffect.isEnded()) 
     {
         //reset transition animation and change application state so that if this state will 
         //be reused it wont be completely black
         start.setActive(true); 
         exit.setActive(true);
-        Application::nextState(); //#TODO check which button has been pressed and change state according to that
+        Application::nextState(); //TODO check which button has been pressed and change state according to that
     }
 }
 
@@ -65,7 +65,7 @@ void Menu::render()
 {
     window.draw(background);
     window.draw(title);
-    start.render();
-    exit.render();
-    transitionEffect.render();
+    start.render(window);
+    exit.render(window);
+    transitionEffect.render(window);
 }

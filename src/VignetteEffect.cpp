@@ -9,51 +9,76 @@ VignetteEffect::VignetteEffect() :
 	shader.loadFromFile(Config::vignetteEffectShaderPath, sf::Shader::Fragment);
 	shader.setUniform("resolution", sf::Vector2<float>(window.getSize()));
 	vignette.setPosition(0, 0);
+	vignette.setSize(sf::Vector2<float>{window.getSize()});
 }
 
-void VignetteEffect::update() 
+void VignetteEffect::update(const float& dt) 
 {
-	time += Application::getDeltaTime();
+	time += dt;
 
-	sf::RenderWindow& window = Application::getWindow();
-	vignette.setSize(sf::Vector2<float>{window.getSize()});
-
-	radius = defaultRadius + std::abs(std::sin(time * radiusFrequency)) * radiusAmplitude;
+	radius = defaultRadius + std::sin(time * radiusOscillationFrequency) * radiusOscillationAmplitude;
 	
-	if (animationStarted)
+	if (!waiting) 
 	{
-		if (closingAnimation) closingUpdate();	
-		else openingUpdate();
+		if (ended)
+		{
+			animationProgress += dt * animationSpeed;
+			double dAnimationProgress = animationProgress;
+			float fPow = std::pow(dAnimationProgress,8);
+			intensity = std::min(defaultIntensity, fPow);
+			if (intensity >= defaultIntensity)
+			{
+				waiting = true;
+				intensity = defaultIntensity;
+			}
+		}
+		else
+		{
+			animationProgress -= dt * animationSpeed;
+			double dAnimationProgress = animationProgress;
+			float fPow = std::pow(dAnimationProgress,8);
+			intensity = std::max(0.f, fPow);
+			if (animationProgress <= 0.f)
+			{
+				ended = true;
+				intensity = 0.f;
+				animationProgress = 0.f;
+			}
+		}
 	}
-	
 
 	shader.setUniform("radius",radius);
 	shader.setUniform("intensity", intensity);
 }
 
-void VignetteEffect::render() 
+void VignetteEffect::render(sf::RenderWindow& window) 
 {
-	//#TODO check view
-	Application::getWindow().draw(vignette, &shader);
+	window.draw(vignette, &shader);
 }
 
-void VignetteEffect::startAnimation() 
+void VignetteEffect::start() 
 {
-	closingAnimation = true;
-	animationStarted = true;
+	ended = false;
+	waiting = false;
 }
 
-bool VignetteEffect::isAnimationEnded() const 
+bool VignetteEffect::isEnded() const 
 {
-	return intensity <= Config::eps;
+	return ended && intensity <= 0.f;
 }
 
-void VignetteEffect::openingUpdate()
+
+
+/*
+void VignetteEffect::openingUpdate() 
 {
-	intensity = Utils::Math::lerp(intensity, defaultIntensity, animationSpeed * Application::getDeltaTime());
+	openingInterpolationFactor *= openingAnimationSpeed;
+	openingInterpolationProgress += Application::getDeltaTime() * openingInterpolationFactor;
+    intensity = Utils::Math::lerp(intensity, defaultIntensity, openingInterpolationProgress);
 
 	if (intensity >= defaultIntensity - Config::eps)
 	{
+		intensity = defaultIntensity;
 		closingAnimation = true;
 		animationStarted = false;
 	}
@@ -61,8 +86,9 @@ void VignetteEffect::openingUpdate()
 
 void VignetteEffect::closingUpdate()
 {
-	intensity = Utils::Math::lerp(intensity, 0.f, animationSpeed * Application::getDeltaTime());
+	intensity = Utils::Math::lerp(intensity, 0.f, closingAnimationSpeed * Application::getDeltaTime());
 
 	if (intensity <= Config::eps)
 		closingAnimation = false;
 }
+*/

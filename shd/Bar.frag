@@ -1,4 +1,4 @@
-#version 330
+#version 130
 
 //loading direction
 uniform sampler2D texture;
@@ -8,7 +8,7 @@ uniform float value; // 0-1
 
 //color mask
 uniform vec3 colorMask;
-uniform float threshold = 0.55; //#TODO we could have a function to set it up
+uniform float threshold = 0.55;
 
 //texture mask?
 uniform sampler2D textureMask;

@@ -7,7 +7,7 @@ Pause::Pause() :
     menu({ 0.f, window.getSize().y * 0.71f }, sf::Vector2<int>(window.getSize().x, window.getSize().y * 0.14f))
 {
     //BACKGROUND
-    backgroundTexture.loadFromFile(Config::backgroundTexturePath);
+    backgroundTexture.loadFromFile(Config::menuBackgroundTexturePath);
     background.setTexture(backgroundTexture);
     float backgroundScale = (float)window.getSize().x / backgroundTexture.getSize().x;
     background.setScale(backgroundScale, backgroundScale);
@@ -24,7 +24,7 @@ Pause::Pause() :
     back.getText().setFillColor(sf::Color(0, 0, 0, 255));
     back.setOnClick([this]()
         {
-            transitionEffect.startAnimation();
+            transitionEffect.start();
             save.setActive(false); //not allow to press any other button if scene is changing
             back.setActive(false);
             menu.setActive(false);
@@ -40,18 +40,18 @@ Pause::Pause() :
 
 void Pause::update()
 {
-    transitionEffect.update();
+    transitionEffect.update(dt);
 
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
     back.getText().setFillColor(sf::Color(0, 0, 0, 255));
     menu.getText().setFillColor(sf::Color(0, 0, 0, 255));
 
-    save.update();
-    back.update();
-    menu.update();
+    save.update(input);
+    back.update(input);
+    menu.update(input);
 
     //switch state
-    if (transitionEffect.isAnimationEnded())
+    if (transitionEffect.isEnded())
     {
         //reset transition animation and change application state so that if this state will 
         //be reused it wont be completely black
@@ -60,15 +60,15 @@ void Pause::update()
         menu.setActive(true);
         
         if(back.isClicked())
-            Application::prevState(); //#TODO check which button has been pressed and change state according to that
+            Application::prevState(); //TODO check which button has been pressed and change state according to that
     }
 }
 
 void Pause::render()
 {
     window.draw(background);
-    save.render();
-    back.render();
-    menu.render();
-    transitionEffect.render();
+    save.render(window);
+    back.render(window);
+    menu.render(window);
+    transitionEffect.render(window);
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include "Application.h"
 #include <functional>
+#include "Input.h"
 
 class Button 
 {
@@ -34,7 +34,7 @@ public:
     inline void setSprite(const std::string& path) { texture.loadFromFile(path); setSprite(texture); };
     
     //STATE
-    bool isMouseOver() const;
+    bool isMouseOver(const Input& input) const;
     inline void setActive(bool active) { this->active = active; };
     inline void setActive() { active = !active; }; //toggle without parameters
     inline bool isActive() const { return active; };
@@ -45,8 +45,8 @@ public:
     //UPDATE
     inline void setOnClick(std::function<void()> onClick) { this->onClick = onClick; };
     inline void setOnMouseOver(std::function<void()> onMouseOver) { this->onMouseOver = onMouseOver; };
-    void update();
-    void render();
+    void update(const Input& input);
+    void render(sf::RenderWindow& window);
 
 private:
     //STATE

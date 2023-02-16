@@ -2,25 +2,36 @@
 #include "Application.h"
 #include <SFML/Graphics.hpp>
 
+template<typename Type>
 class Bar 
 {
 public: 
-	Bar(float transitionSpeed) : transitionSpeed(transitionSpeed) 
+	Bar(float transitionSpeed = 5.f)
+		: transitionSpeed(transitionSpeed)
 	{
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
 	};
 
+	Bar(const Type* targetValue, const Type& targetMaxValue, float transitionSpeed = 5.f) 
+		: transitionSpeed(transitionSpeed), targetValue(targetValue), targetMaxValue(targetMaxValue)
+	{
+		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
+
+	};
+
 	void update(const float& dt) 
 	{
-		*value += transitionSpeed * dt * (targetValue - *value);
+		if (!targetValue) return; //handled died
+
+		value += transitionSpeed * dt * (*targetValue - value);
 		
-		shader.setUniform("value", *value/targetValue);
-		text.setString(std::to_string(*value));
+		shader.setUniform("value", value/(targetMaxValue));
+		text.setString(std::to_string(static_cast<Type>(round(value))));
 	};
 	
 	void render(sf::RenderWindow& window) 
 	{
-		shader.setUniform("windowHeight", window.getView().getSize().y); //#TODO check if view or default view
+		shader.setUniform("windowHeight", window.getView().getSize().y); //TODO test/check if view or default view
 		window.draw(sprite, &shader);
 		//fix text pos according to number of digits
 		text.setPosition(sprite.getPosition().x + relativeTextCenteredPos.x - static_cast<int>(text.getGlobalBounds().width * 0.5f),  //cast to int fix the text position to an int value preventing antialiasing blur effect
@@ -28,8 +39,8 @@ public:
 		window.draw(text);
 	};
 
-	void setValue(float* value) { this->value = value; };
-	void setTargetValue(float targetValue) { this->targetValue = targetValue; };
+	void setTargetValue(const Type* targetValue) { this->targetValue = targetValue; };
+	void setTargetMaxValue(const Type& targetMaxValue) { this->targetMaxValue = targetMaxValue; };
 
 	//TEXTURE
 	void setTexture(const std::string& path) 
@@ -45,7 +56,7 @@ public:
 	void setPos(const sf::Vector2<int>& pos) { sprite.setPosition(pos.x,pos.y); };
 	
 	//MASK
-	void setColorMask(const sf::Color& color) {	shader.setUniform("colorMask", sf::Glsl::Vec3(color.r/256, color.g/256, color.b/256)); };
+	void setColorMask(const sf::Color& color) {	shader.setUniform("colorMask", sf::Glsl::Vec3(color.r/255, color.g/255, color.b/255)); };
 	void setThreshold(float threshold) { shader.setUniform("threshold", threshold); };
 
 	void setMask(const std::string& path) 
@@ -69,14 +80,15 @@ public:
 		text.setFont(font);
 	};
 
-	void setTextColor(const sf::Color& color) { text.setColor(color); };
+	void setTextColor(const sf::Color& color) { text.setFillColor(color); };
 	void setCharacterSize(uint32_t size) { text.setCharacterSize(size); };
 	void setTextPos(const sf::Vector2<int>& pos) { relativeTextCenteredPos = pos; };
 	
 private:
 
-	float* value;
-	float targetValue;
+	float value;
+	const Type* targetValue;  
+	Type targetMaxValue; 
 	float transitionSpeed;
 
 	//TEXTURE

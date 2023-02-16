@@ -25,7 +25,7 @@ public:
 		Load = std::ios_base::binary | std::ios_base::in,
 	};
 
-	Archive(const char* fileName, Mode mode = Mode::Save) : file(fileName, static_cast<std::ios_base::openmode>(mode)), mode(mode) { reset(); };
+	Archive(const std::string& path, Mode mode = Mode::Save) : file(path.c_str(), static_cast<std::ios_base::openmode>(mode)), mode(mode) { reset(); };
 
 	//serialize
 	template<typename Type> Archive& operator<<(Type& obj);
@@ -71,14 +71,17 @@ private:
 	template<typename Type> if_Serializable<Type> save(Type*& ptr);
 	template<typename Type> if_Serializable<Type> load(Type*& ptr);
 
-	//definition of series of template function for some types of class without a serializable function
-	//not derivable from Serializable<Type> (we could actually use the Adapter pattern but 
-	//would be too inefficent in terms of lines of code)
+	//definition of a series of template function for some types of class without a serializable function
+	//not derivable from Serializable (we could actually use the Adapter pattern but 
+	//would be too inefficent in terms of lines of code). The copiler choose the best fitting overloaded function
+	//by parameter comparison, if noone of this is fitting it uses the reference one and let the object
+	//to define of to serialize itself.
 
 	template<typename Type> void save(std::shared_ptr<Type>& ptr);
 	template<typename Type> void load(std::shared_ptr<Type>& ptr);
 
-	//#TODO add a save and load for weak_ptr
+	template<typename Type> void save(std::weak_ptr<Type>& ptr);
+	template<typename Type> void load(std::weak_ptr<Type>& ptr);
 
 	template<typename Type> void save(std::unique_ptr<Type>& ptr);
 	template<typename Type> void load(std::unique_ptr<Type>& ptr);
@@ -203,7 +206,8 @@ if_Serializable<Type> Archive::load(Type& obj)
 
 	obj.serialize(*this);
 }
-/*
+
+/* TODO fix and test 
 template<typename Type, size_t size>
 void Archive::save(Type(&array)[size])
 {
@@ -233,6 +237,7 @@ void Archive::load(Type(&array)[size])
 		load(elm);
 }
 */
+
 template<typename Type>
 if_Pod<Type> Archive::save(Type*& ptr)
 {
@@ -349,6 +354,27 @@ void Archive::load(std::shared_ptr<Type>& ptr)
 }
 
 template<typename Type>
+void Archive::save(std::weak_ptr<Type>& ptr)
+{
+	Type* p = ptr.lock().get(); //TODO test
+	save(p);
+}
+
+template<typename Type>
+void Archive::load(std::weak_ptr<Type>& ptr)
+{
+	Type* p = nullptr;
+	load(p);
+	if (p)
+	{
+		std::shared_ptr<Type>& shared = (std::shared_ptr<Type>&) objToShared[p];
+		if (!shared)
+			shared = std::shared_ptr<Type>(p);
+		ptr = shared;
+	}
+}
+
+template<typename Type>
 void Archive::save(std::unique_ptr<Type>& ptr)
 {
 	Type* p = (Type*)ptr.get();
@@ -394,7 +420,10 @@ void Archive::load(std::vector<Type>& vec)
 		ASSERT(std::is_default_constructible<Type>::value,"serializable class has not an empty contructor");
 		Type type = {};
 		load(type);
-		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value)
+		//we need to differentiate std::vector<std::unique_ptr<Type>> from std::vector<Type>
+		//we could do it by specialize another function with that different parameter and let the compiler choose 
+		//the best fitting function but the implementation is pretty much the same 
+		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value) 
 			vec.push_back(std::move(type));
 		else
 			vec.push_back(type);
@@ -437,7 +466,7 @@ void Archive::load(std::list<Type>& list)
 }
 /*
 template<typename Type, size_t size>
-void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (#TODO fix me)
+void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (TODO fix me)
 {
 	tab();
 	file << "array of " << typeid(Type).name() << " -" << std::endl;
@@ -478,7 +507,7 @@ void Archive::save(std::map<Key, Value>& map)
 }
 
 template<typename Key, typename Value>
-void Archive::load(std::map<Key, Value>& map) //TODO test
+void Archive::load(std::map<Key, Value>& map) 
 {
 	std::string mapIntro;
 	std::getline(file, mapIntro);

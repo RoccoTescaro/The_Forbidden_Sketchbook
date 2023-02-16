@@ -2,13 +2,13 @@
 #include <SFML/System.hpp>
 #include "Serializable.h"
 #include "Archive.h"
+#include "Entity.h"
+#include "Tile.h"
+#include "GameCharacter.h"
 #include <map>
 #include <memory>
 #include "GameCharacter.h"
 #include "Tile.h"
-
-
-//#TODO remove
 
 class Map : public Serializable
 {
@@ -24,7 +24,7 @@ class Map : public Serializable
 	using GameCharacters = std::map<sf::Vector2<int>, std::shared_ptr<GameCharacter>, Compare>;
 
 public:
-	void render();
+	void render(sf::RenderWindow& window);
 
 	inline Tiles& getTiles() { return tiles; };
 	inline const Tiles& getTiles() const { return tiles; };
@@ -52,7 +52,7 @@ public:
 	sf::Vector2<float> posIntToFloat(const sf::Vector2<int>& pos);
 	sf::Vector2<int> posFloatToInt(const sf::Vector2<float>& pos); //convert world coord to grided one
 
-	void serialize(Archive& fs) override; //#TODO fix sf::Vector2 save
+	void serialize(Archive& fs) override; 
 private:
 	static Serializable* create() { return new Map; };
 	static Register registration;
@@ -61,5 +61,5 @@ private:
 	GameCharacters gameCharacters;
 	std::shared_ptr<Player> player;
 
-	sf::Vector2<int> cellDim{ 64,64 };
+	sf::Vector2<int> cellDim{ 64,32 };
 };

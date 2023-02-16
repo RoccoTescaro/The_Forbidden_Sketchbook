@@ -33,14 +33,7 @@ int main()
 	}
 
 	Application::run();
-/*
-	Map map;
-	std::shared_ptr<GameCharacter> gc (new Melee(1,1));
-	gc.get()->setPos({7,0});
-	map.addGameCharacter(gc);
-	sf::Vector2f pos=map.getGameCharacter({1,1}).get()->getPos();
-	std::cout<<pos.x<<std::endl;
-*/
+
 	return 0;
 
 }
