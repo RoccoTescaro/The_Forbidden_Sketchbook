@@ -3,6 +3,10 @@
 Game::Game()
 	: turnSystem(map)
 {
+
+	//test 
+
+
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); //FIX bg
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
@@ -28,6 +32,12 @@ Game::Game()
 	map.add({ 0,0 }, new Player); //TODO remove this initialization
 
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
+
+
+    map.addGameCharacter({8,8}, new Melee(1,1));
+    map.addGameCharacter({3,3}, new Melee(1,1));
+    map.addGameCharacter({8,3}, new Melee(1,1));
+
 
 	cam.lock(true);
 	cam.setTarget(actor); 
@@ -77,13 +87,19 @@ void Game::update()
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
 	//UPDATE ACTOR
-	if (actor->getEnergy() == 0)
-	{
-		actor->turnReset();
-		actor = turnSystem.getActor();
-		if (cam.isLocked())
-			cam.setTarget(actor);
-	}
+    //TURNSYSTEM
+    if(actor.get()->getEnergy()==0)
+        actor=turnSystem.getActor();
+    if(!turnSystem.isPlayerTurn()){
+        actor.get()->updateStepQueue(map, map.getPlayer().get()->getPos());
+    }
+    else{
+        if(actor.get()->isStepQueueEmpty()&&input.isKeyReleased(Input::MouseL)){
+                    actor.get()->updateStepQueue(map, map.posIntToFloat(mousePos));
+        }
+    }
+    actor.get()->update(map, Application::getDeltaTime());
+
 
 }
 

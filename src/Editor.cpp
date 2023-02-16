@@ -1,19 +1,8 @@
 #include "../hdr/Editor.h"
 #include "../hdr/Config.h"
 
-Editor::Editor() : cam(), turnSystem(map)
+Editor::Editor() : cam()
 {
-
-    map.addGameCharacter({5,5}, new Player(1,1,1,1,1));
-
-    actor=turnSystem.getActor();
-    
-    //ENTITIES ADD
-
-    map.addGameCharacter({8,8}, new Melee(1,1));
-    map.addGameCharacter({3,3}, new Melee(1,1));
-    map.addGameCharacter({8,3}, new Melee(1,1));
-
 
     //BACKGROUND
     backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
@@ -61,19 +50,6 @@ void Editor::update()
 
     }
     */
-    //TURNSYSTEM
-    if(actor.get()->getEnergy()==0)
-        actor=turnSystem.getActor();
-    if(!turnSystem.isPlayerTurn()){
-        actor.get()->updateStepQueue(map, map.getPlayer().get()->getPos());
-    }
-    else{
-        if(actor.get()->isStepQueueEmpty()&&input.isKeyReleased(Input::MouseL)){
-                    actor.get()->updateStepQueue(map, map.posIntToFloat(mouseGriddedPos));
-        }
-    }
-    actor.get()->update(map, Application::getDeltaTime());
-
 }
 
 void Editor::render() 

@@ -3,7 +3,6 @@
 #include "Button.h"
 #include "Map.h"
 #include "Camera.h"
-#include "TurnSystem.h"
 
 class Editor : public State
 {
@@ -24,8 +23,5 @@ private:
     sf::RectangleShape mouseIndicator;
     sf::Font mouseFont;
     sf::Text mousePosText;
-
-    TurnSystem turnSystem;
-    std::shared_ptr<GameCharacter> actor;
 
 };
