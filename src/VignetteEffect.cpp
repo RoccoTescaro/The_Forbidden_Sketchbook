@@ -23,7 +23,9 @@ void VignetteEffect::update(const float& dt)
 		if (ended)
 		{
 			animationProgress += dt * animationSpeed;
-			intensity = std::min(defaultIntensity, std::powf(animationProgress,8));
+			double dAnimationProgress = animationProgress;
+			float fPow = std::pow(dAnimationProgress,8);
+			intensity = std::min(defaultIntensity, fPow);
 			if (intensity >= defaultIntensity)
 			{
 				waiting = true;
@@ -33,7 +35,9 @@ void VignetteEffect::update(const float& dt)
 		else
 		{
 			animationProgress -= dt * animationSpeed;
-			intensity = std::max(0.f, std::powf(animationProgress, 8));
+			double dAnimationProgress = animationProgress;
+			float fPow = std::pow(dAnimationProgress,8);
+			intensity = std::max(0.f, fPow);
 			if (animationProgress <= 0.f)
 			{
 				ended = true;

@@ -45,6 +45,6 @@ private:
     sf::Sprite  sprite;
     sf::Shader  shader;
     float threshold = 1.f;
-    sf::Color previousColor{0.f,0.f,0.f,255.f};
+    sf::Color previousColor{0,0,0,255};
     sf::Color targetColor;
 };

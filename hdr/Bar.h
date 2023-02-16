@@ -13,8 +13,10 @@ public:
 	};
 
 	Bar(const Type* targetValue, const Type& targetMaxValue, float transitionSpeed = 5.f) 
-		: Bar(transitionSpeed), targetValue(targetValue), targetMaxValue(targetMaxValue)
+		: transitionSpeed(transitionSpeed), targetValue(targetValue), targetMaxValue(targetMaxValue)
 	{
+		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
+
 	};
 
 	void update(const float& dt) 

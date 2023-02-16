@@ -1,4 +1,4 @@
-#include "..\hdr\Game.h"
+#include "../hdr/Game.h"
 
 Game::Game()
 	: turnSystem(map)

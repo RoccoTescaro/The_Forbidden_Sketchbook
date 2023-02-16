@@ -1,4 +1,4 @@
-#include "..\hdr\Hud.h"
+#include "../hdr/Hud.h"
 
 Hud::Hud()
 {
