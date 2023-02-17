@@ -12,7 +12,7 @@ public:
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
 	};
 
-	Bar(const Type* targetValue, Type targetMaxValue, float transitionSpeed = 5.f) 
+	Bar(const Type* targetValue, const Type& targetMaxValue, float transitionSpeed = 5.f) 
 		: transitionSpeed(transitionSpeed), targetValue(targetValue), targetMaxValue(targetMaxValue)
 	{
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);

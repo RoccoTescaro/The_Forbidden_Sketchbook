@@ -1,6 +1,7 @@
 #include "../hdr/VignetteEffect.h"
 #include "../hdr/Utils.h"
 #include "../hdr/Application.h"
+#include <cmath>
 
 VignetteEffect::VignetteEffect() :
 	radius(defaultRadius), intensity(0.f)
@@ -23,7 +24,7 @@ void VignetteEffect::update(const float& dt)
 		if (ended)
 		{
 			animationProgress += dt * animationSpeed;
-			intensity = std::min(defaultIntensity, std::powf(animationProgress,8));
+			intensity = std::min(defaultIntensity, (float)std::pow(animationProgress, 8));
 			if (intensity >= defaultIntensity)
 			{
 				waiting = true;
@@ -33,7 +34,7 @@ void VignetteEffect::update(const float& dt)
 		else
 		{
 			animationProgress -= dt * animationSpeed;
-			intensity = std::max(0.f, std::powf(animationProgress, 8));
+			intensity = std::max(0.f, (float)std::pow(animationProgress, 8));
 			if (animationProgress <= 0.f)
 			{
 				ended = true;

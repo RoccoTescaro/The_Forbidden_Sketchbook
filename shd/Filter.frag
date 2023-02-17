@@ -1,4 +1,4 @@
-#version 330
+#version 130
 
 uniform float threshold;
 uniform vec4 previousColor;

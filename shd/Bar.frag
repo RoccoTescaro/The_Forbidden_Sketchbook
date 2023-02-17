@@ -1,4 +1,4 @@
-#version 330
+#version 130
 
 //loading direction
 uniform sampler2D texture;

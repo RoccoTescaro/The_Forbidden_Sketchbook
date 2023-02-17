@@ -16,7 +16,7 @@ void Wall::setTexture(uint8_t newType){
 		if (!texture[i])
 		{
 			texture[i] = new sf::Texture;
-			texture[i]->loadFromFile("../img/"+std::to_string(i)+".png");
+			texture[i]->loadFromFile("../img/Wall"+std::to_string(i)+".png");
 			texture[i]->generateMipmap();
 		}
 	Wall::type=newType;
