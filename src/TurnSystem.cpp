@@ -1,8 +1,8 @@
 #include "../hdr/TurnSystem.h"
 
-TurnSystem::TurnSystem (Map& map): map(map)
+TurnSystem::TurnSystem(const std::shared_ptr<Map>& map)
 {
-    //newRound();
+    this->map = map;
 };
 
 std::shared_ptr<GameCharacter> TurnSystem::getActor()
@@ -23,18 +23,18 @@ std::shared_ptr<GameCharacter> TurnSystem::getActor()
 
 bool TurnSystem::isPlayerTurn()
 {
-    return turnQueue.size() == 0;
+    return turnQueue.empty();
 }
 
 void TurnSystem::newRound()
 {
-    auto gameCharacters = map.getGameCharacters();
+    auto gameCharacters = map->getGameCharacters();
 
     for(auto &gcs : gameCharacters)
     {
         auto gc = gcs.second;
 
-        if(Config::maxActivationDistance > Utils::Math::distance(map.getPlayer()->getPos(),gc->getPos()))
+        if(Config::maxActivationDistance > Utils::Math::distance(map->getPlayer()->getPos(),gc->getPos()))
         {
             turnQueue.push(gc);
             gc->turnReset();
@@ -43,3 +43,12 @@ void TurnSystem::newRound()
     }
 }
 
+void TurnSystem::serialize(Archive& fs) 
+{
+    fs.serialize(map);
+    uint32_t size = turnQueue.size();
+    fs.serialize(size);
+    newRound();
+    while (turnQueue.size() != size) //might be size+1
+        turnQueue.pop();
+}

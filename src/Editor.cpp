@@ -1,7 +1,8 @@
 #include "../hdr/Editor.h"
 #include "../hdr/Config.h"
 
-Editor::Editor() : cam(), turnSystem(map)
+Editor::Editor() 
+    : cam(), turnSystem(nullptr)
 {
 
     map.addGameCharacter({5,5}, new Player(1,1,1,1,1));

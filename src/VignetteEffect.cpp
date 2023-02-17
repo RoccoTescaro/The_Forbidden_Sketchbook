@@ -63,28 +63,3 @@ bool VignetteEffect::isEnded() const
 	return ended && intensity <= 0.f;
 }
 
-
-
-/*
-void VignetteEffect::openingUpdate() 
-{
-	openingInterpolationFactor *= openingAnimationSpeed;
-	openingInterpolationProgress += Application::getDeltaTime() * openingInterpolationFactor;
-    intensity = Utils::Math::lerp(intensity, defaultIntensity, openingInterpolationProgress);
-
-	if (intensity >= defaultIntensity - Config::eps)
-	{
-		intensity = defaultIntensity;
-		closingAnimation = true;
-		animationStarted = false;
-	}
-}
-
-void VignetteEffect::closingUpdate()
-{
-	intensity = Utils::Math::lerp(intensity, 0.f, closingAnimationSpeed * Application::getDeltaTime());
-
-	if (intensity <= Config::eps)
-		closingAnimation = false;
-}
-*/

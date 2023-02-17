@@ -273,13 +273,16 @@ if_Pod<Type> Archive::load(Type*& ptr)
 	uint32_t objId;
 	load(objId);
 
-	ptr = (Type*&)idToObj[objId]; //take it from memory if already deserialized
-	if (!ptr) //else construct it
+	Type*& temp = (Type*&)idToObj[objId]; //take it from memory if already deserialized
+	if (!temp && (objId != 0)) //else construct it
 	{
-		ptr = new Type;
-		load(*ptr);
+		temp = new Type;
+		load(*temp);
 	}
+
+	ptr = temp;
 }
+
 
 
 template<typename Type>
@@ -321,15 +324,16 @@ if_Serializable<Type> Archive::load(Type*& ptr)
 	uint32_t objId;
 	load(objId);
 
-	ptr = (Type*&)idToObj[objId]; //take it from memory if already deserialized
-	if (!ptr) //else construct it
+	Type*& temp = (Type*&)(idToObj[objId]); //take it from memory if already deserialized
+	if (!temp && objId != 0) //else construct it
 	{
 		std::string typeId;
 		load(typeId);
 
-		ptr = (Type*)Register::getType(typeId);
-		load(*ptr);
+		temp = dynamic_cast<Type*>(Register::getType(typeId));
+		load(*temp);
 	}
+	ptr = temp;
 }
 
 template<typename Type>
