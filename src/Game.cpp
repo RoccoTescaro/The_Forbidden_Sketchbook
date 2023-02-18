@@ -91,17 +91,15 @@ void Game::update()
     if(actor->getEnergy()==0)
         actor=turnSystem.getActor();
     if(!turnSystem.isPlayerTurn()){
-        actor.get()->updateStepQueue(map, map.getPlayer().get()->getPos());
+        actor->updateStepQueue(map, map.getPlayer()->getPos());
     }
     else{
 		std::cout<<"else"<<std::endl;
-        if(actor.get()->isStepQueueEmpty() && input.isKeyReleased(Input::MouseL)){
-            actor.get()->updateStepQueue(map, map.posIntToFloat(mousePos));
-					std::cout<<"empty"<<std::endl;
-
+        if(actor->isStepQueueEmpty() && input.isKeyReleased(Input::MouseL)){
+            actor->updateStepQueue(map, map.posIntToFloat(mousePos));
         }
     }
-    actor.get()->update(map, Application::getDeltaTime());
+    actor->update(map, Application::getDeltaTime());
 
 
 }

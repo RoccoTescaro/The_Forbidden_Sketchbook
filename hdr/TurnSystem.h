@@ -20,7 +20,7 @@ private:
     {
         bool operator()(const std::weak_ptr<GameCharacter> &p1, const std::weak_ptr<GameCharacter> &p2) const
         {
-            return (p1.lock().get()->getPriority() <= p2.lock().get()->getPriority());
+            return (p1.lock()->getPriority() <= p2.lock()->getPriority());
         }
     };
 

@@ -90,7 +90,7 @@ void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end)
 
 bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
 {
-	return getTile(pos) && (getTile(pos).get()->isSolid() || solid); 
+	return getTile(pos) && (getTile(pos)->isSolid() || solid); 
 }
 
 sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>&pos)
