@@ -4,7 +4,6 @@
 #include "GameCharacter.h"
 #include "Map.h"
 #include "Utils.h"
-#include "Serializable.h"
 
 
 class TurnSystem : public Serializable
@@ -21,15 +20,15 @@ private:
 
 public:
 
-    TurnSystem(const std::shared_ptr<Map>& map);
-    TurnSystem() : map(nullptr) {};
-
-    std::shared_ptr<GameCharacter> getActor();
+    void init(Map& map);
+  
+    std::weak_ptr<GameCharacter> getActor();
+    
     bool isPlayerTurn();
+    
     void newRound();
 
-    void serialize(Archive& fs) override;
-
+    void serialize(Archive& arc);
 private:
     static Serializable* create() { return new TurnSystem; };
     static Register registration;

@@ -16,7 +16,6 @@ public:
         : maxHealth(maxHealth), health(health), maxEnergy(maxEnergy), energy(energy), priority(priority) {};
     GameCharacter() : energy(0), priority(0) {};
 
-
     //ENTITY
     void update(Map &map, const float &dt) override;
     void execute(GameCharacter &gameCharacter, Map &map) override;

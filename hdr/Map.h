@@ -24,7 +24,7 @@ class Map : public Serializable
 	using GameCharacters = std::map<sf::Vector2<int>, std::shared_ptr<GameCharacter>, Compare>;
 
 public:
-	Map() : player(nullptr), cellDim({64,32}) {};
+	Map() : playerPos({0,0}), cellDim({64,32}) {};
 
 	void render(sf::RenderWindow& window);
 
@@ -35,7 +35,7 @@ public:
 
 	std::shared_ptr<Tile> getTile(const sf::Vector2<int>& pos); //Cannot return a reference in case there is no entity at given pos
 	std::shared_ptr<GameCharacter> getGameCharacter(const sf::Vector2<int>& pos);
-	std::shared_ptr<Player> getPlayer();
+	std::shared_ptr<GameCharacter> getPlayer();
 
 	inline const sf::Vector2<int>& getCellDim() const { return cellDim; };
 
@@ -61,7 +61,7 @@ private:
 
 	Tiles tiles;
 	GameCharacters gameCharacters;
-	std::shared_ptr<Player> player;
+	sf::Vector2<int> playerPos;
 
 	sf::Vector2<int> cellDim{ 64,32 };
 };

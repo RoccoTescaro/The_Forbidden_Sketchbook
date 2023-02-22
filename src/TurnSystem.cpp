@@ -1,24 +1,17 @@
 #include "../hdr/TurnSystem.h"
 
-TurnSystem::TurnSystem(const std::shared_ptr<Map>& map)
+std::weak_ptr<GameCharacter> TurnSystem::getActor()
 {
-    this->map = map;
-};
-
-std::shared_ptr<GameCharacter> TurnSystem::getActor()
-{
-
     while (!turnQueue.empty() && turnQueue.top().expired())
         turnQueue.pop();
 
-    if(turnQueue.empty())
+    if (turnQueue.empty())
         newRound();
-    
+
     std::weak_ptr<GameCharacter> actor = turnQueue.top();
     turnQueue.pop();
 
-    return actor.lock();
-
+    return actor;
 }
 
 bool TurnSystem::isPlayerTurn()
@@ -28,27 +21,32 @@ bool TurnSystem::isPlayerTurn()
 
 void TurnSystem::newRound()
 {
-    auto gameCharacters = map->getGameCharacters();
+    auto& gameCharacters = map->getGameCharacters();
 
     for(auto &gcs : gameCharacters)
     {
         auto gc = gcs.second;
 
-        if(Config::maxActivationDistance > Utils::Math::distance(map->getPlayer()->getPos(),gc->getPos()))
+        if(Config::maxActivationDistance > Utils::Math::distance(map->getPlayer()->getPos(), gc->getPos()))
         {
-            turnQueue.push(gc);
+            turnQueue.emplace(gc);
             gc->turnReset();
         }
 
     }
 }
 
+void TurnSystem::init(Map& map) 
+{
+    this->map = std::make_shared<Map>(map);
+    newRound();
+}
+
 void TurnSystem::serialize(Archive& fs) 
 {
-    fs.serialize(map);
     uint32_t size = turnQueue.size();
     fs.serialize(size);
     newRound();
-    while (turnQueue.size() != size) //might be size+1
+    while (size != turnQueue.size())
         turnQueue.pop();
 }

@@ -20,7 +20,7 @@ Pause::Pause() :
     save.setOnClick([this]()
         {
             Game* game = dynamic_cast<Game*>(Application::getState(1));
-            ASSERT(game, "wrong state index!");
+            WARNING(!game, "wrong state index!");
             game->save();
         });
     save.setOnMouseOver([this]() { save.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
@@ -36,7 +36,7 @@ Pause::Pause() :
             menu.setActive(false);
 
             Game* game = dynamic_cast<Game*>(Application::getState(1));
-            ASSERT(game, "wrong state index!");
+            ASSERT(!game, "wrong state index!");
             game->load();
         });
     back.setOnMouseOver([this]() { back.getText().setFillColor(sf::Color(255, 255, 255, 255)); });

@@ -1,7 +1,6 @@
 #include "../hdr/Game.h"
 
 Game::Game()
-	: map(new Map), turnSystem(map)
 {
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); //FIX bg
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
@@ -11,7 +10,7 @@ Game::Game()
 	backgroundShader.setUniform("texture", backgroundTexture);
 
 	mouseIndicator.setOutlineThickness(3);
-	mouseIndicator.setSize(sf::Vector2<float>(map->getCellDim()));
+	mouseIndicator.setSize(sf::Vector2<float>(map.getCellDim()));
 	mouseIndicator.setFillColor(sf::Color(0, 0, 0, 0));
 	mouseIndicator.setOutlineColor(sf::Color(255,255,255,255));
 	mouseFont.loadFromFile(Config::dialogueFontPath);
@@ -25,15 +24,16 @@ Game::Game()
 	ASSERT(map.getPlayer().get(), "Doesn't exist a player in the map");
 	*/
 
-	map->add({ 0,0 }, new Player); //TODO remove this initialization
+	map.add({ 0,0 }, new Player); //TODO remove this initialization
+	turnSystem.init(map);
 
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 	cam.lock(true);
-	cam.setTarget(actor); 
+	cam.setTarget(actor.lock()); 
 
 	hud.setView(cam.getView());
-	hud.setPlayer(map->getPlayer());
+	hud.setPlayer(map.getPlayer());
 }
 
 void Game::update()
@@ -48,20 +48,20 @@ void Game::update()
 		Application::nextState();
 
 	//MOUSE
-	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
-	mouseIndicator.setPosition(map->posIntToFloat(mousePos));
+	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));
+	mouseIndicator.setPosition(map.posIntToFloat(mousePos));
 	mousePosText.setString(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	mousePosText.setPosition(mouseIndicator.getPosition() + 
-		sf::Vector2<float>{ map->getCellDim().x - mousePosText.getGlobalBounds().width, 
-							map->getCellDim().y - mousePosText.getGlobalBounds().height - 4});
+		sf::Vector2<float>{ map.getCellDim().x - mousePosText.getGlobalBounds().width, 
+							map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
 
 	//CAMERA
 
 	if (input.isKeyPressed(Input::Space))
 		cam.lock();
 
-	if (input.isKeyReleased(Input::MouseR) && map->getGameCharacter(mousePos).get())
-		cam.setTarget(map->getGameCharacter(mousePos));
+	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
+		cam.setTarget(map.getGameCharacter(mousePos));
 
 	cam.update(); 
 
@@ -77,12 +77,13 @@ void Game::update()
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
 	//UPDATE ACTOR
-	if (actor->getEnergy() == 0)
+	auto actorShr = actor.lock();
+	if (actorShr->getEnergy() == 0)
 	{
-		actor->turnReset();
+		actorShr->turnReset();
 		actor = turnSystem.getActor();
 		if (cam.isLocked())
-			cam.setTarget(actor);
+			cam.setTarget(actor.lock());
 	}
 
 }
@@ -91,7 +92,7 @@ void Game::render()
 {
 	window.setView(cam.getView());
 	window.draw(backgroundSprite, &backgroundShader);
-	map->render(window);
+	map.render(window);
 	window.draw(mouseIndicator);
 	window.draw(mousePosText);
 	hud.render(window);
@@ -107,13 +108,15 @@ void Game::save()
 void Game::load()
 {
 	Archive arc(Config::gameMapPath, Archive::Load);
+
 	arc >> map >> turnSystem;
-	
-	//actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
-	//cam.lock(true);
-	//cam.setTarget(actor);
+	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
-	//hud.setView(cam.getView());
-	hud.setPlayer(map->getPlayer());
+	cam.lock(true);
+	cam.setTarget(actor.lock());
+
+	sf::Vector2<float> size = { (float)window.getSize().x,(float)window.getSize().y };
+	hud.setView(sf::View{ size*0.5f,size });
+	hud.setPlayer(map.getPlayer());
 }

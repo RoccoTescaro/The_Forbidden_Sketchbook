@@ -185,7 +185,8 @@ if_Serializable<Type> Archive::save(Type& obj)
 	//since unlike for pointers where a Base class pointer could
 	//actually point to a derived class, here with 
 	//reference, we are sure of the type to deserialize
-	//but improve error handling further more
+	//but improve 
+	//handling further more
 	tab();
 	file << typeid(Type).name() << " -" << std::endl;
 	nTab++;
@@ -288,7 +289,7 @@ if_Pod<Type> Archive::load(Type*& ptr)
 template<typename Type>
 if_Serializable<Type> Archive::save(Type*& ptr)
 {
-	ASSERT(ptr != nullptr, "nullptr");
+	ASSERT(ptr == nullptr, "nullptr");
 	tab();
 	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
 	nTab++;
@@ -360,22 +361,16 @@ void Archive::load(std::shared_ptr<Type>& ptr)
 template<typename Type>
 void Archive::save(std::weak_ptr<Type>& ptr)
 {
-	Type* p = ptr.lock().get(); //TODO test
-	save(p);
+	std::shared_ptr<Type> shared = ptr.lock();
+	save(shared);
 }
 
 template<typename Type>
 void Archive::load(std::weak_ptr<Type>& ptr)
 {
-	Type* p = nullptr;
-	load(p);
-	if (p)
-	{
-		std::shared_ptr<Type>& shared = (std::shared_ptr<Type>&) objToShared[p];
-		if (!shared)
-			shared = std::shared_ptr<Type>(p);
-		ptr = shared;
-	}
+	std::shared_ptr<Type> shared;
+	load(shared);
+	ptr = std::weak_ptr<Type>(shared);
 }
 
 template<typename Type>
@@ -421,7 +416,7 @@ void Archive::load(std::vector<Type>& vec)
 	vec.reserve(size);
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(std::is_default_constructible<Type>::value,"serializable class has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Type>::value,"serializable class has not an empty contructor");
 		Type type = {};
 		load(type);
 		//we need to differentiate std::vector<std::unique_ptr<Type>> from std::vector<Type>
@@ -459,7 +454,7 @@ void Archive::load(std::list<Type>& list)
 	list.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(std::is_default_constructible<Type>::value, "serializable class has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Type>::value, "serializable class has not an empty contructor");
 		Type type = {};
 		load(type);
 		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value)
@@ -521,8 +516,8 @@ void Archive::load(std::map<Key, Value>& map)
 	map.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(std::is_default_constructible<Key>::value, "key has not an empty contructor");
-		ASSERT(std::is_default_constructible<Value>::value, "value has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Key>::value, "key has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Value>::value, "value has not an empty contructor");
 		Key key{};
 		Value value{};
 		load(key);
