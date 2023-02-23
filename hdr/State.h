@@ -21,3 +21,4 @@ protected:
 
 	VignetteEffect transitionEffect;
 };
+

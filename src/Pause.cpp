@@ -35,8 +35,8 @@ Pause::Pause() :
             back.setActive(false);
             menu.setActive(false);
 
-            Game* game = dynamic_cast<Game*>(Application::getState(1));
-            ASSERT(!game, "wrong state index!");
+            Game* game = dynamic_cast<Game*>(Application::getState(1)); //TODO make it flexible with editor
+            ASSERT(!game);
             game->load();
         });
     back.setOnMouseOver([this]() { back.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
@@ -75,7 +75,7 @@ void Pause::update()
         back.setActive(true);
         menu.setActive(true);
         
-        if (back.isClicked())
+        if (back.isClicked()) //TODO make it flexible with editor
             Application::prevState(); 
         else if (menu.isClicked())
             Application::setState(0);

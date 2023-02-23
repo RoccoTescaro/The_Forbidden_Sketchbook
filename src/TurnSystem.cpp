@@ -41,7 +41,7 @@ void TurnSystem::init(Map& map)
     this->map = static_cast<std::shared_ptr<Map>>(&map);//std::make_shared<Map>(map);
 }
 
-void TurnSystem::serialize(Archive& fs) //#TODO test with less entities
+void TurnSystem::serialize(Archive& fs) 
 {
     if (fs.getMode() == Archive::Save)
     {

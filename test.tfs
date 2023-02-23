@@ -1,7 +1,7 @@
 class Map -
 	std::string : class Map
 	unsigned int : 0
-	unsigned int : 5
+	unsigned int : 2
 	pointer to class GameCharacter -
 		unsigned int : 1
 		std::string : class Player
@@ -20,33 +20,6 @@ class Map -
 			float : 32
 			unsigned char : d
 			unsigned char : d
-	pointer to class GameCharacter -
-		unsigned int : 3
-		std::string : class Player
-		class GameCharacter -
-			std::string : class Player
-			float : 128
-			float : 64
-			unsigned char : d
-			unsigned char : d
-	pointer to class GameCharacter -
-		unsigned int : 4
-		std::string : class Player
-		class GameCharacter -
-			std::string : class Player
-			float : 320
-			float : 192
-			unsigned char : d
-			unsigned char : d
-	pointer to class GameCharacter -
-		unsigned int : 5
-		std::string : class Player
-		class GameCharacter -
-			std::string : class Player
-			float : 256
-			float : 224
-			unsigned char : d
-			unsigned char : d
 class TurnSystem -
 	std::string : class TurnSystem
-	unsigned int : 3
+	unsigned int : 2

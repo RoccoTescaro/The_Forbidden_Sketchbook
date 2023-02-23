@@ -110,6 +110,19 @@ namespace Utils
         {
             return std::min(std::max(value, min), max);
         }
+
+        template<typename Type>
+        static float mod(const sf::Vector2<Type>& vec)
+        {
+            return (float) Utils::Math::distance(vec, {0,0});
+        }
+
+        static sf::Vector2<float> normalize(const sf::Vector2<float>& vec)
+        {
+            float mod = Utils::Math::mod(vec);
+            return vec/mod;
+        }
+
     }
 
 } // namespace utils
