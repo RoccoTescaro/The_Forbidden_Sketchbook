@@ -3,12 +3,12 @@
 #include <SFML/System.hpp>
 #include "GameCharacter.h"
 
-class Camera //TODO make indipendent from application
+class Camera
 {
 public:
-	Camera();
+	Camera(const sf::Vector2<float>& viewPort);
 
-	void update();
+	void update(const float& dt);
 
 	void setTarget(const std::shared_ptr<GameCharacter>& target);
 

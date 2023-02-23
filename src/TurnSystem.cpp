@@ -38,15 +38,30 @@ void TurnSystem::newRound()
 
 void TurnSystem::init(Map& map) 
 {
-    this->map = std::make_shared<Map>(map);
-    newRound();
+    this->map = static_cast<std::shared_ptr<Map>>(&map);//std::make_shared<Map>(map);
 }
 
-void TurnSystem::serialize(Archive& fs) 
+void TurnSystem::serialize(Archive& fs) //#TODO test with less entities
 {
-    uint32_t size = turnQueue.size();
-    fs.serialize(size);
-    newRound();
-    while (size != turnQueue.size())
-        turnQueue.pop();
+    if (fs.getMode() == Archive::Save)
+    {
+        uint32_t size = turnQueue.size();
+        size++;
+        fs.serialize(size);
+        //LOG("onSave turnQueue size: {1}", size);
+    }
+    else 
+    {
+        while (!turnQueue.empty()) //clear the queue to load it properly
+            turnQueue.pop();
+        
+        uint32_t size;
+        fs.serialize(size);
+
+        newRound();
+        while (size != turnQueue.size())
+            turnQueue.pop();
+
+        //LOG("onLoad turnQueue size: {1}", size);
+    }
 }

@@ -1,8 +1,9 @@
 #include "../hdr/Game.h"
 
 Game::Game()
+	: cam(sf::Vector2<float>{ Application::getWindow().getSize() })
 {
-	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); //FIX bg
+	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); 
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
 	backgroundShader.setUniform("viewPortDim", sf::Glsl::Vec2(window.getSize()));
@@ -18,15 +19,12 @@ Game::Game()
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
-	/*
+	
+	turnSystem.init(map);
 	Archive arc(Config::gameMapPath, Archive::Load);
 	arc >> map >> turnSystem;
-	ASSERT(map.getPlayer().get(), "Doesn't exist a player in the map");
-	*/
-
-	map.add({ 0,0 }, new Player); //TODO remove this initialization
-	turnSystem.init(map);
-
+	ASSERT(!map.getPlayer().get());
+	
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 	cam.lock(true);
@@ -63,7 +61,7 @@ void Game::update()
 	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
 		cam.setTarget(map.getGameCharacter(mousePos));
 
-	cam.update(); 
+	cam.update(dt); 
 
 	//HUD 
 	hud.update(dt);
@@ -108,7 +106,6 @@ void Game::save()
 void Game::load()
 {
 	Archive arc(Config::gameMapPath, Archive::Load);
-
 	arc >> map >> turnSystem;
 
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him

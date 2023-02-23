@@ -3,7 +3,7 @@
 Hud::Hud()
 {
 	playerHealth.setTexture(Config::healthBarTexturePath);
-	playerHealth.setPos({ 8,128 }); //TODO decide if define parameters here or in config
+	playerHealth.setPos({ 8,128 }); 
 	playerHealth.setScale(0.25f,0.25f);
 	playerHealth.setMask(Config::healthBarMaskTexturePath);
 	playerHealth.setColorMask({ 242,0,0 });

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <bitset>
 
-class Input //TODO decide if make this indipendent application or not
+class Input 
 {
 public:
     enum Key
@@ -20,7 +20,7 @@ public:
         ENUM_SIZE //must be mainteined as last element of the enum, indicates the number of elements in the list
     };
 
-    void update(); //TODO should take a view as parameter
+    void update(); 
 
     sf::Vector2<float> getMousePos(const sf::View* view = nullptr) const;
     const float &getWheelDelta() const;
