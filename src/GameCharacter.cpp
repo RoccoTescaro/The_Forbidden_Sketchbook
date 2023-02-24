@@ -63,14 +63,14 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	if (!texture)
 	{
 		texture = new sf::Texture;
-		texture->loadFromFile("../img/Melee.png");
+		texture->loadFromFile(Config::meleeTexturePath);
 		texture->generateMipmap();
 	}
 
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
+	sprite.setScale(64.f/textureRect.width,128.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
    //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
@@ -85,7 +85,7 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	if (!texture)
 	{
 		texture = new sf::Texture;
-		texture->loadFromFile("../img/Bat.png");
+		texture->loadFromFile(Config::batTexturePath);
 		texture->generateMipmap();
 	}
 
@@ -108,7 +108,7 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	if (!texture)
 	{
 		texture = new sf::Texture;
-		texture->loadFromFile("../img/Ranged.png");
+		texture->loadFromFile(Config::rangedTexturePath);
 		texture->generateMipmap();
 	}
 

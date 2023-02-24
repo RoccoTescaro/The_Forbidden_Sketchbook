@@ -7,19 +7,27 @@ class Map -
 		std::string : class Player
 		class GameCharacter -
 			std::string : class Player
-			float : 0
-			float : 0
+			sf::Vector2<float> -
+				float : 0
+				float : 0
 			unsigned char : d
 			unsigned char : d
+			sf::Color -
+				unsigned char : ÿ
+				unsigned char : ÿ
+				unsigned char : ÿ
+				unsigned char : ÿ
 	pointer to class GameCharacter -
 		unsigned int : 2
-		std::string : class Player
+		std::string : class Melee
 		class GameCharacter -
-			std::string : class Player
-			float : 768
-			float : 32
+			std::string : class Melee
+			sf::Vector2<float> -
+				float : 0
+				float : 96
 			unsigned char : d
-			unsigned char : d
+			unsigned char : 
+
 class TurnSystem -
 	std::string : class TurnSystem
 	unsigned int : 2

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <queue>
 #include <memory>
 #include "Entity.h"
@@ -9,7 +8,7 @@ class PathAlgorithm {};
 class AStar : public PathAlgorithm{};
 class DiglettMovement : public PathAlgorithm{};
 
-class GameCharacter : public Entity
+class GameCharacter : public Entity //TODO fix constructors
 {
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
@@ -79,7 +78,7 @@ public:
     void serialize(Archive& fs) override 
     {
         GameCharacter::serialize(fs);
-        //fs.serialize(filterColor);
+        fs.serialize(filterColor);
     }
 
 private:
@@ -93,13 +92,9 @@ class Melee : public GameCharacter
 {
 public:
     Melee(uint8_t health, uint8_t energy);
-    Melee() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
-
-    void serialize(Archive& fs) override
-    {
-        GameCharacter::serialize(fs);
-        //fs.serialize(filterColor);
-    }
+private:
+    static Serializable* create() { return new Melee{100,100}; };
+    static Register registration;
 };
 
 
@@ -109,11 +104,9 @@ public:
     Bat(uint8_t health, uint8_t energy);
 
     inline bool isSolid() const override { return false; };
-
-    void serialize(Archive& fs) override 
-    {
-        GameCharacter::serialize(fs);
-    }
+private:
+    static Serializable* create() { return new Bat{100,100}; };
+    static Register registration;
 };
 
 
@@ -121,7 +114,6 @@ class Ranged : public GameCharacter
 {
 public:
     Ranged(uint8_t health, uint8_t energy);
-    Ranged() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     void update(Map &map, const float &dt) override;
 
@@ -131,6 +123,9 @@ public:
         fs.serialize(animationTime);
     }
 private:
+    static Serializable* create() { return new Ranged{100,100}; };
+    static Register registration;
+
     const float animationDuration = 0.f;
     float animationTime = 0.f;
 };

@@ -30,6 +30,9 @@ namespace Config
 	const std::string menuBackgroundTexturePath{ PATH("img/MenuBackground.jpg") };
 	const std::string gameBackgroundTexturePath{ PATH("img/GameBackground.jpg") };
 	const std::string playerTexturePath{ PATH("img/Player.png") };
+	const std::string meleeTexturePath{ PATH("img/Melee.png") };
+	const std::string batTexturePath{ PATH("img/Bat.png") };
+	const std::string rangedTexturePath{ PATH("img/Ranged.png") };
 	const std::string healthBarTexturePath{ PATH("img/HealthBar.png") };
 	const std::string healthBarMaskTexturePath{ PATH("img/HealthBarMask.png") };
 	const std::string energyBarTexturePath{ PATH("img/EnergyBar.png") };

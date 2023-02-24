@@ -3,7 +3,7 @@
 Game::Game()
 	: cam(sf::Vector2<float>{ Application::getWindow().getSize() })
 {
-	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); 
+	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
 	backgroundShader.setUniform("viewPortDim", sf::Glsl::Vec2(window.getSize()));
@@ -13,18 +13,21 @@ Game::Game()
 	mouseIndicator.setOutlineThickness(3);
 	mouseIndicator.setSize(sf::Vector2<float>(map.getCellDim()));
 	mouseIndicator.setFillColor(sf::Color(0, 0, 0, 0));
-	mouseIndicator.setOutlineColor(sf::Color(255,255,255,255));
+	mouseIndicator.setOutlineColor(sf::Color(255, 255, 255, 255));
 	mouseFont.loadFromFile(Config::dialogueFontPath);
 	mousePosText.setFont(mouseFont);
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
-	
+
 	turnSystem.init(map);
 	Archive arc(Config::gameMapPath, Archive::Load);
 	arc >> map >> turnSystem;
 	ASSERT(!map.getPlayer().get());
-	
+
+	//map.add({ 0,0 }, new Player);
+	//map.add({ 0,3 }, new Melee{100,100});
+
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 	cam.lock(true);

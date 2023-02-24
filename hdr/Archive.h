@@ -101,6 +101,40 @@ private:
 	template<typename Type> void save(sf::Vector2<Type>& vec);
 	template<typename Type> void load(sf::Vector2<Type>& vec);
 
+	inline void save(sf::Color& color) 
+	{
+		tab();
+		file << "sf::Color -" << std::endl;
+		nTab++;
+		uint8_t red = color.r;
+		uint8_t green = color.g;
+		uint8_t blue = color.b;
+		uint8_t alpha = color.a;
+		save(red);
+		save(green);
+		save(blue);
+		save(alpha);
+		nTab--;
+	};
+
+	inline void load(sf::Color& color) 
+	{
+		std::string colorIntro;
+		std::getline(file, colorIntro);
+		std::getline(file, colorIntro); //not sure why but it work, might be couse >> operator doesn't remove completly last line;
+		
+		uint8_t red, green, blue, alpha;
+		load(red);
+		load(green);
+		load(blue);
+		load(alpha);
+
+		color.r = red;
+		color.g = green;
+		color.b = blue;
+		color.a = alpha;
+	};
+
 	inline void save(std::string& string)
 	{
 		tab();
@@ -185,8 +219,7 @@ if_Serializable<Type> Archive::save(Type& obj)
 	//since unlike for pointers where a Base class pointer could
 	//actually point to a derived class, here with 
 	//reference, we are sure of the type to deserialize
-	//but improve 
-	//handling further more
+	//but improve error handling further more
 	tab();
 	file << typeid(Type).name() << " -" << std::endl;
 	nTab++;
@@ -529,13 +562,19 @@ void Archive::load(std::map<Key, Value>& map)
 template<typename Type>
 void Archive::save(sf::Vector2<Type>& vec)
 {
+	tab();
+	file << "sf::Vector2<" << typeid(Type).name() << "> -" << std::endl;
+	nTab++;
 	save(vec.x);
 	save(vec.y);
+	nTab--;
 }
 
 template<typename Type>
 void Archive::load(sf::Vector2<Type>& vec)
 {
+	std::string vecIntro;
+	std::getline(file, vecIntro);
 	load(vec.x);
 	load(vec.y);
 }

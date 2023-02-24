@@ -140,6 +140,7 @@ void Map::serialize(Archive& fs)
 		{
 			GameCharacter* gameCharacter;
 			fs.serialize(gameCharacter);
+
 			addGameCharacter(posFloatToInt(gameCharacter->getPos()), gameCharacter);
 		}
 	}
