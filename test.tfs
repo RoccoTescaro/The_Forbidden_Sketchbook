@@ -1,33 +1,83 @@
 class Map -
 	std::string : class Map
-	unsigned int : 0
-	unsigned int : 2
-	pointer to class GameCharacter -
+	unsigned int : 3
+	pointer to class Tile -
 		unsigned int : 1
+		std::string : class Wall
+		class Tile -
+			std::string : class Wall
+			sf::Vector2<float> -
+				float : 640
+				float : 64
+			unsigned char : 2
+	pointer to class Tile -
+		unsigned int : 2
+		std::string : class Hole
+		class Tile -
+			std::string : class Hole
+			sf::Vector2<float> -
+				float : 448
+				float : 160
+	pointer to class Tile -
+		unsigned int : 3
+		std::string : class ColorPedestral
+		class Tile -
+			std::string : class ColorPedestral
+			sf::Vector2<float> -
+				float : 448
+				float : 480
+			sf::Color -
+				unsigned char : 255
+				unsigned char : 0
+				unsigned char : 0
+				unsigned char : 255
+	unsigned int : 4
+	pointer to class GameCharacter -
+		unsigned int : 4
 		std::string : class Player
 		class GameCharacter -
 			std::string : class Player
 			sf::Vector2<float> -
 				float : 0
 				float : 0
-			unsigned char : d
-			unsigned char : d
+			unsigned char : 100
+			unsigned char : 100
 			sf::Color -
-				unsigned char : ÿ
-				unsigned char : ÿ
-				unsigned char : ÿ
-				unsigned char : ÿ
+				unsigned char : 255
+				unsigned char : 255
+				unsigned char : 255
+				unsigned char : 255
 	pointer to class GameCharacter -
-		unsigned int : 2
+		unsigned int : 5
 		std::string : class Melee
 		class GameCharacter -
 			std::string : class Melee
 			sf::Vector2<float> -
 				float : 0
 				float : 96
-			unsigned char : d
-			unsigned char : 
-
+			unsigned char : 100
+			unsigned char : 10
+	pointer to class GameCharacter -
+		unsigned int : 6
+		std::string : class Bat
+		class GameCharacter -
+			std::string : class Bat
+			sf::Vector2<float> -
+				float : 320
+				float : 96
+			unsigned char : 100
+			unsigned char : 30
+	pointer to class GameCharacter -
+		unsigned int : 7
+		std::string : class Ranged
+		class GameCharacter -
+			std::string : class Ranged
+			sf::Vector2<float> -
+				float : 512
+				float : 256
+			unsigned char : 100
+			unsigned char : 50
+			float : 0
 class TurnSystem -
 	std::string : class TurnSystem
-	unsigned int : 2
+	unsigned int : 4

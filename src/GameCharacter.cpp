@@ -5,11 +5,11 @@
 
 void GameCharacter::update(Map &map, const float &dt)
 {
-	while(!isStepQueueEmpty()){
+	/*while (!isStepQueueEmpty()) {
 	setPos(getPos()+stepQueue.at(0));
 	stepQueue.pop_front();
 	setEnergy(0);
-	}
+	}*/
 }
 
 void GameCharacter::execute(GameCharacter &gameCharacter, Map &map)
@@ -24,8 +24,10 @@ bool GameCharacter::isInRange(Map &map) const
 
 void GameCharacter::updateStepQueue(const sf::Vector2<float> target)
 {
+	/*
 	if(stepQueue.empty())
 		stepQueue={{0,64},{64,0},{0,64}};
+	*/
 }
 
 //PLAYER
@@ -92,7 +94,7 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
+	sprite.setScale(128.f/textureRect.width,64.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
@@ -115,13 +117,8 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
+	sprite.setScale(64.f/textureRect.width,	128.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new DiglettMovement());
-}
-
-void Ranged::update(Map &map, const float &dt)
-{
-
 }

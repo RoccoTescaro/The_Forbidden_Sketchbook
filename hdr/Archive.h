@@ -198,7 +198,9 @@ template<typename Type>
 if_Pod<Type> Archive::save(Type& obj)
 {
 	tab();
-	file << typeid(Type).name() << " : " << obj << std::endl;
+	//We cast to the most bits type of data to prevent char and unsigned char 
+	//with value 0 1 2 to ruin the structure and readability of the saved file.
+	file << typeid(Type).name() << " : " << (long double)obj << std::endl; 
 }
 
 template<typename Type>
@@ -209,7 +211,9 @@ if_Pod<Type> Archive::load(Type& obj)
 	std::getline(file, intro, ':');
 	std::getline(file, intro, ' ');
 
-	file >> obj;
+	long double temp;
+	file >> temp;
+	obj = (Type)temp;
 }
 
 template<typename Type>

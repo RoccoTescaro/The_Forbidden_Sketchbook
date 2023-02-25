@@ -92,6 +92,11 @@ class Melee : public GameCharacter
 {
 public:
     Melee(uint8_t health, uint8_t energy);
+
+    void serialize(Archive& fs) override
+    {
+        GameCharacter::serialize(fs);
+    }
 private:
     static Serializable* create() { return new Melee{100,100}; };
     static Register registration;
@@ -104,6 +109,11 @@ public:
     Bat(uint8_t health, uint8_t energy);
 
     inline bool isSolid() const override { return false; };
+
+    void serialize(Archive& fs) override
+    {
+        GameCharacter::serialize(fs);
+    }
 private:
     static Serializable* create() { return new Bat{100,100}; };
     static Register registration;
@@ -114,8 +124,6 @@ class Ranged : public GameCharacter
 {
 public:
     Ranged(uint8_t health, uint8_t energy);
-
-    void update(Map &map, const float &dt) override;
 
     void serialize(Archive& fs) override 
     {

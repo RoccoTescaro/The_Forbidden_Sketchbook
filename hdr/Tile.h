@@ -67,9 +67,13 @@ public:
 
     void execute(GameCharacter &gameCharacter, Map &map) override;
 
-    void serialize(Archive& fs) { };//fs.serialize(color); };
+    void serialize(Archive& fs) 
+    { 
+        Tile::serialize(fs);
+        fs.serialize(color); 
+    };
 private:
-    static Serializable* create() { return new Hole; };
+    static Serializable* create() { return new ColorPedestral; };
     static Register registration;
 
 	sf::Color color; 
