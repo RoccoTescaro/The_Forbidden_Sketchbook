@@ -23,7 +23,7 @@ void Wall::setTexture(uint8_t newType){
 	sprite.setTexture(*texture[type]);
 	sf::Rect<int> textureRect{0,0,1300,1350};
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
+	sprite.setScale(64.f/textureRect.width,96.f/textureRect.height);
 
 }
 

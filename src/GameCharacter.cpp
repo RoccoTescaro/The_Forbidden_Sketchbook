@@ -92,9 +92,9 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	}
 
 	sprite.setTexture(*texture); 
-	sf::Rect<int> textureRect{ 0,0,1080,1920 };
+	sf::Rect<int> textureRect{ 115,0,1910,1070 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(128.f/textureRect.width,64.f/textureRect.height);
+	sprite.setScale(104.f/textureRect.width,48.f/textureRect.height);
 
     //MOVEMENTSTRATEGY
     //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
