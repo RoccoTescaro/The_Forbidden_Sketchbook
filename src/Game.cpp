@@ -86,7 +86,6 @@ void Game::update()
 
 	//UPDATE ACTOR
     //TURNSYSTEM
-	std::cout<<"a"<<std::endl;
     auto actorShr = actor.lock();
 	if(actorShr->getEnergy()==0)
         actor=turnSystem.getActor();
@@ -94,7 +93,6 @@ void Game::update()
         actorShr->updateStepQueue(map, map.getPlayer()->getPos());
     }
     else{
-		std::cout<<"else"<<std::endl;
         if(actorShr->isStepQueueEmpty() && input.isKeyReleased(Input::MouseL)){
             actorShr->updateStepQueue(map, map.posIntToFloat(mousePos));
         }
