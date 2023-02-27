@@ -5,16 +5,15 @@
 #include "Entity.h"
 #include "PathFinding.h"
 #include "Utils.h"
-#include "GcBrain.h"
 
 class Weapon;
 
 class GameCharacter : public Entity
 {
 public:
-    GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority, GcBrain::MovementType movementType ) 
-        : maxHealth(maxHealth), health(health), priority(priority), gcBrain(maxEnergy, energy, movementType) {};
-    GameCharacter() :  priority(0), gcBrain(20, 20, GcBrain::ASTAR) {};
+    GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
+        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy), priority(priority) {};
+    GameCharacter() :  priority(0) {};
 
 
     //ENTITY
@@ -29,17 +28,18 @@ public:
     //GAMECHARACTER GET&SET
     inline bool isSolid() const override { return true; };
     inline uint8_t getMaxHealth() const { return maxHealth; }; //need to return as a reference and not by copy to allow hud auto update
-    inline uint8_t getMaxEnergy() const { return gcBrain.getMaxEnergy();; }; //need to return as a reference and not by copy to allow hud auto update
+    inline uint8_t getMaxEnergy() const { return maxEnergy; }; //need to return as a reference and not by copy to allow hud auto update
     inline const uint8_t& getHealth() const { return health; };
-    inline const uint8_t& getEnergy() const { return gcBrain.getEnergy(); };
+    inline const uint8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
     inline float getRange() const { return 1; /*return weapon->getRange()*/};
 
 
     //GAMECHARACTER FUNCTIONS
     void updateStepQueue( Map &map, const sf::Vector2<float> target);
-    inline void turnReset(){    gcBrain.turnReset();          };
-    inline bool isStepQueueEmpty(){     return gcBrain.isStepQueueEmpty();   };
+    inline void turnReset(){    energy+=maxEnergy;
+                                stepQueue.clear();           }; 
+    inline bool isStepQueueEmpty(){     return stepQueue.empty();   };
 
     inline void serialize(Archive& fs) 
     {
@@ -50,12 +50,17 @@ public:
 protected:
     //STATS
     const uint8_t maxHealth = 0;  
+    const uint8_t maxEnergy = 0;
     const uint8_t priority = 0;
     uint8_t health = 0;
+    uint8_t energy = 0;
     //Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 
     //MOVEMENT
-    GcBrain gcBrain;
+    const float animationSpeed = 300.f;
+    std::deque<sf::Vector2<float>> stepQueue;
+    std::unique_ptr<PathAlgorithm> movementStrategy;
+
 };
 
 

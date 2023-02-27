@@ -5,11 +5,10 @@
 
 void GameCharacter::update(Map &map, const float &dt)
 {
-	if(gcBrain.ready()){
+	if(!stepQueue.empty() && energy>0){
 		bool apSpent=false;
 
-		if(gcBrain.canExecute()){
-			if(gcBrain.canAttack(map, getRange())){
+			if(Utils::Math::distance(stepQueue.front(), stepQueue.back()) < getRange() && energy>2 && map.getGameCharacter(map.posFloatToInt(stepQueue.back()))){
 				apSpent=true;
 				/*if(weapon){
 					if(weapon->animation(dt,stepQueue.back(), map.getCellDim())){
@@ -27,15 +26,30 @@ void GameCharacter::update(Map &map, const float &dt)
 							
 			}else{
 				apSpent=true;
-				sf::Vector2<float>newPos = gcBrain.move(map, sprite, getPos(), dt);
+				sf::Vector2<float> pos =getPos();
+				sf::Vector2<float> &nextStep =stepQueue[1];
+				sf::Vector2<float> direction=nextStep-pos;
+				direction={direction.x/map.getCellDim().x,direction.y/map.getCellDim().y};
+				pos+={direction.x*dt*animationSpeed,direction.y*dt*animationSpeed};
+				//if(weapon)
+				//	weapon->setPosition(pos);
+				if(Utils::Math::distance(sprite.getPosition(),nextStep)<3){
+					sprite.setPosition(nextStep);
+					energy-=1;
+					map.move(map.posFloatToInt(stepQueue.front()),map.posFloatToInt(nextStep));
+					stepQueue.pop_front();
+				}else{
+					sprite.setPosition(pos);
+				}
 				//if(weapon)
 				//	weapon->setPosition(newPos);
-				gcBrain.queueClearCheck();
-			}
+				if(stepQueue.size()==1)
+                    {   stepQueue.clear();  } 
+			
 		}
 
 		if(!apSpent){
-			gcBrain.setEnergy(0);
+			energy=0;
 		}
 	}
 }
@@ -50,13 +64,15 @@ void GameCharacter::execute(GameCharacter &gameCharacter, Map &map)
 
 void GameCharacter::updateStepQueue( Map &map, const sf::Vector2<float> target)
 {
-	gcBrain.updateStepQueue(map,getPos(),target,isSolid());
+	if(stepQueue.empty()){
+		stepQueue=movementStrategy->findPath(map, getPos(), target, isSolid());
+	}
 }
 
 //PLAYER
 
 Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB)
-	: GameCharacter(100,health,20,energy,0,GcBrain::ASTAR)
+	: GameCharacter(100,health,20,energy,0)
 {
 
 	static sf::Texture* texture;
@@ -76,13 +92,16 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 	//FILTER
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
 
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
 }
 
 
 //MELEE
 
 Melee::Melee(uint8_t health, uint8_t energy)
-	: GameCharacter(30, health, 10, energy, 2,GcBrain::ASTAR)
+	: GameCharacter(30, health, 10, energy, 2)
 {
 	static sf::Texture* texture;
 	if (!texture)
@@ -97,12 +116,15 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
 }
 
 //BAT
 
 Bat::Bat(uint8_t health, uint8_t energy)
-	: GameCharacter(10, health, 30, energy, 3,GcBrain::ASTAR)
+	: GameCharacter(10, health, 30, energy, 3)
 {
 	static sf::Texture* texture;
 	if (!texture)
@@ -117,12 +139,15 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
 
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
 }
 
 //RANGED
 
 Ranged::Ranged(uint8_t health, uint8_t energy)
-	: GameCharacter(5, health, 50, energy,1,GcBrain::DIGLETMOVEMENT), animationDuration(1), animationTime(0)
+	: GameCharacter(5, health, 50, energy,1), animationDuration(1), animationTime(0)
 {
 
 	static sf::Texture* texture;
@@ -137,6 +162,9 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
+
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new DigletMovement());
 
 }
 
