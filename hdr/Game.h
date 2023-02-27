@@ -28,7 +28,7 @@ private:
 
 	Map map;
 	TurnSystem turnSystem;
-	std::shared_ptr<GameCharacter> actor;
+	std::weak_ptr<GameCharacter> actor;
 	Camera cam;
 	Hud hud;
 };

@@ -101,6 +101,40 @@ private:
 	template<typename Type> void save(sf::Vector2<Type>& vec);
 	template<typename Type> void load(sf::Vector2<Type>& vec);
 
+	inline void save(sf::Color& color) 
+	{
+		tab();
+		file << "sf::Color -" << std::endl;
+		nTab++;
+		uint8_t red = color.r;
+		uint8_t green = color.g;
+		uint8_t blue = color.b;
+		uint8_t alpha = color.a;
+		save(red);
+		save(green);
+		save(blue);
+		save(alpha);
+		nTab--;
+	};
+
+	inline void load(sf::Color& color) 
+	{
+		std::string colorIntro;
+		std::getline(file, colorIntro);
+		std::getline(file, colorIntro); //not sure why but it work, might be couse >> operator doesn't remove completly last line;
+		
+		uint8_t red, green, blue, alpha;
+		load(red);
+		load(green);
+		load(blue);
+		load(alpha);
+
+		color.r = red;
+		color.g = green;
+		color.b = blue;
+		color.a = alpha;
+	};
+
 	inline void save(std::string& string)
 	{
 		tab();
@@ -115,6 +149,7 @@ private:
 			std::getline(file, toParse);
 
 		toParse.erase(0, toParse.find("std::string : ") + 14);
+		toParse.erase(std::remove(toParse.begin(), toParse.end(), '\r'), toParse.end());
 		string = toParse;
 	}
 
@@ -164,7 +199,9 @@ template<typename Type>
 if_Pod<Type> Archive::save(Type& obj)
 {
 	tab();
-	file << typeid(Type).name() << " : " << obj << std::endl;
+	//We cast to the most bits type of data to prevent char and unsigned char 
+	//with value 0 1 2 to ruin the structure and readability of the saved file.
+	file << typeid(Type).name() << " : " << (long double)obj << std::endl; 
 }
 
 template<typename Type>
@@ -175,7 +212,9 @@ if_Pod<Type> Archive::load(Type& obj)
 	std::getline(file, intro, ':');
 	std::getline(file, intro, ' ');
 
-	file >> obj;
+	long double temp;
+	file >> temp;
+	obj = (Type)temp;
 }
 
 template<typename Type>
@@ -273,19 +312,22 @@ if_Pod<Type> Archive::load(Type*& ptr)
 	uint32_t objId;
 	load(objId);
 
-	ptr = (Type*&)idToObj[objId]; //take it from memory if already deserialized
-	if (!ptr) //else construct it
+	Type*& temp = (Type*&)idToObj[objId]; //take it from memory if already deserialized
+	if (!temp && (objId != 0)) //else construct it
 	{
-		ptr = new Type;
-		load(*ptr);
+		temp = new Type;
+		load(*temp);
 	}
+
+	ptr = temp;
 }
+
 
 
 template<typename Type>
 if_Serializable<Type> Archive::save(Type*& ptr)
 {
-	ASSERT(ptr != nullptr, "nullptr");
+	ASSERT(ptr == nullptr);
 	tab();
 	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
 	nTab++;
@@ -321,15 +363,16 @@ if_Serializable<Type> Archive::load(Type*& ptr)
 	uint32_t objId;
 	load(objId);
 
-	ptr = (Type*&)idToObj[objId]; //take it from memory if already deserialized
-	if (!ptr) //else construct it
+	Type*& temp = (Type*&)(idToObj[objId]); //take it from memory if already deserialized
+	if (!temp && objId != 0) //else construct it
 	{
 		std::string typeId;
 		load(typeId);
 
-		ptr = (Type*)Register::getType(typeId);
-		load(*ptr);
+		temp = dynamic_cast<Type*>(Register::getType(typeId));
+		load(*temp);
 	}
+	ptr = temp;
 }
 
 template<typename Type>
@@ -356,22 +399,16 @@ void Archive::load(std::shared_ptr<Type>& ptr)
 template<typename Type>
 void Archive::save(std::weak_ptr<Type>& ptr)
 {
-	Type* p = ptr.lock().get(); //TODO test
-	save(p);
+	std::shared_ptr<Type> shared = ptr.lock();
+	save(shared);
 }
 
 template<typename Type>
 void Archive::load(std::weak_ptr<Type>& ptr)
 {
-	Type* p = nullptr;
-	load(p);
-	if (p)
-	{
-		std::shared_ptr<Type>& shared = (std::shared_ptr<Type>&) objToShared[p];
-		if (!shared)
-			shared = std::shared_ptr<Type>(p);
-		ptr = shared;
-	}
+	std::shared_ptr<Type> shared;
+	load(shared);
+	ptr = std::weak_ptr<Type>(shared);
 }
 
 template<typename Type>
@@ -417,7 +454,7 @@ void Archive::load(std::vector<Type>& vec)
 	vec.reserve(size);
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(std::is_default_constructible<Type>::value,"serializable class has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Type>::value);
 		Type type = {};
 		load(type);
 		//we need to differentiate std::vector<std::unique_ptr<Type>> from std::vector<Type>
@@ -455,7 +492,7 @@ void Archive::load(std::list<Type>& list)
 	list.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(std::is_default_constructible<Type>::value, "serializable class has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Type>::value);
 		Type type = {};
 		load(type);
 		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value)
@@ -517,8 +554,8 @@ void Archive::load(std::map<Key, Value>& map)
 	map.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(std::is_default_constructible<Key>::value, "key has not an empty contructor");
-		ASSERT(std::is_default_constructible<Value>::value, "value has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Key>::value);
+		ASSERT(!std::is_default_constructible<Value>::value);
 		Key key{};
 		Value value{};
 		load(key);
@@ -530,13 +567,19 @@ void Archive::load(std::map<Key, Value>& map)
 template<typename Type>
 void Archive::save(sf::Vector2<Type>& vec)
 {
+	tab();
+	file << "sf::Vector2<" << typeid(Type).name() << "> -" << std::endl;
+	nTab++;
 	save(vec.x);
 	save(vec.y);
+	nTab--;
 }
 
 template<typename Type>
 void Archive::load(sf::Vector2<Type>& vec)
 {
+	std::string vecIntro;
+	std::getline(file, vecIntro);
 	load(vec.x);
 	load(vec.y);
 }

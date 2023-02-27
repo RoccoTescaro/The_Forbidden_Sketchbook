@@ -1,17 +1,14 @@
 #include "../hdr/Camera.h"
 
-Camera::Camera() 
+Camera::Camera(const sf::Vector2<float>& viewPort)
 	: input(Application::getInput())
 {
-	setView(Application::getWindow().getSize());
-	setCenter(sf::Vector2<int>{
-		sf::Vector2<float>{ (float)Application::getWindow().getSize().x,
-			(float)Application::getWindow().getSize().y } *0.5f });
+	setView(sf::Vector2u{ (unsigned int)viewPort.x,(unsigned int)viewPort.y });
+	setCenter(sf::Vector2<int>{ viewPort * 0.5f });
 };
 
-void Camera::update()
+void Camera::update(const float& dt)
 {
-	float dt = Application::getDeltaTime(); //TODO decide if make this indipendent from application or not
 	const sf::Vector2<float>& mousePos = input.getMousePos(&view);
 	std::shared_ptr shrTarget = target.lock();
 

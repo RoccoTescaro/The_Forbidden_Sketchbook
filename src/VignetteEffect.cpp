@@ -1,6 +1,7 @@
 #include "../hdr/VignetteEffect.h"
 #include "../hdr/Utils.h"
 #include "../hdr/Application.h"
+#include <cmath>
 
 VignetteEffect::VignetteEffect() :
 	radius(defaultRadius), intensity(0.f)
@@ -23,9 +24,7 @@ void VignetteEffect::update(const float& dt)
 		if (ended)
 		{
 			animationProgress += dt * animationSpeed;
-			double dAnimationProgress = animationProgress;
-			float fPow = std::pow(dAnimationProgress,8);
-			intensity = std::min(defaultIntensity, fPow);
+			intensity = std::min(defaultIntensity, (float)std::pow(animationProgress, 8));
 			if (intensity >= defaultIntensity)
 			{
 				waiting = true;
@@ -35,9 +34,7 @@ void VignetteEffect::update(const float& dt)
 		else
 		{
 			animationProgress -= dt * animationSpeed;
-			double dAnimationProgress = animationProgress;
-			float fPow = std::pow(dAnimationProgress,8);
-			intensity = std::max(0.f, fPow);
+			intensity = std::max(0.f, (float)std::pow(animationProgress, 8));
 			if (animationProgress <= 0.f)
 			{
 				ended = true;
@@ -67,28 +64,3 @@ bool VignetteEffect::isEnded() const
 	return ended && intensity <= 0.f;
 }
 
-
-
-/*
-void VignetteEffect::openingUpdate() 
-{
-	openingInterpolationFactor *= openingAnimationSpeed;
-	openingInterpolationProgress += Application::getDeltaTime() * openingInterpolationFactor;
-    intensity = Utils::Math::lerp(intensity, defaultIntensity, openingInterpolationProgress);
-
-	if (intensity >= defaultIntensity - Config::eps)
-	{
-		intensity = defaultIntensity;
-		closingAnimation = true;
-		animationStarted = false;
-	}
-}
-
-void VignetteEffect::closingUpdate()
-{
-	intensity = Utils::Math::lerp(intensity, 0.f, closingAnimationSpeed * Application::getDeltaTime());
-
-	if (intensity <= Config::eps)
-		closingAnimation = false;
-}
-*/

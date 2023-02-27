@@ -1,13 +1,9 @@
 #include "../hdr/Game.h"
 
 Game::Game()
-	: turnSystem(map)
+	: cam(sf::Vector2<float>{ Application::getWindow().getSize() })
 {
-
-	//test 
-
-
-	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath); //FIX bg
+	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
 	backgroundSprite.setPosition(0, 0);
 	backgroundShader.setUniform("viewPortDim", sf::Glsl::Vec2(window.getSize()));
@@ -17,30 +13,32 @@ Game::Game()
 	mouseIndicator.setOutlineThickness(3);
 	mouseIndicator.setSize(sf::Vector2<float>(map.getCellDim()));
 	mouseIndicator.setFillColor(sf::Color(0, 0, 0, 0));
-	mouseIndicator.setOutlineColor(sf::Color(255,255,255,255));
+	mouseIndicator.setOutlineColor(sf::Color(255, 255, 255, 255));
 	mouseFont.loadFromFile(Config::dialogueFontPath);
 	mousePosText.setFont(mouseFont);
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
-	/*
+	turnSystem.init(map);
 	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> map >> turnSystem;
-	ASSERT(map.getPlayer().get(), "Doesn't exist a player in the map");
-	*/
+	//arc >> map >> turnSystem;
+	//ASSERT(!map.getPlayer().get());
 
-	map.add({ 0,0 }, new Player); //TODO remove this initialization
+	map.add({ 0,0 }, new Player);
+	
+	//map.add({ 8,8 }, new Ranged{100,100});
+	//map.add({ 10,2 }, new Wall{Wall::RU});
+	//map.add({ 7,5 }, new Hole);
+	//map.add({ 7,15 }, new ColorPedestral);
 
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
-
-    map.addGameCharacter({8,8}, new Melee(1,1));
-    map.addGameCharacter({3,3}, new Melee(1,1));
-    map.addGameCharacter({8,3}, new Melee(1,1));
+	map.add({ 0,3 }, new Melee{100,100});
+	map.add({ 5,3 }, new Bat{100,100});
 
 
 	cam.lock(true);
-	cam.setTarget(actor); 
+	cam.setTarget(actor.lock()); 
 
 	hud.setView(cam.getView());
 	hud.setPlayer(map.getPlayer());
@@ -73,7 +71,7 @@ void Game::update()
 	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
 		cam.setTarget(map.getGameCharacter(mousePos));
 
-	cam.update(); 
+	cam.update(dt); 
 
 	//HUD 
 	hud.update(dt);
@@ -88,18 +86,20 @@ void Game::update()
 
 	//UPDATE ACTOR
     //TURNSYSTEM
-    if(actor->getEnergy()==0)
+	std::cout<<"a"<<std::endl;
+    auto actorShr = actor.lock();
+	if(actorShr->getEnergy()==0)
         actor=turnSystem.getActor();
     if(!turnSystem.isPlayerTurn()){
-        actor->updateStepQueue(map, map.getPlayer()->getPos());
+        actorShr->updateStepQueue(map, map.getPlayer()->getPos());
     }
     else{
 		std::cout<<"else"<<std::endl;
-        if(actor->isStepQueueEmpty() && input.isKeyReleased(Input::MouseL)){
-            actor->updateStepQueue(map, map.posIntToFloat(mousePos));
+        if(actorShr->isStepQueueEmpty() && input.isKeyReleased(Input::MouseL)){
+            actorShr->updateStepQueue(map, map.posIntToFloat(mousePos));
         }
     }
-    actor->update(map, Application::getDeltaTime());
+    actorShr->update(map, Application::getDeltaTime());
 
 
 }
@@ -115,3 +115,23 @@ void Game::render()
 	transitionEffect.render(window);
 }
 
+void Game::save() 
+{
+	Archive arc(Config::gameMapPath, Archive::Save);
+	arc << map << turnSystem;
+}
+
+void Game::load()
+{
+	Archive arc(Config::gameMapPath, Archive::Load);
+	arc >> map >> turnSystem;
+
+	actor = turnSystem.getActor(); //we need to initialize the actor to update him
+
+	cam.lock(true);
+	cam.setTarget(actor.lock());
+
+	sf::Vector2<float> size = { (float)window.getSize().x,(float)window.getSize().y };
+	hud.setView(sf::View{ size*0.5f,size });
+	hud.setPlayer(map.getPlayer());
+}

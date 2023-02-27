@@ -1,5 +1,4 @@
 #pragma once
-
 #include <queue>
 #include <memory>
 #include "Entity.h"
@@ -8,13 +7,12 @@
 
 class Weapon;
 
-class GameCharacter : public Entity
+class GameCharacter : public Entity //TODO fix constructors
 {
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
         : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy), priority(priority) {};
     GameCharacter() :  priority(0) {};
-
 
     //ENTITY
     void update(Map &map, const float &dt) override;
@@ -75,7 +73,7 @@ public:
     void serialize(Archive& fs) override 
     {
         GameCharacter::serialize(fs);
-        //fs.serialize(filterColor);
+        fs.serialize(filterColor);
     }
 
 private:
@@ -89,13 +87,14 @@ class Melee : public GameCharacter
 {
 public:
     Melee(uint8_t health, uint8_t energy);
-    Melee() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     void serialize(Archive& fs) override
     {
         GameCharacter::serialize(fs);
-        //fs.serialize(filterColor);
     }
+private:
+    static Serializable* create() { return new Melee{100,100}; };
+    static Register registration;
 };
 
 
@@ -106,10 +105,13 @@ public:
 
     inline bool isSolid() const override { return false; };
 
-    void serialize(Archive& fs) override 
+    void serialize(Archive& fs) override
     {
         GameCharacter::serialize(fs);
     }
+private:
+    static Serializable* create() { return new Bat{100,100}; };
+    static Register registration;
 };
 
 
@@ -117,9 +119,6 @@ class Ranged : public GameCharacter
 {
 public:
     Ranged(uint8_t health, uint8_t energy);
-    Ranged() {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
-
-    void update(Map &map, const float &dt) override;
 
     void serialize(Archive& fs) override 
     {
@@ -127,6 +126,9 @@ public:
         fs.serialize(animationTime);
     }
 private:
+    static Serializable* create() { return new Ranged{100,100}; };
+    static Register registration;
+
     const float animationDuration = 0.f;
     float animationTime = 0.f;
 };

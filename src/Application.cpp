@@ -5,9 +5,9 @@
 #include "../hdr/Game.h"
 #include "../hdr/Pause.h"
 
-State& Application::getState(uint8_t index)
+State* Application::getState(uint8_t index)
 {
-	return *app.states[index];
+	return app.states[index].get();
 }
 
 
@@ -38,7 +38,7 @@ void Application::run()
 
 	while (app.window.isOpen())
 	{
-		State& state = Application::getState(app.currentStateIndex);
+		State& state = *Application::getState(app.currentStateIndex);
 		app.input.update();
 		state.update();
 

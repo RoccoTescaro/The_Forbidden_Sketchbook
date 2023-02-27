@@ -7,7 +7,7 @@ class Bar
 {
 public: 
 	Bar(float transitionSpeed = 5.f)
-		: transitionSpeed(transitionSpeed)
+		: transitionSpeed(transitionSpeed), targetValue(nullptr), targetMaxValue(0)
 	{
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
 	};
@@ -16,7 +16,6 @@ public:
 		: transitionSpeed(transitionSpeed), targetValue(targetValue), targetMaxValue(targetMaxValue)
 	{
 		shader.loadFromFile(Config::barShaderPath, sf::Shader::Fragment);
-
 	};
 
 	void update(const float& dt) 
@@ -31,7 +30,7 @@ public:
 	
 	void render(sf::RenderWindow& window) 
 	{
-		shader.setUniform("windowHeight", window.getView().getSize().y); //TODO test/check if view or default view
+		shader.setUniform("windowHeight", window.getView().getSize().y); 
 		window.draw(sprite, &shader);
 		//fix text pos according to number of digits
 		text.setPosition(sprite.getPosition().x + relativeTextCenteredPos.x - static_cast<int>(text.getGlobalBounds().width * 0.5f),  //cast to int fix the text position to an int value preventing antialiasing blur effect

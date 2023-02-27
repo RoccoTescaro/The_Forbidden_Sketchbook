@@ -25,8 +25,11 @@ std::shared_ptr<GameCharacter> Map::getGameCharacter(const sf::Vector2<int>&pos)
 	return nullptr;
 }
 
-std::shared_ptr<Player> Map::getPlayer()
+std::shared_ptr<GameCharacter> Map::getPlayer()
 {
+	auto player = gameCharacters[playerPos];
+	if (!player) ERROR("Map has no player in it");
+	
 	return player;
 }
 
@@ -58,7 +61,7 @@ Map& Map::addGameCharacter(const sf::Vector2<int>& pos, GameCharacter* gameChara
 	
 	Player* ptrPlayer = dynamic_cast<Player*>(gameCharacter);
 	if (ptrPlayer) 
-		player = static_cast<std::shared_ptr<Player>>(ptrPlayer);
+		playerPos = pos;
 	return *this;
 }
 
@@ -120,6 +123,9 @@ void Map::serialize(Archive& fs)
 	}
 	else 
 	{
+		tiles.clear();
+		gameCharacters.clear();
+
 		uint32_t sizeTiles;
 		fs.serialize(sizeTiles);
 		for (uint32_t i = 0; i < sizeTiles; i++)

@@ -58,8 +58,8 @@ private:
     static Register registration;
 };
 
-class ColorPedestral : public Tile{
-
+class ColorPedestral : public Tile
+{
 public:
     ColorPedestral();
 
@@ -67,6 +67,14 @@ public:
 
     void execute(GameCharacter &gameCharacter, Map &map) override;
 
+    void serialize(Archive& fs) 
+    { 
+        Tile::serialize(fs);
+        fs.serialize(color); 
+    };
 private:
+    static Serializable* create() { return new ColorPedestral; };
+    static Register registration;
+
 	sf::Color color; 
 };

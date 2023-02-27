@@ -1,7 +1,8 @@
 #include "../hdr/Editor.h"
 #include "../hdr/Config.h"
 
-Editor::Editor() : cam()
+Editor::Editor() :
+    cam({0,0})
 {
 
     //BACKGROUND
@@ -34,7 +35,7 @@ void Editor::update()
 	mousePosText.setPosition(mouseIndicator.getPosition()+sf::Vector2<float>{map.getCellDim().x - mousePosText.getGlobalBounds().width, map.getCellDim().y - mousePosText.getGlobalBounds().height-4});
 
 	//CAMERA
-	cam.update();
+	cam.update(dt);
     
 	//BACKGROUND
 	sf::Vector2<float> bgSize = cam.getView().getSize();

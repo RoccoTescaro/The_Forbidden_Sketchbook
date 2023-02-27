@@ -1,5 +1,6 @@
 #include "../hdr/Pause.h"
 #include "../hdr/Config.h"
+#include "../hdr/Game.h"
 
 Pause::Pause() :
     save({ 0.f, window.getSize().y * 0.15f }, sf::Vector2<int>(window.getSize().x, window.getSize().y *0.14f)),
@@ -16,7 +17,12 @@ Pause::Pause() :
     save.setFont(Config::buttonFontPath);
     save.setText(" SavE ", window.getSize().y * 0.125f);
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
-
+    save.setOnClick([this]()
+        {
+            Game* game = dynamic_cast<Game*>(Application::getState(1));
+            WARNING(!game, "wrong state index!");
+            game->save();
+        });
     save.setOnMouseOver([this]() { save.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
     back.setFont(Config::buttonFontPath);
@@ -28,13 +34,23 @@ Pause::Pause() :
             save.setActive(false); //not allow to press any other button if scene is changing
             back.setActive(false);
             menu.setActive(false);
+
+            Game* game = dynamic_cast<Game*>(Application::getState(1)); //TODO make it flexible with editor
+            ASSERT(!game);
+            game->load();
         });
     back.setOnMouseOver([this]() { back.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
     menu.setFont(Config::buttonFontPath);
     menu.setText(" MeNu ", window.getSize().y * 0.125f);
     menu.getText().setFillColor(sf::Color(0, 0, 0, 255));
-
+    menu.setOnClick([this]()
+        {
+            transitionEffect.start();
+            save.setActive(false); //not allow to press any other button if scene is changing
+            back.setActive(false);
+            menu.setActive(false);
+        });
     menu.setOnMouseOver([this]() { menu.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 }
 
@@ -59,8 +75,10 @@ void Pause::update()
         back.setActive(true);
         menu.setActive(true);
         
-        if(back.isClicked())
-            Application::prevState(); //TODO check which button has been pressed and change state according to that
+        if (back.isClicked()) //TODO make it flexible with editor
+            Application::prevState(); 
+        else if (menu.isClicked())
+            Application::setState(0);
     }
 }
 

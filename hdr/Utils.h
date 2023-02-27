@@ -3,27 +3,24 @@
 #include "Config.h"
 #include <iostream>
 #include <cmath>
+#include<sstream>
 
-
-#define ERROR(description) { if(Config::debugMode) Utils::error(description); } 
-#define LOG(string, ...) { if(Config::debugMode) Utils::log(string, __VA_ARGS__); }
-#define ASSERT(condition, errorMessage) { if(Config::debugMode) { if(errorMessage)Utils::assert(condition, errorMessage);else Utils::assert(condition, #condition);} }
-
-namespace Utils
+namespace Utils 
 {
 
-	static void error(const char* description)
-	{
-		std::cout << "[ERROR] " << description << std::endl;
-        exit(1);
-	}
+    template<typename T>
+    static std::string to_string(const T& value) {
+        std::ostringstream ss;
+        ss << value;
+        return ss.str();
+    }
 
     template <typename T>
     static void print(std::string& text, std::size_t dim, std::size_t pos, T t)
     {
         std::size_t i = dim - pos;
         while (text.find("{" + std::to_string(i) + "}") != std::string::npos)
-            text.replace(text.find("{" + std::to_string(i) + "}"), 3, std::to_string(t));
+            text.replace(text.find("{" + std::to_string(i) + "}"), 3, to_string(t));
     }
 
     template <typename T, typename... Args>
@@ -31,25 +28,52 @@ namespace Utils
     {
         std::size_t i = dim - pos;
         while (text.find("{" + std::to_string(i) + "}") != std::string::npos)
-            text.replace(text.find("{" + std::to_string(i) + "}"), 3, std::to_string(t));
+            text.replace(text.find("{" + std::to_string(i) + "}"), 3, to_string(t));
         print(text, dim, pos - 1, args...);
     }
 
-    template<typename... Args>
-    static void log(const char* text, Args... args)
+    static void print(std::string& text, std::size_t dim, std::size_t pos)
     {
-        std::string string{ text };
-        print(string, sizeof...(args), sizeof...(args)-1, args...);
-        std::cout << "[LOG] " << string << std::endl;
+        return;
     }
 
-	static void assert(bool condition, const char * errorMessage)
-	{
-        if (!condition) 
-            ERROR(errorMessage);
-	}
+    template<typename... Args>
+    static void log(const std::string& text, Args... args)
+    {
+        std::string message{ text.c_str() };
+        print(message, sizeof...(args), sizeof...(args) - 1, args...);
+        std::cout << "[LOG] " << message << std::endl;
+    }
 
-    namespace Math 
+    template<typename... Args>
+    static void error(const char* message, Args... args)
+    {
+        std::string string{ message };
+        print(string, sizeof...(args), sizeof...(args) - 1, args...);
+        std::cout << "[ERROR] " << string << std::endl;
+        exit(1);
+    }
+
+    template<typename T>
+    static void assert(const T& condition, const char* expression)
+    {
+        if (condition)
+            Utils::error(expression);
+    }
+
+    template<typename T, typename... Args>
+    static void warning(const T& condition, const char* message, Args... args)
+    {
+        if (condition)
+        {
+            std::string string{ message };
+            print(string, sizeof...(args), sizeof...(args) - 1, args...);
+            std::cout << "[WARNING] " << string << std::endl;
+        }
+    }
+
+
+    namespace Math
     {
         template<typename Type>
         static Type distance(const sf::Vector2<Type>& pos1, const sf::Vector2<Type>& pos2)  //Euclidean distance
@@ -58,15 +82,15 @@ namespace Utils
         }
 
         template<typename Type>
-        static Type distance(Type pos1, Type pos2) 
+        static Type distance(Type pos1, Type pos2)
         {
-            return std::abs(pos2-pos1);
+            return std::abs(pos2 - pos1);
         }
 
         template<typename Type>
         static Type manhattanDistance(const sf::Vector2<Type>& pos1, const sf::Vector2<Type>& pos2)
         {
-            return distance(pos1.x,pos2.x) + distance(pos1.y,pos2.y);
+            return distance(pos1.x, pos2.x) + distance(pos1.y, pos2.y);
         }
 
         template<typename Type>
@@ -76,16 +100,35 @@ namespace Utils
         }
 
         template<typename Type>
-        static Type lerp(Type pos1, Type pos2, Type dt) 
+        static Type lerp(Type pos1, Type pos2, Type dt)
         {
             return pos1 + dt * (pos2 - pos1);
         }
-        
+
         template<typename Type>
         static Type clamp(Type min, Type max, Type value)
         {
-            return std::min(std::max(value,min),max);
+            return std::min(std::max(value, min), max);
         }
+
+        template<typename Type>
+        static float mod(const sf::Vector2<Type>& vec)
+        {
+            return (float) Utils::Math::distance(vec, {0,0});
+        }
+
+        static sf::Vector2<float> normalize(const sf::Vector2<float>& vec)
+        {
+            float mod = Utils::Math::mod(vec);
+            return vec/mod;
+        }
+
     }
 
-}
+} // namespace utils
+
+#define LOG(...) Utils::log(__VA_ARGS__)
+#define ERROR(...) Utils::error(__VA_ARGS__)
+#define ASSERT(condition) Utils::assert(condition, #condition)
+#define WARNING(...) Utils::warning(__VA_ARGS__)
+

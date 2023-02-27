@@ -3,7 +3,7 @@
 Hud::Hud()
 {
 	playerHealth.setTexture(Config::healthBarTexturePath);
-	playerHealth.setPos({ 8,128 }); //TODO decide if define parameters here or in config
+	playerHealth.setPos({ 8,128 }); 
 	playerHealth.setScale(0.25f,0.25f);
 	playerHealth.setMask(Config::healthBarMaskTexturePath);
 	playerHealth.setColorMask({ 242,0,0 });
@@ -11,7 +11,7 @@ Hud::Hud()
 	playerHealth.setFont(Config::barFontPath);
 	playerHealth.setCharacterSize(32);
 	playerHealth.setTextPos({ 55,40 });
-
+	
 	playerEnergy.setTexture(Config::energyBarTexturePath);
 	playerEnergy.setPos({ 16,0 });
 	playerEnergy.setScale(0.25f, 0.25f);
@@ -21,15 +21,15 @@ Hud::Hud()
 	playerEnergy.setFont(Config::barFontPath);
 	playerEnergy.setCharacterSize(32);
 	playerEnergy.setTextPos({ 144,370 });
-
+	
 	dialogueManager.setFont(Config::dialogueFontPath);
 	dialogueManager.setTexture(Config::dialogueTexturePath);
 }
 
-void Hud::setPlayer(const std::shared_ptr<Player>& player) 
+void Hud::setPlayer(const std::shared_ptr<GameCharacter>& player) 
 {
 	this->player = player;
-	filter.setTargetColor(player->getFilterColor());
+	filter.setTargetColor(dynamic_cast<Player*>(player.get())->getFilterColor());
 	playerHealth.setTargetValue(&(player->getHealth()));
 	playerHealth.setTargetMaxValue(player->getMaxHealth());
 	playerEnergy.setTargetValue(&(player->getEnergy()));
@@ -39,10 +39,10 @@ void Hud::setPlayer(const std::shared_ptr<Player>& player)
 
 void Hud::update(const float& dt)
 {
-	auto shrPlayer = player.lock();
-	if (!shrPlayer) return;
+	//auto shrPlayer = player.lock();
+	//if (!shrPlayer) return;
 
-	filter.setTargetColor(shrPlayer->getFilterColor());
+	filter.setTargetColor(dynamic_cast<Player*>(player.lock().get())->getFilterColor());
 	filter.update(dt);
 
 	playerHealth.update(dt);
@@ -57,8 +57,8 @@ void Hud::render(sf::RenderWindow& window)
 
 	filter.render(window);
 	
-	auto shrPlayer = player.lock();
-	if (!shrPlayer) return;
+	//auto shrPlayer = player.lock();
+	//if (!shrPlayer) return;
 
 	playerHealth.render(window);
 	playerEnergy.render(window);
