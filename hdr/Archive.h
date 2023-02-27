@@ -326,7 +326,7 @@ if_Pod<Type> Archive::load(Type*& ptr)
 template<typename Type>
 if_Serializable<Type> Archive::save(Type*& ptr)
 {
-	ASSERT(ptr == nullptr, "nullptr");
+	ASSERT(ptr == nullptr);
 	tab();
 	file << "pointer to " << typeid(Type).name() << " -" << std::endl;
 	nTab++;
@@ -453,7 +453,7 @@ void Archive::load(std::vector<Type>& vec)
 	vec.reserve(size);
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(!std::is_default_constructible<Type>::value,"serializable class has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Type>::value);
 		Type type = {};
 		load(type);
 		//we need to differentiate std::vector<std::unique_ptr<Type>> from std::vector<Type>
@@ -491,7 +491,7 @@ void Archive::load(std::list<Type>& list)
 	list.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(!std::is_default_constructible<Type>::value, "serializable class has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Type>::value);
 		Type type = {};
 		load(type);
 		if constexpr (std::is_convertible<Type, std::unique_ptr<void>>::value)
@@ -553,8 +553,8 @@ void Archive::load(std::map<Key, Value>& map)
 	map.clear();
 	for (uint32_t i = 0; i < size; i++)
 	{
-		ASSERT(!std::is_default_constructible<Key>::value, "key has not an empty contructor");
-		ASSERT(!std::is_default_constructible<Value>::value, "value has not an empty contructor");
+		ASSERT(!std::is_default_constructible<Key>::value);
+		ASSERT(!std::is_default_constructible<Value>::value);
 		Key key{};
 		Value value{};
 		load(key);
