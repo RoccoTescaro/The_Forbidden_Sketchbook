@@ -149,6 +149,7 @@ private:
 			std::getline(file, toParse);
 
 		toParse.erase(0, toParse.find("std::string : ") + 14);
+		toParse.erase(std::remove(toParse.begin(), toParse.end(), '\r'), toParse.end());
 		string = toParse;
 	}
 
