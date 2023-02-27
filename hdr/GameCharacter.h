@@ -49,8 +49,8 @@ public:
     }
 protected:
     //STATS
-    const uint8_t maxHealth = 0;  
-    const uint8_t maxEnergy = 0;
+    const uint8_t maxHealth = 20;  
+    const uint8_t maxEnergy = 20;
     const uint8_t priority = 0;
     uint8_t health = 0;
     uint8_t energy = 0;
@@ -68,7 +68,7 @@ class Player : public GameCharacter
 {
 public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
-    Player() : Player(100,100,255,255,255) {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
+    Player() : Player(100,0,255,255,255) {}; //should initialize by the list initialization the const memeber that we dont wont/cant serialize
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
   
