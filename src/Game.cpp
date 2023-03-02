@@ -21,20 +21,20 @@ Game::Game()
 
 	turnSystem.init(map);
 	Archive arc(Config::gameMapPath, Archive::Load);
-	//arc >> map >> turnSystem;
+	arc >> map >> turnSystem;
 	//ASSERT(!map.getPlayer().get());
 
-	map.add({ 0,0 }, new Player);
+	//map.add({ 0,0 }, new Player);
 	
 	//map.add({ 8,8 }, new Ranged{100,100});
 	//map.add({ 10,2 }, new Wall{Wall::RU});
 	//map.add({ 7,5 }, new Hole);
 	//map.add({ 7,15 }, new ColorPedestral);
-
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
-	map.add({ 0,3 }, new Melee{100,100});
-	map.add({ 5,3 }, new Bat{100,100});
+
+	//map.add({ 0,3 }, new Melee{100,100});
+	//map.add({ 5,3 }, new Bat{100,100});
 
 
 	cam.lock(true);
@@ -87,19 +87,17 @@ void Game::update()
 	//UPDATE ACTOR
     //TURNSYSTEM
     auto actorShr = actor.lock();
-	if(actorShr->getEnergy()==0)
+
+	if(actorShr->getEnergy()==0)//turn ended
         actor=turnSystem.getActor();
-    if(!turnSystem.isPlayerTurn()){
-        actorShr->updateStepQueue(map, map.getPlayer()->getPos());
-    }
-    else{
-        if(actorShr->isStepQueueEmpty() && input.isKeyReleased(Input::MouseL)){
-            actorShr->updateStepQueue(map, map.posIntToFloat(mousePos));
-        }
-    }
-    actorShr->update(map, Application::getDeltaTime());
 
-
+    if(!turnSystem.isPlayerTurn())
+		turnSystem.turnBuild(map.getPlayer()->getPos());
+		
+    else if(input.isKeyReleased(Input::MouseL))
+            turnSystem.turnBuild(map.posIntToFloat(mousePos));
+    
+    turnSystem.update(dt);
 }
 
 void Game::render() 

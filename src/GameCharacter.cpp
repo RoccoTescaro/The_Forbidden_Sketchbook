@@ -30,7 +30,7 @@ void GameCharacter::update(Map &map, const float &dt)
 				sf::Vector2<float> &nextStep =stepQueue[1];
 				sf::Vector2<float> direction=nextStep-pos;
 				direction={direction.x/map.getCellDim().x,direction.y/map.getCellDim().y};
-				pos+={direction.x*dt*animationSpeed,direction.y*dt*animationSpeed};
+				pos+={direction.x*dt*speed,direction.y*dt*speed};
 				//if(weapon)
 				//	weapon->setPosition(pos);
 				if(Utils::Math::distance(sprite.getPosition(),nextStep)<3){

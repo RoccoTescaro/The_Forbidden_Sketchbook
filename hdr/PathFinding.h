@@ -17,6 +17,7 @@ public:
 
     virtual std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying)=0;
 
+    inline uint8_t getMovementCost() const {    return movementCost;    };
 
 protected:
 struct hash
@@ -31,6 +32,8 @@ struct hash
 
     bool isValid(Map &map, const sf::Vector2<int> pos, bool flying, bool ignoreGC=false);
 
+
+    const uint8_t movementCost = 1; 
 };
 
 class AStar : public PathAlgorithm

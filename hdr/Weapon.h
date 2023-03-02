@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class Weapon
 {

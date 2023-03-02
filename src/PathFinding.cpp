@@ -27,7 +27,7 @@ std::deque<sf::Vector2<float>> AStar::tracePath(Map &map, std::unordered_map<sf:
     }
 
     //aggiungo il nodo di partenza
-    finalPath.emplace_front(map.posIntToFloat(target));
+    //finalPath.emplace_front(map.posIntToFloat(target));
     return finalPath;
 };
 

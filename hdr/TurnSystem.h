@@ -4,6 +4,7 @@
 #include "GameCharacter.h"
 #include "Map.h"
 #include "Utils.h"
+#include "Action.h"
 
 
 class TurnSystem : public Serializable
@@ -18,6 +19,7 @@ private:
         }
     };
 
+    using ActionQueue = std::queue<std::unique_ptr<Action>>;
     using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, PriorityCompare>;
 public:
 
@@ -30,10 +32,21 @@ public:
     void newRound();
 
     void serialize(Archive& arc);
+
+    void turnBuild(sf::Vector2<float> target);
+
+    void update(const float &dt);
+
+    inline bool isActionQueueEmpty(){   return actionQueue.empty(); };
+
 private:
     static Serializable* create() { return new TurnSystem; };
     static Register registration;
 
     std::shared_ptr<Map> map;
+
     TurnQueue turnQueue;
+    std::weak_ptr<GameCharacter> actor;
+
+    ActionQueue actionQueue;
 };

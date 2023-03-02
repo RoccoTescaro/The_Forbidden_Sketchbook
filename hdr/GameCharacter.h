@@ -9,6 +9,10 @@ class Weapon;
 
 class GameCharacter : public Entity //TODO fix constructors
 {
+private:
+
+    using MovementStrategy = std::unique_ptr<PathAlgorithm>;
+    using StepQueue = std::deque<sf::Vector2<float>>;
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
         : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy), priority(priority) {};
@@ -31,7 +35,9 @@ public:
     inline const uint8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
     inline float getRange() const { return 1; /*return weapon->getRange()*/};
+    inline MovementStrategy& getMovementStrategy() { return movementStrategy; };
 
+    inline void subEnergy(const uint8_t newEnergy) { energy -= newEnergy;}
 
     //GAMECHARACTER FUNCTIONS
     void updateStepQueue( Map &map, const sf::Vector2<float> target);
@@ -55,9 +61,9 @@ protected:
     //Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 
     //MOVEMENT
-    const float animationSpeed = 300.f;
-    std::deque<sf::Vector2<float>> stepQueue;
-    std::unique_ptr<PathAlgorithm> movementStrategy;
+    const float speed = 300.f;
+    StepQueue stepQueue;
+    MovementStrategy movementStrategy;
 
 };
 
