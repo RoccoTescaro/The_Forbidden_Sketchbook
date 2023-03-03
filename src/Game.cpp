@@ -29,6 +29,8 @@ Game::Game()
 	//map.add({ 5,3 }, new Bat{100,100});
 	//map.add({ 8,8 }, new Ranged{100,100});
 	//map.add({ 10,2 }, new Wall{Wall::RU});
+	//map.add({ 10,1 }, new Wall{Wall::UD});
+	//map.add({ 11,2 }, new Wall{Wall::RL});
 	//map.add({ 7,5 }, new Hole);
 	//map.add({ 7,15 }, new ColorPedestral);
 
@@ -46,7 +48,7 @@ void Game::update()
 	//TRANSITION EFFECT
 	transitionEffect.update(dt);
 
-	if (input.isKeyPressed(Input::Enter))
+	if (input.isKeyPressed(Input::Esc))
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())

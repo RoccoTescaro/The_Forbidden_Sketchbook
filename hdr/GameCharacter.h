@@ -81,8 +81,8 @@ public:
         fs.serialize(filterColor);
     }
 
-private:
     static Serializable* create() { return new Player; };
+private:
     static Register registration;
     sf::Color filterColor; 
 };
@@ -97,8 +97,9 @@ public:
     {
         GameCharacter::serialize(fs);
     }
-private:
+
     static Serializable* create() { return new Melee{100,100}; };
+private:
     static Register registration;
 };
 
@@ -114,8 +115,9 @@ public:
     {
         GameCharacter::serialize(fs);
     }
-private:
+
     static Serializable* create() { return new Bat{100,100}; };
+private:
     static Register registration;
 };
 
@@ -130,8 +132,9 @@ public:
         GameCharacter::serialize(fs);
         fs.serialize(animationTime);
     }
-private:
+
     static Serializable* create() { return new Ranged{100,100}; };
+private:
     static Register registration;
 
     const float animationDuration = 0.f;

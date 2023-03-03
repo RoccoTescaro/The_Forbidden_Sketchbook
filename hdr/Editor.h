@@ -3,7 +3,7 @@
 #include "Button.h"
 #include "Map.h"
 #include "Camera.h"
-#include "TurnSystem.h"
+#include <vector>
 
 class Editor : public State
 {
@@ -12,20 +12,26 @@ public:
 
     void update() override;
     void render() override;
+
+	void save();
+	void load();
 private:
-    sf::Texture backgroundTexture;
-    sf::Sprite background;
+	sf::Texture backgroundTexture;
+	sf::RectangleShape backgroundSprite;
+	sf::Shader backgroundShader;
 
-    Map map;
-    Camera cam;
-    sf::View gui;
+	sf::Vector2<int> mousePos; //in map coordinates;
+	sf::Font mouseFont;
+	sf::Text mousePosText;
+	sf::RectangleShape mouseIndicator;
 
-    sf::Vector2<int> mouseGriddedPos;
-    sf::RectangleShape mouseIndicator;
-    sf::Font mouseFont;
-    sf::Text mousePosText;
+	Map map;
+	Camera cam;
+	sf::View gui;
 
-    TurnSystem turnSystem;
-    std::shared_ptr<GameCharacter> actor;
-
+	std::vector<std::function<Serializable* ()>> entitiesFactories;
+	std::vector<std::function<Serializable* ()>>::iterator factory;
+	std::unique_ptr<Entity> placeHolderEntity;
+	//sf::Texture placeHolderBackgroundTexture
+	//sf::Sprite placeHolderBackground;
 };

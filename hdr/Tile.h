@@ -40,8 +40,8 @@ public:
         setTexture(type);
     }
 
-private:
     static Serializable* create() { return new Wall; };
+private:
     static Register registration;
     uint8_t type = 0;
 };
@@ -53,8 +53,8 @@ public:
 
     bool isSolid() const override;
 
-private:
     static Serializable* create() { return new Hole; };
+private:
     static Register registration;
 };
 
@@ -72,8 +72,9 @@ public:
         Tile::serialize(fs);
         fs.serialize(color); 
     };
-private:
+
     static Serializable* create() { return new ColorPedestral; };
+private:
     static Register registration;
 
 	sf::Color color; 
