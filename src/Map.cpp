@@ -6,9 +6,9 @@
 void Map::render(sf::RenderWindow& window)
 {
 	for (auto& tile : tiles)
-		tile.second->render(); //TODO make indipendent from application 
+		tile.second->render(window); 
 	for (auto& gameCharacter : gameCharacters)
-		gameCharacter.second->render();
+		gameCharacter.second->render(window);
 };
 
 std::shared_ptr<Tile> Map::getTile(const sf::Vector2<int>&pos)

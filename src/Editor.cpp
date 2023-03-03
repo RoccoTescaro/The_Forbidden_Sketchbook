@@ -34,8 +34,15 @@ Editor::Editor()
 	entitiesFactories.emplace_back(Bat::create);
 	entitiesFactories.emplace_back(Ranged::create);
 
+	placeHolderBackgroundTexture.loadFromFile(Config::placeHolderTexturePath);
+	placeHolderBackground.setTexture(placeHolderBackgroundTexture);
+	placeHolderBackground.setOrigin(placeHolderBackgroundTexture.getSize().x*0.5f, placeHolderBackgroundTexture.getSize().y*0.5f);
+	placeHolderBackground.setScale(1.5f, 1.5f);
+	placeHolderBackground.setPosition(window.getSize().x*0.5f,window.getSize().y*0.85f);
+
 	factory = entitiesFactories.begin();
 	placeHolderEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
+	placeHolderEntity->setPos({ window.getSize().x * 0.5f - placeHolderEntity->getCenter().x, window.getSize().y * 0.85f - placeHolderEntity->getCenter().y });
 
 	gui = cam.getView();
 }
@@ -59,14 +66,6 @@ void Editor::update()
 		sf::Vector2<float>{ map.getCellDim().x - mousePosText.getGlobalBounds().width,
 		map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
 
-	//CAMERA
-
-	if (input.isKeyPressed(Input::Space))
-		cam.lock();
-
-	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
-		cam.setTarget(map.getGameCharacter(mousePos));
-
 	cam.update(dt);
 
 	//BACKGROUND
@@ -83,19 +82,28 @@ void Editor::update()
 		factory++;
 		if (factory == entitiesFactories.end()) factory = entitiesFactories.begin();
 		placeHolderEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
+		placeHolderEntity->setPos({ window.getSize().x * 0.5f - placeHolderEntity->getCenter().x, window.getSize().y * 0.85f - placeHolderEntity->getCenter().y});
+
 	}
 	else if(input.getWheelDelta() < 0)
 	{
 		if (factory == entitiesFactories.begin()) factory = entitiesFactories.end();
 		factory--;
 		placeHolderEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
+		placeHolderEntity->setPos({ window.getSize().x * 0.5f - placeHolderEntity->getCenter().x, window.getSize().y * 0.85f - placeHolderEntity->getCenter().y });
+
 	}
 
-	if (input.isKeyReleased(Input::MouseL)) 
+	if (input.isKeyDown(Input::MouseL) &&
+		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.getPlayer()->getPos()))
 	{
 		if (dynamic_cast<Wall*>(placeHolderEntity.get())); //wall inititalization based on map
 		else map.add(mousePos, dynamic_cast<Entity*>((*factory)()));
 	}
+
+	if (input.isKeyDown(Input::MouseR) && 
+		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.getPlayer()->getPos()))
+		map.remove(map.posFloatToInt(input.getMousePos(&cam.getView())));
 }
 
 void Editor::render() 
@@ -106,8 +114,8 @@ void Editor::render()
 	window.draw(mouseIndicator);
 	window.draw(mousePosText);
 	window.setView(gui);
-	//window.draw(placeHolderBackground);
-	//placeHolderEntity->render(window);
+	window.draw(placeHolderBackground);
+	placeHolderEntity->render(window);
 	transitionEffect.render(window);
 }
 

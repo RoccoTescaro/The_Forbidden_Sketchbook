@@ -29,6 +29,7 @@ namespace Config
 
 	const std::string menuBackgroundTexturePath{ PATH("img/MenuBackground.jpg") };
 	const std::string gameBackgroundTexturePath{ PATH("img/GameBackground.jpg") };
+	const std::string placeHolderTexturePath{ PATH("img/PlaceHolderBackground.png") };
 	const std::string playerTexturePath{ PATH("img/Player.png") };
 	const std::string meleeTexturePath{ PATH("img/Melee.png") };
 	const std::string batTexturePath{ PATH("img/Bat.png") };

@@ -18,10 +18,10 @@ public:
     //ENTITY
     void update(Map &map, const float &dt) override;
     void execute(GameCharacter &gameCharacter, Map &map) override;
-    inline void render() override 
+    inline void render(sf::RenderWindow& window) override 
     {   
-        Entity::render();
-        //weapon->render();    
+        Entity::render(window);
+        //weapon->render(window);    
     };
     
     //GAMECHARACTER GET&SET

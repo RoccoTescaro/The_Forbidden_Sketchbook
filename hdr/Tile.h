@@ -27,7 +27,7 @@ public:
     };
 
     Wall(uint8_t type);
-    Wall() {};
+    Wall() : Wall(RL) {};
 
     void setTexture(uint8_t newType) ;
 
