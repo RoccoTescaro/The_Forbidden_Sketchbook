@@ -3,107 +3,133 @@
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
 
+#define MAX_AREA_PROPERLY_RENDER 1500 //50*30
+
 void Map::render(sf::RenderWindow& window)
 {
+	auto& view = window.getView();
+	float top = view.getCenter().y - view.getSize().y * 0.5f - cellDim.y;
+	float bottom = view.getCenter().y + view.getSize().y * 0.5 + cellDim.y;
+	float left = view.getCenter().x - view.getSize().x * 0.5f - cellDim.x;
+	float right = view.getCenter().x + view.getSize().x * 0.5f + cellDim.x;
+
+	uint32_t nCells = ((bottom - top) / cellDim.y) * ((right - left) / cellDim.x);
+
+	if (nCells < MAX_AREA_PROPERLY_RENDER)
+		for (float j = top; j < bottom; j += cellDim.y)
+			for (float i = left; i < right; i += cellDim.x) 
+			{
+				auto tile = get<Tile>(posFloatToInt({ i,j }));
+				auto gameCharater = get<GameCharacter>(posFloatToInt({ i,j }));
+				if (tile) tile->render(window);
+				else if (gameCharater) gameCharater->render(window);
+			}
+	else 
+	{
+		for (auto& tileType : tiles)
+			for (auto& tile : tileType.second)
+				tile.second->render(window);
+
+		for (auto& gameCharacterType : gameCharacters)
+			for (auto& gameCharacter : gameCharacterType.second)
+				gameCharacter.second->render(window);
+	}
+}
+
+
+template<>
+Map& Map::remove<Tile>(const sf::Vector2<int>& pos)
+{
+	for (auto& tile : tiles) {
+		if (tile.second.erase(pos)) 
+		{
+			LOG("a Tile removed at pos {{1},{2}}", pos.x, pos.y);
+			return *this;
+		}
+		else
+			LOG("no Tile at pos {{1},{2}}", pos.x, pos.y);
+	}
+	return *this;
+}
+
+template<>
+Map& Map::remove<GameCharacter>(const sf::Vector2<int>& pos)
+{
+	for (auto& gameCharacter : gameCharacters) {
+		if (gameCharacter.second.erase(pos)) {
+			LOG("a GameCharacter removed at pos {{1},{2}}", pos.x, pos.y);
+			return *this;
+		}
+		else
+			LOG("no GameCharacter at pos {{1},{2}}", pos.x, pos.y);
+	}
+	return *this;
+}
+
+template<>
+Map& Map::remove<Entity>(const sf::Vector2<int>& pos)
+{
+	remove<Tile>(pos);
+	remove<GameCharacter>(pos);
+	return *this;
+}
+
+template<>
+std::shared_ptr<Entity> Map::get<Entity>(const sf::Vector2<int>& pos) const
+{
+	std::shared_ptr<Tile> tile = get<Tile>(pos);
+	std::shared_ptr<GameCharacter> gameCharacter = get<GameCharacter>(pos);
+
+	if (tile.get()) return tile;
+	else if (gameCharacter.get()) return gameCharacter;
+	else return nullptr;
+}
+
+template<>
+std::shared_ptr<Tile> Map::get<Tile>(const sf::Vector2<int>& pos) const
+{
 	for (auto& tile : tiles)
-		tile.second->render(window); 
+		if (tile.second.find(pos) != tile.second.end())
+			return tile.second.at(pos);
+	return nullptr;
+}
+
+template<>
+std::shared_ptr<GameCharacter> Map::get<GameCharacter>(const sf::Vector2<int>& pos) const
+{
 	for (auto& gameCharacter : gameCharacters)
-		gameCharacter.second->render(window);
-};
-
-std::shared_ptr<Tile> Map::getTile(const sf::Vector2<int>&pos)
-{
-	if (tiles.find(pos) != tiles.end())
-		return tiles.at(pos);
+		if (gameCharacter.second.find(pos) != gameCharacter.second.end())
+			return gameCharacter.second.at(pos);
 	return nullptr;
 }
 
-std::shared_ptr<GameCharacter> Map::getGameCharacter(const sf::Vector2<int>&pos)
+bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid) const
 {
-	if (gameCharacters.find(pos) != gameCharacters.end())
-		return gameCharacters.at(pos);
-	return nullptr;
+	return get<Tile>(pos).get() && (get<Tile>(pos)->isSolid() || solid);
 }
 
-std::shared_ptr<GameCharacter> Map::getPlayer()
+void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end) //#TODO test
 {
-	auto player = gameCharacters[playerPos];
-	if (!player) ERROR("Map has no player in it");
-	
-	return player;
+	for (auto& gameCharacter : gameCharacters)
+		if (gameCharacter.second.find(start) != gameCharacter.second.end())
+		{
+			auto entity = gameCharacter.second.extract(start);
+
+			if (entity)
+			{
+				entity.key() = end;
+				gameCharacter.second.insert(std::move(entity));
+			}
+
+		}
 }
 
-Map& Map::add(const sf::Vector2<int>& pos, Entity* entity)
-{
-	Tile* ptrTile = dynamic_cast<Tile*>(entity);
-	GameCharacter* ptrGameCharacter = dynamic_cast<GameCharacter*>(entity);
-	if (ptrTile) addTile(pos, ptrTile);
-	else if (ptrGameCharacter) addGameCharacter(pos, ptrGameCharacter);
-	else ERROR("no suitable conversion for entity");
-	return *this;
-}
-
-Map& Map::addTile(const sf::Vector2<int>& pos, Tile* tile)
-{
-	tile->setPos(posIntToFloat(pos));
-	if (tiles.count(pos))
-		removeTile(pos);
-	tiles[pos] = static_cast<std::shared_ptr<Tile>>(tile);		
-	return *this;
-}
-
-Map& Map::addGameCharacter(const sf::Vector2<int>& pos, GameCharacter* gameCharacter)
-{
-	gameCharacter->setPos(posIntToFloat(pos));
-	if (gameCharacters.count(pos))
-		removeGameCharacter(pos);
-	gameCharacters[pos] = static_cast<std::shared_ptr<GameCharacter>>(gameCharacter);
-	
-	Player* ptrPlayer = dynamic_cast<Player*>(gameCharacter);
-	if (ptrPlayer) 
-		playerPos = pos;
-	return *this;
-}
-
-Map& Map::remove(const sf::Vector2<int>& pos)
-{
-	removeTile(pos);
-	removeGameCharacter(pos);
-	return *this;
-}
-
-Map& Map::removeTile(const sf::Vector2<int>& pos)
-{
-	tiles.erase(pos);
-	return *this;
-}
-
-Map& Map::removeGameCharacter(const sf::Vector2<int>& pos)
-{
-	gameCharacters.erase(pos);
-	return *this;
-}
-
-void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end)
-{
-	auto gameCharacter = gameCharacters.extract(start);
-	if (gameCharacter) gameCharacters[end] = gameCharacter.mapped();
-	else ERROR("no gameCharacter at start position");
-
-	if (start == playerPos) playerPos = end;
-}
-
-bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
-{
-	return getTile(pos) && (getTile(pos).get()->isSolid() || solid); 
-}
-
-sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>&pos)
+sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>&pos) const 
 {
 	return sf::Vector2<float>(pos.x * cellDim.x, pos.y * cellDim.y);
 }
 
-sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>&pos)
+sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>&pos) const
 {
 	return sf::Vector2<int>(std::floor(pos.x / cellDim.x), std::floor(pos.y / cellDim.y));
 }
@@ -116,12 +142,22 @@ void Map::serialize(Archive& fs)
 	{
 		uint32_t sizeTiles = tiles.size();
 		fs.serialize(sizeTiles);
-		for (auto& tile : tiles)
-			fs.serialize(tile.second);
+		for (auto& tileType : tiles) 
+		{
+			uint32_t sizeType = tileType.second.size();
+			fs.serialize(sizeType);
+			for (auto& tile : tileType.second)
+				fs.serialize(tile.second);
+		}
 		uint32_t sizeGameCharacters = gameCharacters.size();
 		fs.serialize(sizeGameCharacters);
-		for (auto& gameCharacter : gameCharacters)
-			fs.serialize(gameCharacter.second);
+		for (auto& gameCharactersType : gameCharacters)
+		{
+			uint32_t sizeType = gameCharactersType.second.size();
+			fs.serialize(sizeType);
+			for (auto& gameCharacter : gameCharactersType.second)
+				fs.serialize(gameCharacter.second);
+		}
 	}
 	else 
 	{
@@ -132,17 +168,27 @@ void Map::serialize(Archive& fs)
 		fs.serialize(sizeTiles);
 		for (uint32_t i = 0; i < sizeTiles; i++)
 		{
-			Tile* tile;
-			fs.serialize(tile);
-			addTile(posFloatToInt(tile->getPos()), tile);
+			uint32_t sizeType;
+			fs.serialize(sizeType);
+			for (uint32_t j = 0; j < sizeType; j++)
+			{
+				Tile* tile;
+				fs.serialize(tile);
+				append<Tile>(posFloatToInt(tile->getPos()), tile);
+			}
 		}
 		uint32_t sizeGameCharacters;
 		fs.serialize(sizeGameCharacters);
 		for (uint32_t i = 0; i < sizeGameCharacters; i++)
 		{
-			GameCharacter* gameCharacter;
-			fs.serialize(gameCharacter);
-			addGameCharacter(posFloatToInt(gameCharacter->getPos()), gameCharacter);
+			uint32_t sizeType;
+			fs.serialize(sizeType);
+			for (uint32_t j = 0; j < sizeType; j++)
+			{
+				GameCharacter* gameCharacter;
+				fs.serialize(gameCharacter);
+				append<GameCharacter>(posFloatToInt(gameCharacter->getPos()), gameCharacter);
+			}
 		}
 	}
 	

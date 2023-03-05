@@ -25,7 +25,7 @@ Editor::Editor()
 	//Archive arc(Config::gameMapPath, Archive::Load);
 	//arc >> map;
 
-	map.add({ 0,0 }, new Player);
+	map.append({ 0,0 }, new Player);
 	
 	entitiesFactories.emplace_back(Wall::create);
 	entitiesFactories.emplace_back(Hole::create);
@@ -102,19 +102,19 @@ void Editor::update()
 
 	//CREATION
 	if (input.isKeyDown(Input::MouseL) &&
-		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.getPlayer()->getPos()))
+		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.get<Player>()->getPos()))
 	{
 		if (dynamic_cast<Wall*>(placeHolderEntity.get())) 
 		{
 
-			map.addTile(mousePos, dynamic_cast<Wall*>((*factory)()));
+			map.append<Tile>(mousePos, dynamic_cast<Wall*>((*factory)()));
 		}
-		else map.add(mousePos, dynamic_cast<Entity*>((*factory)()));
+		else map.append(mousePos, dynamic_cast<Entity*>((*factory)()));
 	}
 
 	if (input.isKeyDown(Input::MouseR) && 
-		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.getPlayer()->getPos()))
-		map.remove(map.posFloatToInt(input.getMousePos(&cam.getView())));
+		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.get<Player>()->getPos()))
+		map.remove<Entity>(map.posFloatToInt(input.getMousePos(&cam.getView())));
 }
 
 void Editor::render() 

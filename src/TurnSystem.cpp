@@ -23,14 +23,16 @@ void TurnSystem::newRound()
 {
     auto& gameCharacters = map->getGameCharacters();
 
-    for(auto &gcs : gameCharacters)
+    for(auto &gameCharactersType : gameCharacters)
     {
-        auto gc = gcs.second;
-
-        if(Config::maxActivationDistance > Utils::Math::distance(map->getPlayer()->getPos(), gc->getPos()))
+        for (auto& gameCharacterPair : gameCharactersType.second) 
         {
-            turnQueue.emplace(gc);
-            gc->turnReset();
+            auto& gameCharacter = gameCharacterPair.second;
+            if(Config::maxActivationDistance > Utils::Math::distance(map->get<Player>()->getPos(), gameCharacter->getPos()))
+            {
+                turnQueue.emplace(gameCharacter);
+                gameCharacter->turnReset();
+            }
         }
 
     }

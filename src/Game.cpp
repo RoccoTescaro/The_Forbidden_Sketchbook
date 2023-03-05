@@ -20,14 +20,14 @@ Game::Game()
 	window.setMouseCursorVisible(false);
 
 	turnSystem.init(map);
-	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> map >> turnSystem;
+	//Archive arc(Config::gameMapPath, Archive::Load);
+	//arc >> map >> turnSystem;
 	//ASSERT(!map.getPlayer().get());
 
-	//map.add({ 0,0 }, new Player);
-	//map.add({ 0,3 }, new Melee{100,100});
-	//map.add({ 5,3 }, new Bat{100,100});
-	//map.add({ 8,8 }, new Ranged{100,100});
+	map.append({ 0,0 }, new Player);
+	map.append({ 0,3 }, new Melee{100,100});
+	map.append({ 5,3 }, new Bat{100,100});
+	map.append({ 8,8 }, new Ranged{100,100});
 	//map.add({ 10,2 }, new Wall{Wall::RU});
 	//map.add({ 10,1 }, new Wall{Wall::UD});
 	//map.add({ 11,2 }, new Wall{Wall::RL});
@@ -40,7 +40,7 @@ Game::Game()
 	cam.setTarget(actor.lock()); 
 
 	hud.setView(cam.getView());
-	hud.setPlayer(map.getPlayer());
+	hud.setPlayer(map.get<Player>());
 }
 
 void Game::update()
@@ -67,8 +67,8 @@ void Game::update()
 	if (input.isKeyPressed(Input::Space))
 		cam.lock();
 
-	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
-		cam.setTarget(map.getGameCharacter(mousePos));
+	if (input.isKeyReleased(Input::MouseR) && map.get<GameCharacter>(mousePos).get())
+		cam.setTarget(map.get<GameCharacter>(mousePos));
 
 	cam.update(dt); 
 
@@ -124,5 +124,5 @@ void Game::load()
 
 	sf::Vector2<float> size = { (float)window.getSize().x,(float)window.getSize().y };
 	hud.setView(sf::View{ size*0.5f,size });
-	hud.setPlayer(map.getPlayer());
+	hud.setPlayer(map.get<Player>());
 }
