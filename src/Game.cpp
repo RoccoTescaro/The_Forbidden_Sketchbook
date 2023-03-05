@@ -86,9 +86,10 @@ void Game::update()
 
 	//UPDATE ACTOR
     //TURNSYSTEM
+	
     auto actorShr = actor.lock();
 
-	if(actorShr->getEnergy()==0)//turn ended
+	if(actorShr->getEnergy()==0 && turnSystem.isActionQueueEmpty())//turn ended
         actor=turnSystem.getActor();
 
     if(!turnSystem.isPlayerTurn())

@@ -11,6 +11,7 @@
 				f : 0
 				f : 0
 			h : 100
+			h : 20
 			sf::Color -
 				h : 255
 				h : 255
@@ -25,6 +26,7 @@
 				f : 0
 				f : 96
 			h : 100
+			h : 20
 	pointer to 13GameCharacter -
 		j : 3
 		std::string : 3Bat
@@ -34,6 +36,7 @@
 				f : 320
 				f : 96
 			h : 100
+			h : 20
 10TurnSystem -
 	std::string : 10TurnSystem
 	j : 1

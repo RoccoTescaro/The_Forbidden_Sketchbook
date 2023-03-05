@@ -4,8 +4,9 @@
 #include "Entity.h"
 #include "PathFinding.h"
 #include "Utils.h"
+#include "Weapon.h"
 
-class Weapon;
+
 
 class GameCharacter : public Entity //TODO fix constructors
 {
@@ -15,16 +16,13 @@ private:
     using StepQueue = std::deque<sf::Vector2<float>>;
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
-        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy), priority(priority) {};
-    GameCharacter() :  priority(0) {};
+        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy>maxEnergy ? maxEnergy:energy), priority(priority), weapon(5,3) {};
 
     //ENTITY
-    void update(Map &map, const float &dt) override;
-    void execute(GameCharacter &gameCharacter, Map &map) override;
-    inline void render() override 
+    inline void render(sf::RenderWindow& window) override 
     {   
-        Entity::render();
-        //weapon->render();    
+        Entity::render(window);
+        weapon.render(window);    
     };
     
     //GAMECHARACTER GET&SET
@@ -36,33 +34,40 @@ public:
     inline uint8_t getPriority() const { return priority; };
     inline float getRange() const { return 1; /*return weapon->getRange()*/};
     inline MovementStrategy& getMovementStrategy() { return movementStrategy; };
+    inline Weapon& getWeapon() { return weapon; };
 
+    inline void setPos(const sf::Vector2<float>& pos) override  {   Entity::setPos(pos);
+                                                                    weapon.setPos(pos); };
+    inline void subHealth(const uint8_t newHealth) { health -= newHealth;}
     inline void subEnergy(const uint8_t newEnergy) { energy -= newEnergy;}
 
     //GAMECHARACTER FUNCTIONS
-    void updateStepQueue( Map &map, const sf::Vector2<float> target);
-    inline void turnReset(){    energy+=maxEnergy;
-                                stepQueue.clear();           }; 
-    inline bool isStepQueueEmpty(){     return stepQueue.empty();   };
-
+    inline void turnReset(){    energy=maxEnergy;     }; 
     inline void serialize(Archive& fs) 
     {
         Entity::serialize(fs);
         fs.serialize(health);
-        //fs.serialize(stepQueue);
+        fs.serialize(energy);
     }
+
+    virtual void move(Map &map, sf::Vector2<float> target, const float &dt); 
+    virtual void interact(Map &map, sf::Vector2<float> target, const float &dt); 
+
+
+
 protected:
     //STATS
+
+    const float speed = 200.f;
     const uint8_t maxHealth = 20;  
     const uint8_t maxEnergy = 20;
     const uint8_t priority = 0;
     uint8_t health = 0;
     uint8_t energy = 0;
-    //Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
+    Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 
     //MOVEMENT
-    const float speed = 300.f;
-    StepQueue stepQueue;
+    
     MovementStrategy movementStrategy;
 
 };

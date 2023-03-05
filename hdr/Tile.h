@@ -6,8 +6,6 @@ class Tile : public Entity
 {
 public:
 
-    void update(Map &map, const float &dt) override{};
-    void execute(GameCharacter &gameCharacter, Map &map) override{};
     void serialize(Archive& fs) override { Entity::serialize(fs); };
 
 };
@@ -64,8 +62,6 @@ public:
     ColorPedestral();
 
     bool isSolid() const override;
-
-    void execute(GameCharacter &gameCharacter, Map &map) override;
 
     void serialize(Archive& fs) 
     { 

@@ -6,9 +6,9 @@
 void Map::render(sf::RenderWindow& window)
 {
 	for (auto& tile : tiles)
-		tile.second->render(); //TODO make indipendent from application 
+		tile.second->render(window); //TODO make indipendent from application 
 	for (auto& gameCharacter : gameCharacters)
-		gameCharacter.second->render();
+		gameCharacter.second->render(window);
 };
 
 std::shared_ptr<Tile> Map::getTile(const sf::Vector2<int>&pos)
@@ -89,6 +89,8 @@ void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end)
 	auto gameCharacter = gameCharacters.extract(start);
 	if (gameCharacter) gameCharacters[end] = gameCharacter.mapped();
 	else ERROR("no gameCharacter at start position");
+
+	if(start == playerPos) playerPos = end;
 }
 
 bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)

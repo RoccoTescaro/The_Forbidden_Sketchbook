@@ -4,11 +4,21 @@
 #include "GameCharacter.h"
 #include "Map.h"
 #include "Utils.h"
-#include "Action.h"
+
 
 
 class TurnSystem : public Serializable
 {
+    struct Action{
+
+        #define MOVE 0
+        #define ATTACK 1
+
+        bool actionType;
+        sf::Vector2<float> target;
+
+    };
+
 private:
 
     struct PriorityCompare
@@ -19,7 +29,7 @@ private:
         }
     };
 
-    using ActionQueue = std::queue<std::unique_ptr<Action>>;
+    using ActionQueue = std::queue<Action>;
     using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, PriorityCompare>;
 public:
 

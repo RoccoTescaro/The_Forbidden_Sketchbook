@@ -10,7 +10,7 @@ std::weak_ptr<GameCharacter> TurnSystem::getActor()
         newRound();
     actor = turnQueue.top();
     turnQueue.pop();
-
+    actionQueue={};
     return actor;
 }
 
@@ -78,17 +78,19 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     if(map->getGameCharacter(map->posFloatToInt(target)))
         targetHp = map->getGameCharacter(map->posFloatToInt(target))->getHealth();
     bool inRange = (Utils::Math::distance(actorShr->getPos(),target)<=range && map->getGameCharacter(map->posFloatToInt(target)));
-    sf::Vector2<float> newPos = actorShr->getPos();
 
     std::deque<sf::Vector2<float>> stepQueue = actorShr->getMovementStrategy()->findPath(*map, actorShr->getPos(), target, actorShr->isSolid());
+    sf::Vector2<float> newPos = stepQueue.front();
     while (!stepQueue.empty() && energy && !inRange)
     {
+        if(map->getGameCharacter(map->posFloatToInt(newPos)))
+            break;
+        energy-=actorShr->getMovementStrategy()->getMovementCost();
+        actionQueue.emplace(0,newPos);
+        stepQueue.pop_front();
         newPos = stepQueue.front();
         inRange = (Utils::Math::distance(newPos,target)<=range && map->getGameCharacter(map->posFloatToInt(target)));    //if you can attack u must do it
-        energy-=actorShr->getMovementStrategy()->getMovementCost();
-        std::unique_ptr<Action> action {new Move(newPos)};
-        actionQueue.push(std::move(action));
-        stepQueue.pop_front();
+
 
         LOG("action type: move \n action target:{1},{2} \n energy left: {3} \n", newPos.x, newPos.y, int(energy) );
         
@@ -97,10 +99,9 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     while(inRange && energy>1 && targetHp)
     {
         //energy-=actorShr->getWeapon()->getCost();
-        energy-=2;
+        energy-=actorShr->getWeapon().getCost();
         targetHp-=dmg;
-        std::unique_ptr<Action> action {new Attack(target)};
-        actionQueue.push(std::move(action));
+        actionQueue.emplace(1,target);
         LOG("action type: attack \n action target:{1},{2} \n energy left: {3} \n\n", target.x, target.y, int(energy) );
 
     }
@@ -111,12 +112,25 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
 
 void TurnSystem::update(const float &dt)
 {
-
+    
     if(actionQueue.empty())
         return;
+   
 
-    actionQueue.front()->update(*map, actor, dt);
-    if(actionQueue.front()->isAnimationEnded(actor))
-        actionQueue.pop();
+    auto action = actionQueue.front();
+    auto actorShr = actor.lock();
+        
 
+    if(!action.actionType){
+        actorShr->move(*map, action.target, dt);
+        if(Utils::Math::distance(actorShr->getPos(),action.target)<5){
+            LOG("a");actionQueue.pop();LOG("c");}
+    }
+    else{
+        actorShr->interact(*map, action.target, dt);
+        LOG("{1}",actorShr->getWeapon().isAnimationEnded());
+        if(actorShr->getWeapon().isAnimationEnded()){
+            actionQueue.pop();LOG("TRUE");
+           }
+    }
 }
