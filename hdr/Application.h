@@ -34,7 +34,7 @@ private:
 	uint8_t currentStateIndex = 0;
 	uint8_t previousStateIndex = -1; 
 
-	sf::RenderWindow window{};
+	sf::RenderWindow window;
 	float dt = 0.f;
 
 	Input input{};

@@ -27,6 +27,8 @@ public:
 									sprite.getPosition().y - sprite.getOrigin().y * sprite.getScale().y + getSize().y * 0.5f };
 	};
 
+	inline sf::Sprite& getSprite() { return sprite; };
+
 	virtual bool isSolid() const = 0;
 	
 	void serialize(Archive& fs) override 

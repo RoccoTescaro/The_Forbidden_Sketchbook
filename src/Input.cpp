@@ -23,6 +23,8 @@ void Input::update()
     newKeys[Key::A] = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
     newKeys[Key::S] = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
     newKeys[Key::D] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+    newKeys[Key::Left] = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+    newKeys[Key::Right] = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
     newKeys[Key::MouseR] = sf::Mouse::isButtonPressed(sf::Mouse::Right);
     newKeys[Key::MouseL] = sf::Mouse::isButtonPressed(sf::Mouse::Left);
     newKeys[Key::Enter] = sf::Keyboard::isKeyPressed(sf::Keyboard::Enter);

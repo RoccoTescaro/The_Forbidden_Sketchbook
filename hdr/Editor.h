@@ -32,6 +32,7 @@ private:
 	std::vector<std::function<Serializable* ()>> entitiesFactories;
 	std::vector<std::function<Serializable* ()>>::iterator factory;
 	std::unique_ptr<Entity> placeHolderEntity;
+	std::unique_ptr<Entity> previewEntity;
 	sf::Texture placeHolderBackgroundTexture;
 	sf::Sprite placeHolderBackground;
 };

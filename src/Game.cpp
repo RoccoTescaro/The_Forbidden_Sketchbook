@@ -52,7 +52,7 @@ void Game::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::nextState();
+		Application::setState(3);
 
 	//MOUSE
 	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));

@@ -43,6 +43,8 @@ Editor::Editor()
 	factory = entitiesFactories.begin();
 	placeHolderEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
 	placeHolderEntity->setPos({ window.getSize().x * 0.5f - placeHolderEntity->getCenter().x, window.getSize().y * 0.85f - placeHolderEntity->getCenter().y });
+	previewEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
+	previewEntity->getSprite().setColor(sf::Color(255, 255, 255, 120));
 
 	gui = cam.getView();
 }
@@ -56,7 +58,7 @@ void Editor::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::nextState();
+		Application::setState(3);
 
 	//MOUSE
 	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));
@@ -65,6 +67,8 @@ void Editor::update()
 	mousePosText.setPosition(mouseIndicator.getPosition() +
 		sf::Vector2<float>{ map.getCellDim().x - mousePosText.getGlobalBounds().width,
 		map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
+
+	previewEntity->setPos(mouseIndicator.getPosition());
 
 	cam.update(dt);
 
@@ -77,27 +81,34 @@ void Editor::update()
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
 	//FACTORY
-	if (input.getWheelDelta() > 0) 
+	if (input.isKeyPressed(Input::Right)) 
 	{
 		factory++;
 		if (factory == entitiesFactories.end()) factory = entitiesFactories.begin();
 		placeHolderEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
 		placeHolderEntity->setPos({ window.getSize().x * 0.5f - placeHolderEntity->getCenter().x, window.getSize().y * 0.85f - placeHolderEntity->getCenter().y});
-
+		previewEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
+		previewEntity->getSprite().setColor(sf::Color(255,255,255,120));
 	}
-	else if(input.getWheelDelta() < 0)
+	else if(input.isKeyPressed(Input::Left))
 	{
 		if (factory == entitiesFactories.begin()) factory = entitiesFactories.end();
 		factory--;
 		placeHolderEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
 		placeHolderEntity->setPos({ window.getSize().x * 0.5f - placeHolderEntity->getCenter().x, window.getSize().y * 0.85f - placeHolderEntity->getCenter().y });
-
+		previewEntity = static_cast<std::unique_ptr<Entity>>(dynamic_cast<Entity*>((*factory)()));
+		previewEntity->getSprite().setColor(sf::Color(255, 255, 255, 120));
 	}
 
+	//CREATION
 	if (input.isKeyDown(Input::MouseL) &&
 		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.getPlayer()->getPos()))
 	{
-		if (dynamic_cast<Wall*>(placeHolderEntity.get())); //wall inititalization based on map
+		if (dynamic_cast<Wall*>(placeHolderEntity.get())) 
+		{
+
+			map.addTile(mousePos, dynamic_cast<Wall*>((*factory)()));
+		}
 		else map.add(mousePos, dynamic_cast<Entity*>((*factory)()));
 	}
 
@@ -112,6 +123,7 @@ void Editor::render()
 	window.draw(backgroundSprite, &backgroundShader);
 	map.render(window);
 	window.draw(mouseIndicator);
+	previewEntity->render(window);
 	window.draw(mousePosText);
 	window.setView(gui);
 	window.draw(placeHolderBackground);
