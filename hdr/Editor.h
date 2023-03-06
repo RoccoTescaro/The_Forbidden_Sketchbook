@@ -25,7 +25,7 @@ private:
 	sf::Text mousePosText;
 	sf::RectangleShape mouseIndicator;
 
-	Map map;
+	std::shared_ptr<Map> map;
 	Camera cam;
 	sf::View gui;
 

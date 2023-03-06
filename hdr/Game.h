@@ -26,7 +26,7 @@ private:
 	sf::Text mousePosText;
 	sf::RectangleShape mouseIndicator;
 
-	Map map;
+	std::shared_ptr<Map> map;
 	TurnSystem turnSystem;
 	std::weak_ptr<GameCharacter> actor;
 	Camera cam;

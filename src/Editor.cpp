@@ -2,9 +2,10 @@
 #include "../hdr/Config.h"
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
+#include "../hdr/TurnSystem.h"
 
 Editor::Editor() 
-    : cam(sf::Vector2<float>{ Application::getWindow().getSize() })
+    : cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)
 {   
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
@@ -14,7 +15,7 @@ Editor::Editor()
 	backgroundShader.setUniform("texture", backgroundTexture);
 
 	mouseIndicator.setOutlineThickness(3);
-	mouseIndicator.setSize(sf::Vector2<float>(map.getCellDim()));
+	mouseIndicator.setSize(sf::Vector2<float>(map->getCellDim()));
 	mouseIndicator.setFillColor(sf::Color(0, 0, 0, 0));
 	mouseIndicator.setOutlineColor(sf::Color(255, 255, 255, 255));
 	mouseFont.loadFromFile(Config::dialogueFontPath);
@@ -22,10 +23,9 @@ Editor::Editor()
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
-	//Archive arc(Config::gameMapPath, Archive::Load);
-	//arc >> map;
-
-	map.append({ 0,0 }, new Player);
+	Archive arc(Config::editorMapPath, Archive::Load);
+	arc >> *map;
+	if(!map->get<Player>().get()) map->append({ 0,0 }, new Player);
 	
 	entitiesFactories.emplace_back(Wall::create);
 	entitiesFactories.emplace_back(Hole::create);
@@ -61,12 +61,12 @@ void Editor::update()
 		Application::setState(3);
 
 	//MOUSE
-	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));
-	mouseIndicator.setPosition(map.posIntToFloat(mousePos));
+	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
+	mouseIndicator.setPosition(map->posIntToFloat(mousePos));
 	mousePosText.setString(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	mousePosText.setPosition(mouseIndicator.getPosition() +
-		sf::Vector2<float>{ map.getCellDim().x - mousePosText.getGlobalBounds().width,
-		map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
+		sf::Vector2<float>{ map->getCellDim().x - mousePosText.getGlobalBounds().width,
+		map->getCellDim().y - mousePosText.getGlobalBounds().height - 4});
 
 	previewEntity->setPos(mouseIndicator.getPosition());
 
@@ -102,26 +102,26 @@ void Editor::update()
 
 	//CREATION
 	if (input.isKeyDown(Input::MouseL) &&
-		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.get<Player>()->getPos()))
+		map->posFloatToInt(input.getMousePos(&cam.getView())) != map->posFloatToInt(map->get<Player>()->getPos()))
 	{
 		if (dynamic_cast<Wall*>(placeHolderEntity.get())) 
 		{
 
-			map.append<Tile>(mousePos, dynamic_cast<Wall*>((*factory)()));
+			map->append<Tile>(mousePos, dynamic_cast<Wall*>((*factory)()));
 		}
-		else map.append(mousePos, dynamic_cast<Entity*>((*factory)()));
+		else map->append(mousePos, dynamic_cast<Entity*>((*factory)()));
 	}
 
 	if (input.isKeyDown(Input::MouseR) && 
-		map.posFloatToInt(input.getMousePos(&cam.getView())) != map.posFloatToInt(map.get<Player>()->getPos()))
-		map.remove<Entity>(map.posFloatToInt(input.getMousePos(&cam.getView())));
+		map->posFloatToInt(input.getMousePos(&cam.getView())) != map->posFloatToInt(map->get<Player>()->getPos()))
+		map->remove<Entity>(map->posFloatToInt(input.getMousePos(&cam.getView())));
 }
 
 void Editor::render() 
 {
 	window.setView(cam.getView());
 	window.draw(backgroundSprite, &backgroundShader);
-	map.render(window);
+	map->render(window);
 	window.draw(mouseIndicator);
 	previewEntity->render(window);
 	window.draw(mousePosText);
@@ -129,5 +129,20 @@ void Editor::render()
 	window.draw(placeHolderBackground);
 	placeHolderEntity->render(window);
 	transitionEffect.render(window);
+}
+
+void Editor::save()
+{
+	TurnSystem turnSystem;
+	turnSystem.init(map);
+	turnSystem.newRound();
+	Archive arc(Config::editorMapPath, Archive::Save);
+	arc << *map << turnSystem;
+}
+
+void Editor::load()
+{
+	Archive arc(Config::editorMapPath, Archive::Load);
+	arc >> *map;
 }
 

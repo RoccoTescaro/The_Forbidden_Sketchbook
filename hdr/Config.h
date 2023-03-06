@@ -65,7 +65,8 @@ namespace Config
 		PATH("aud/Typing5.wav")
 	};
 
-	const std::string gameMapPath{ PATH("test.tfs") };
+	const std::string editorMapPath{ PATH("cfg/Editor.tfs") };
+	const std::string gameMapPath{ PATH("cfg/Game.tfs") };
 };
 
 

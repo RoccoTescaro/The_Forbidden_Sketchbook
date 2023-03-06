@@ -13,6 +13,7 @@ class Application
 {
 public:
 	static State* getState(uint8_t index);
+	static State* getPrevState();
 	static void addState(State* state); 
 	inline static void setState(uint8_t index) { app.previousStateIndex = app.currentStateIndex; app.currentStateIndex = index; };
 	inline static void nextState() { app.previousStateIndex = app.currentStateIndex; app.currentStateIndex++; };
@@ -31,9 +32,9 @@ private:
 	static Application app;
 
 	std::vector<std::unique_ptr<State>> states;
+
 	uint8_t currentStateIndex = 0;
 	uint8_t previousStateIndex = -1; 
-
 	sf::RenderWindow window;
 	float dt = 0.f;
 

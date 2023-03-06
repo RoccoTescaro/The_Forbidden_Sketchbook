@@ -3,19 +3,20 @@
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
 
-#define MAX_AREA_PROPERLY_RENDER 1500 //50*30
+#define MAX_AREA_PROPERLY_RENDERED 1500 //50*30
+#define RENDER_OVERSHOOT 3 
 
 void Map::render(sf::RenderWindow& window)
 {
 	auto& view = window.getView();
-	float top = view.getCenter().y - view.getSize().y * 0.5f - cellDim.y;
-	float bottom = view.getCenter().y + view.getSize().y * 0.5 + cellDim.y;
-	float left = view.getCenter().x - view.getSize().x * 0.5f - cellDim.x;
-	float right = view.getCenter().x + view.getSize().x * 0.5f + cellDim.x;
+	float top = view.getCenter().y - view.getSize().y * 0.5f - cellDim.y * RENDER_OVERSHOOT;
+	float bottom = view.getCenter().y + view.getSize().y * 0.5 + cellDim.y * RENDER_OVERSHOOT;
+	float left = view.getCenter().x - view.getSize().x * 0.5f - cellDim.x * RENDER_OVERSHOOT;
+	float right = view.getCenter().x + view.getSize().x * 0.5f + cellDim.x * RENDER_OVERSHOOT;
 
 	uint32_t nCells = ((bottom - top) / cellDim.y) * ((right - left) / cellDim.x);
 
-	if (nCells < MAX_AREA_PROPERLY_RENDER)
+	if (nCells < MAX_AREA_PROPERLY_RENDERED)
 		for (float j = top; j < bottom; j += cellDim.y)
 			for (float i = left; i < right; i += cellDim.x) 
 			{

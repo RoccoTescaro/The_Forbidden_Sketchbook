@@ -21,14 +21,14 @@ bool TurnSystem::isPlayerTurn()
 
 void TurnSystem::newRound()
 {
-    auto& gameCharacters = map->getGameCharacters();
+    auto& gameCharacters = map.lock()->getGameCharacters();
 
     for(auto &gameCharactersType : gameCharacters)
     {
         for (auto& gameCharacterPair : gameCharactersType.second) 
         {
             auto& gameCharacter = gameCharacterPair.second;
-            if(Config::maxActivationDistance > Utils::Math::distance(map->get<Player>()->getPos(), gameCharacter->getPos()))
+            if(Config::maxActivationDistance > Utils::Math::distance(map.lock()->get<Player>()->getPos(), gameCharacter->getPos()))
             {
                 turnQueue.emplace(gameCharacter);
                 gameCharacter->turnReset();
@@ -38,9 +38,9 @@ void TurnSystem::newRound()
     }
 }
 
-void TurnSystem::init(Map& map) 
+void TurnSystem::init(std::shared_ptr<Map> map)
 {
-    this->map = static_cast<std::shared_ptr<Map>>(&map);//std::make_shared<Map>(map);
+    this->map = map;
 }
 
 void TurnSystem::serialize(Archive& fs) 

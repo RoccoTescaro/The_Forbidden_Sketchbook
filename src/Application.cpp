@@ -11,6 +11,10 @@ State* Application::getState(uint8_t index)
 	return app.states[index].get();
 }
 
+State* Application::getPrevState()
+{
+	return app.states[app.previousStateIndex].get();
+}
 
 void Application::addState(State* state)
 {
