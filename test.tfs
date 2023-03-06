@@ -5,6 +5,18 @@ class Map -
 	unsigned int : 1
 	pointer to class GameCharacter -
 		unsigned int : 1
+		std::string : class Ranged
+		class GameCharacter -
+			std::string : class Ranged
+			sf::Vector2<float> -
+				float : 512
+				float : 256
+			unsigned char : 100
+			unsigned char : 50
+			float : 0
+	unsigned int : 1
+	pointer to class GameCharacter -
+		unsigned int : 2
 		std::string : class Player
 		class GameCharacter -
 			std::string : class Player
@@ -20,17 +32,6 @@ class Map -
 				unsigned char : 255
 	unsigned int : 1
 	pointer to class GameCharacter -
-		unsigned int : 2
-		std::string : class Bat
-		class GameCharacter -
-			std::string : class Bat
-			sf::Vector2<float> -
-				float : 320
-				float : 96
-			unsigned char : 100
-			unsigned char : 30
-	unsigned int : 1
-	pointer to class GameCharacter -
 		unsigned int : 3
 		std::string : class Melee
 		class GameCharacter -
@@ -43,15 +44,14 @@ class Map -
 	unsigned int : 1
 	pointer to class GameCharacter -
 		unsigned int : 4
-		std::string : class Ranged
+		std::string : class Bat
 		class GameCharacter -
-			std::string : class Ranged
+			std::string : class Bat
 			sf::Vector2<float> -
-				float : 512
-				float : 256
+				float : 320
+				float : 96
 			unsigned char : 100
-			unsigned char : 50
-			float : 0
+			unsigned char : 30
 class TurnSystem -
 	std::string : class TurnSystem
 	unsigned int : 4

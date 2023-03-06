@@ -27,8 +27,8 @@ void Application::run()
 	//istanciation of the singleton
 
 	app.states.emplace_back(new Menu);
-	app.states.emplace_back(new Game);
 	app.states.emplace_back(new Editor);
+	app.states.emplace_back(new Game);
 	app.states.emplace_back(new Pause);
 	app.window.create(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Close);
 

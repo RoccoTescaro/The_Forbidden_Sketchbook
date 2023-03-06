@@ -82,7 +82,7 @@ public:
 	template<class Type>
 	Map& append(const sf::Vector2<int>& pos, Type* entity) 
 	{
-		const char* id = typeid(Type).name();
+		const char* id = typeid(*entity).name();
 		Tile* tile = dynamic_cast<Tile*>(entity);
 		GameCharacter* gameCharacter = dynamic_cast<GameCharacter*>(entity);
 
