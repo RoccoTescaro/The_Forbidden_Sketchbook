@@ -11,7 +11,7 @@ public:
 	{
 	public:
 
-		Bullet(const sf::Vector2<float>& target, float speed = 400.f);
+		Bullet(const sf::Vector2<float>& target, float speed = 800.f);
 
 		void update(const float& dt);
 		void render(sf::RenderWindow& window);
@@ -35,6 +35,8 @@ public:
 
     inline uint8_t getAttack() const { return attack; }; 
     inline uint8_t getCost() const { return cost; }; 
+    inline uint8_t getRange() const { return range; }; 
+
 
 	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 

@@ -61,7 +61,7 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 //MELEE
 
 Melee::Melee(uint8_t health, uint8_t energy)
-	: GameCharacter(30, health, 10, energy, 2)
+	: GameCharacter(30, health, 5, energy, 2)
 {
 	static sf::Texture* texture;
 	if (!texture)
@@ -84,7 +84,7 @@ Melee::Melee(uint8_t health, uint8_t energy)
 //BAT
 
 Bat::Bat(uint8_t health, uint8_t energy)
-	: GameCharacter(10, health, 30, energy, 3)
+	: GameCharacter(10, health, 8, energy, 3)
 {
 	static sf::Texture* texture;
 	if (!texture)

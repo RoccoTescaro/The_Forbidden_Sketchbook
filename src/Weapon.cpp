@@ -35,12 +35,9 @@ Weapon::Bullet::Bullet(const sf::Vector2<float>& target, float speed)
 
 void Weapon::Bullet::update(const float& dt)
 {
-		LOG("{1},{2}",sprite.getPosition().x,sprite.getPosition().y);
 
 	sf::Vector2<float> pos = sprite.getPosition();
 	sf::Vector2<float> dir = Utils::Math::normalize(target - pos);
-		LOG("{1},{2}",dir.x,dir.y);
-
 	pos += dir * speed * dt;
 	sprite.setPosition(pos);
 }

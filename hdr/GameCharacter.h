@@ -32,14 +32,16 @@ public:
     inline const uint8_t& getHealth() const { return health; };
     inline const uint8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
-    inline float getRange() const { return 1; /*return weapon->getRange()*/};
     inline MovementStrategy& getMovementStrategy() { return movementStrategy; };
     inline Weapon& getWeapon() { return weapon; };
 
     inline void setPos(const sf::Vector2<float>& pos) override  {   Entity::setPos(pos);
                                                                     weapon.setPos(pos); };
-    inline void subHealth(const uint8_t newHealth) { health -= newHealth;}
-    inline void subEnergy(const uint8_t newEnergy) { energy -= newEnergy;}
+    inline void setEnergy(const uint8_t newEnergy) { energy=newEnergy;}
+                                            
+    inline void subHealth(const uint8_t newHealth) {health = (health-newHealth<maxHealth ? health-newHealth : 0);
+                                                    if(health==0)LOG("death");}
+    inline void subEnergy(const uint8_t newEnergy) { energy = (energy-newEnergy<maxEnergy ? energy-newEnergy : 0);}
 
     //GAMECHARACTER FUNCTIONS
     inline void turnReset(){    energy=maxEnergy;     }; 

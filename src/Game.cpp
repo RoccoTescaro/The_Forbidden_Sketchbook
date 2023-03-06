@@ -90,13 +90,14 @@ void Game::update()
     auto actorShr = actor.lock();
 
 	if(actorShr->getEnergy()==0 && turnSystem.isActionQueueEmpty())//turn ended
-        actor=turnSystem.getActor();
-
-    if(!turnSystem.isPlayerTurn())
-		turnSystem.turnBuild(map.getPlayer()->getPos());
+        {actor=turnSystem.getActor();
+		LOG("\n\nnewactor:{1},{2}\n P pos:{3},{4}",actor.lock()->getPos().x,actor.lock()->getPos().y,map.getPlayer()->getPos().x,map.getPlayer()->getPos().y);
+		}
+    if(!turnSystem.isPlayerTurn()){
+		turnSystem.turnBuild(map.getPlayer()->getPos());}
 		
-    else if(input.isKeyReleased(Input::MouseL))
-            turnSystem.turnBuild(map.posIntToFloat(mousePos));
+    else if(input.isKeyReleased(Input::MouseL)){
+            turnSystem.turnBuild(map.posIntToFloat(mousePos));}
     
     turnSystem.update(dt);
 }
