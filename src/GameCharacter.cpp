@@ -10,6 +10,8 @@ void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &d
 	if(weapon.isAnimationEnded()){
 		map.getGameCharacter(map.posFloatToInt(target))->subHealth(weapon.getAttack());
 		subEnergy(weapon.getCost());
+		if(map.getGameCharacter(map.posFloatToInt(target))->getHealth()==0 && map.posFloatToInt(target)!=map.posFloatToInt(map.getPlayer()->getPos()))
+			map.remove(map.posFloatToInt(target));
 	}
 
 }

@@ -10,6 +10,8 @@ std::weak_ptr<GameCharacter> TurnSystem::getActor()
         newRound();
     actor = turnQueue.top();
     turnQueue.pop();
+
+
     return actor;
 }
 
@@ -76,7 +78,6 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     if(map->getGameCharacter(map->posFloatToInt(target)))
         targetHp = map->getGameCharacter(map->posFloatToInt(target))->getHealth();
     bool inRange = (Utils::Math::distance(map->posFloatToInt(actorShr->getPos()),map->posFloatToInt(target))<=range && map->getGameCharacter(map->posFloatToInt(target)));
-    LOG("{1}",Utils::Math::distance(map->posFloatToInt(actorShr->getPos()),map->posFloatToInt(target)));
     std::deque<sf::Vector2<float>> stepQueue = actorShr->getMovementStrategy()->findPath(*map, actorShr->getPos(), target, actorShr->isSolid());
     sf::Vector2<float> newPos = stepQueue.front();
     while (!stepQueue.empty() && energy && !inRange)
@@ -88,7 +89,6 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
         stepQueue.pop_front();
         inRange = (Utils::Math::distance(map->posFloatToInt(newPos),map->posFloatToInt(target))<=range && map->getGameCharacter(map->posFloatToInt(target)));    //if you can attack u must do it        
         newPos = stepQueue.front();
-            
 
     }
     while(inRange && energy>=actorShr->getWeapon().getCost() && targetHp)
@@ -96,18 +96,16 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
         //energy-=actorShr->getWeapon()->getCost();
         energy -=actorShr->getWeapon().getCost();
         targetHp=(  (targetHp-dmg)<actorShr->getMaxHealth() ? (targetHp-dmg):0);
-        
         actionQueue.emplace(1,target);
+
     }
 }
 
 void TurnSystem::update(const float &dt)
 {
-    
     if(actionQueue.empty())
         return;
    
-
     auto action = actionQueue.front();
     auto actorShr = actor.lock();
         
@@ -115,18 +113,18 @@ void TurnSystem::update(const float &dt)
     if(!action.actionType){
         actorShr->move(*map, action.target, dt);
         if(Utils::Math::distance(actorShr->getPos(),action.target)<5){
-            LOG("NEW MOVEMENT\n target:{1},{2}\n",actionQueue.front().target.x,actionQueue.front().target.y);
             actionQueue.pop();
             }
     }
     else{
         actorShr->interact(*map, action.target, dt);
         if(actorShr->getWeapon().isAnimationEnded()){
-            LOG("NEW ATTACK\n target:{1},{2}\n",actionQueue.front().target.x,actionQueue.front().target.y);
             actionQueue.pop();
             }
         
     }
+
     if(actionQueue.empty() && !dynamic_cast<Player*>(actorShr.get())) 
         actorShr->setEnergy(0);
+
 }

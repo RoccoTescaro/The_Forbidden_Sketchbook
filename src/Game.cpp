@@ -46,6 +46,8 @@ Game::Game()
 
 void Game::update()
 {
+
+	LOG("a");
 	//TRANSITION EFFECT
 	transitionEffect.update(dt);
 
@@ -73,6 +75,8 @@ void Game::update()
 
 	cam.update(dt); 
 
+    //TURNSYSTEM
+	LOG("b");
 	//HUD 
 	hud.update(dt);
 
@@ -85,21 +89,24 @@ void Game::update()
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
 	//UPDATE ACTOR
-    //TURNSYSTEM
-	
+
     auto actorShr = actor.lock();
 
 	if(actorShr->getEnergy()==0 && turnSystem.isActionQueueEmpty())//turn ended
-        {actor=turnSystem.getActor();
-		LOG("\n\nnewactor:{1},{2}\n P pos:{3},{4}",actor.lock()->getPos().x,actor.lock()->getPos().y,map.getPlayer()->getPos().x,map.getPlayer()->getPos().y);
-		}
+        actor=turnSystem.getActor();
+
     if(!turnSystem.isPlayerTurn()){
 		turnSystem.turnBuild(map.getPlayer()->getPos());}
 		
     else if(input.isKeyReleased(Input::MouseL)){
-            turnSystem.turnBuild(map.posIntToFloat(mousePos));}
+			if(mousePos!=map.posFloatToInt(map.getPlayer()->getPos()))
+            	turnSystem.turnBuild(map.posIntToFloat(mousePos));
+			else
+				map.getPlayer()->setEnergy(0);
+			}
     
     turnSystem.update(dt);
+
 }
 
 void Game::render() 

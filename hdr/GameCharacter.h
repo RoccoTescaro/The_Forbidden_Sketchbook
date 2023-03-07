@@ -16,7 +16,7 @@ private:
     using StepQueue = std::deque<sf::Vector2<float>>;
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
-        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy>maxEnergy ? maxEnergy:energy), priority(priority), weapon(5,3) {};
+        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health>maxHealth ? maxHealth:health), energy(energy>maxEnergy ? maxEnergy:energy), priority(priority), weapon(5,3) {};
 
     //ENTITY
     inline void render(sf::RenderWindow& window) override 
@@ -39,8 +39,7 @@ public:
                                                                     weapon.setPos(pos); };
     inline void setEnergy(const uint8_t newEnergy) { energy=newEnergy;}
                                             
-    inline void subHealth(const uint8_t newHealth) {health = (health-newHealth<maxHealth ? health-newHealth : 0);
-                                                    if(health==0)LOG("death");}
+    inline void subHealth(const uint8_t newHealth) { health = (health-newHealth<maxHealth ? health-newHealth : 0);}
     inline void subEnergy(const uint8_t newEnergy) { energy = (energy-newEnergy<maxEnergy ? energy-newEnergy : 0);}
 
     //GAMECHARACTER FUNCTIONS

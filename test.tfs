@@ -25,7 +25,7 @@
 			sf::Vector2<f> -
 				f : 0
 				f : 96
-			h : 100
+			h : 30
 			h : 8
 	pointer to 13GameCharacter -
 		j : 3
@@ -35,7 +35,7 @@
 			sf::Vector2<f> -
 				f : 320
 				f : 96
-			h : 100
+			h : 10
 			h : 8
 10TurnSystem -
 	std::string : 10TurnSystem
