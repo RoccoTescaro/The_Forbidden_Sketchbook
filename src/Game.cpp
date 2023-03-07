@@ -20,20 +20,9 @@ Game::Game()
 	window.setMouseCursorVisible(false);
 
 	turnSystem.init(map);
-	//Archive arc(Config::gameMapPath, Archive::Load);
-	//arc >> *map >> turnSystem;
-	//ASSERT(!map.getPlayer().get());
-
-	map->append({ 0,0 }, new Player);
-	map->append({ 0,3 }, new Melee{100,100});
-	map->append({ 5,3 }, new Bat{100,100});
-	map->append({ 8,8 }, new Ranged{100,100});
-	//map.add({ 10,2 }, new Wall{Wall::RU});
-	//map.add({ 10,1 }, new Wall{Wall::UD});
-	//map.add({ 11,2 }, new Wall{Wall::RL});
-	//map.add({ 7,5 }, new Hole);
-	//map.add({ 7,15 }, new ColorPedestral);
-
+	Archive arc(Config::gameMapPath, Archive::Load);
+	arc >> *map >> turnSystem;
+	
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 	cam.lock(true);

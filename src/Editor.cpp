@@ -101,19 +101,46 @@ void Editor::update()
 	}
 
 	//CREATION
-	if (input.isKeyDown(Input::MouseL) &&
-		map->posFloatToInt(input.getMousePos(&cam.getView())) != map->posFloatToInt(map->get<Player>()->getPos()))
+	if (input.isKeyDown(Input::MouseL))
 	{
-		if (dynamic_cast<Wall*>(placeHolderEntity.get())) 
+		if (dynamic_cast<Wall*>(placeHolderEntity.get()) && !map->get<Wall>(mousePos).get()) 
 		{
+			bool canBuild = true;
+			sf::Vector2<int> adj[5] = { {0,-1},{1,0},{0,1},{-1,0},{0,0} };
+			for (auto i = 0; i < 5; i++)
+			{
+				if (!map->get<Wall>(mousePos + adj[i]).get()) continue;
+				uint8_t nWall = 0;
+				
+				for (auto j = 0; j < 4; j++) 
+					nWall += (bool) map->get<Wall>(mousePos + adj[i] + adj[j]).get();
 
-			map->append<Tile>(mousePos, dynamic_cast<Wall*>((*factory)()));
+				if (nWall > 1+(i==4)) 
+				{
+					canBuild = false;
+					break;
+				}
+			}
+			if (canBuild) 
+			{
+				map->append(mousePos, dynamic_cast<Wall*>((*factory)()));
+				for (auto i = 0; i < 5; i++) 
+				{
+					if (!map->get<Wall>(mousePos + adj[i]).get()) continue;
+					bool u = map->get<Wall>(mousePos + adj[i] + adj[0]).get();
+					bool r = map->get<Wall>(mousePos + adj[i] + adj[1]).get();
+					bool d = map->get<Wall>(mousePos + adj[i] + adj[2]).get();
+					bool l = map->get<Wall>(mousePos + adj[i] + adj[3]).get();
+					uint8_t index = (d & (r | l)) << 2 | (u & (r | l)) << 1 | (!r & (d | u));
+					map->get<Wall>(mousePos + adj[i])->setTexture(index);
+				}
+			}
 		}
 		else map->append(mousePos, dynamic_cast<Entity*>((*factory)()));
 	}
 
 	if (input.isKeyDown(Input::MouseR) && 
-		map->posFloatToInt(input.getMousePos(&cam.getView())) != map->posFloatToInt(map->get<Player>()->getPos()))
+		map->posFloatToInt(input.getMousePos(&cam.getView())) != map->posFloatToInt(map->get<Player>()->getPos())) //TODO update wall texture on remove
 		map->remove<Entity>(map->posFloatToInt(input.getMousePos(&cam.getView())));
 }
 
@@ -135,7 +162,7 @@ void Editor::save()
 {
 	TurnSystem turnSystem;
 	turnSystem.init(map);
-	turnSystem.newRound();
+	turnSystem.getActor();
 	Archive arc(Config::editorMapPath, Archive::Save);
 	arc << *map << turnSystem;
 }

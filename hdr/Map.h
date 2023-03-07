@@ -34,12 +34,14 @@ public:
 	{
 		const char* id = typeid(Type).name();
 
-		if (tiles.find(id) != tiles.end() && tiles.at(id).find(pos) != tiles.at(id).end())
-			return std::static_pointer_cast<Type>(tiles.at(id).at(pos));
-		else if (gameCharacters.find(id) != gameCharacters.end() && gameCharacters.at(id).find(pos) != gameCharacters.at(id).end())
-			return std::static_pointer_cast<Type>(gameCharacters.at(id).at(pos));
+		if constexpr (std::is_base_of<Tile, Type>::value)
+			if(tiles.find(id) != tiles.end() && tiles.at(id).find(pos) != tiles.at(id).end())
+				return std::static_pointer_cast<Type>(tiles.at(id).at(pos));
+		else if constexpr (std::is_base_of<GameCharacter, Type>::value)
+			if (gameCharacters.find(id) != gameCharacters.end() && gameCharacters.at(id).find(pos) != gameCharacters.at(id).end())
+				return std::static_pointer_cast<Type>(gameCharacters.at(id).at(pos));
 
-		return nullptr;
+		return std::shared_ptr<Type>(nullptr);;
 	}
 
 	template<>
@@ -94,13 +96,13 @@ public:
 			{
 				tiles[id][pos] = static_cast<std::shared_ptr<Tile>>(tile);
 				tile->setPos(posIntToFloat(pos));
-				LOG("allocated instance of {3} at pos {{1},{2}}", pos.x, pos.y, id);
+				//LOG("allocated instance of {3} at pos {{1},{2}}", pos.x, pos.y, id);
 			}
 			else if (gameCharacter)
 			{
 				gameCharacters[id][pos] = static_cast<std::shared_ptr<GameCharacter>>(gameCharacter);
 				gameCharacter->setPos(posIntToFloat(pos));
-				LOG("allocated instance of {3} at pos {{1},{2}}", pos.x, pos.y, id);
+				//LOG("allocated instance of {3} at pos {{1},{2}}", pos.x, pos.y, id);
 			}
 			else
 			{
@@ -144,11 +146,11 @@ public:
 		{
 			if (tile.second.erase(pos))
 			{
-				LOG("a Tile removed at pos {{1},{2}}", pos.x, pos.y);
+				//LOG("a Tile removed at pos {{1},{2}}", pos.x, pos.y);
 				return *this;
 			}
-			else
-				LOG("no Tile at pos {{1},{2}}", pos.x, pos.y);
+			else;
+				//LOG("no Tile at pos {{1},{2}}", pos.x, pos.y);
 		}
 		return *this;
 	}
@@ -159,11 +161,11 @@ public:
 		for (auto& gameCharacter : gameCharacters) 
 		{
 			if (gameCharacter.second.erase(pos)) {
-				LOG("a GameCharacter removed at pos {{1},{2}}", pos.x, pos.y);
+				//LOG("a GameCharacter removed at pos {{1},{2}}", pos.x, pos.y);
 				return *this;
 			}
-			else
-				LOG("no GameCharacter at pos {{1},{2}}", pos.x, pos.y);
+			else;
+				//LOG("no GameCharacter at pos {{1},{2}}", pos.x, pos.y);
 		}
 		return *this;
 	}
