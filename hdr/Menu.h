@@ -17,5 +17,7 @@ private:
     sf::Text title;
 
     Button start;
+    Button load;
+    Button editor;
     Button exit;
 };

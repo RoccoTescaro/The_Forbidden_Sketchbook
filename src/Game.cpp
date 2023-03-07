@@ -72,7 +72,7 @@ void Game::update()
 	backgroundShader.setUniform("viewPos", sf::Glsl::Vec2(bgPos));
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
-	//UPDATE ACTOR
+	//ACTOR
 	auto actorShr = actor.lock();
 	if (actorShr->getEnergy() == 0)
 	{

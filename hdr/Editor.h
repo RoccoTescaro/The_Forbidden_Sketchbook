@@ -25,14 +25,18 @@ private:
 	sf::Text mousePosText;
 	sf::RectangleShape mouseIndicator;
 
-	std::shared_ptr<Map> map;
-	Camera cam;
-	sf::View gui;
-
 	std::vector<std::function<Serializable* ()>> entitiesFactories;
 	std::vector<std::function<Serializable* ()>>::iterator factory;
 	std::unique_ptr<Entity> placeHolderEntity;
 	std::unique_ptr<Entity> previewEntity;
 	sf::Texture placeHolderBackgroundTexture;
 	sf::Sprite placeHolderBackground;
+
+	//the only reason to have a shr pointer to map instead of an object on the stack is becouse turnSystem need a shr pointer 
+	//otherwise when turnSystem get destroyed before map, which is likely and certain for editor the program gonna crash
+	//dealocating an object on the stack when still used.
+	std::shared_ptr<Map> map;
+	Camera cam;
+	sf::View gui;
+
 };

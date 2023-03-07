@@ -82,9 +82,14 @@ void Pause::update()
         back.setActive(true);
         menu.setActive(true);
         
-        if (back.isClicked())
+        bool backClicked = back.isClicked();
+
+        back.setClicked(false);
+        menu.setClicked(false);
+
+        if (backClicked)
             Application::prevState(); 
-        else if (menu.isClicked())
+        else //menuClicked
             Application::setState(0);
     }
 }

@@ -101,7 +101,7 @@ void Editor::update()
 	}
 
 	//CREATION
-	if (input.isKeyDown(Input::MouseL))
+	if (input.isKeyDown(Input::MouseL) && !map->get<Entity>(mousePos).get())
 	{
 		if (dynamic_cast<Wall*>(placeHolderEntity.get()) && !map->get<Wall>(mousePos).get()) 
 		{

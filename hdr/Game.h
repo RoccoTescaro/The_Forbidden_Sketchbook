@@ -26,7 +26,10 @@ private:
 	sf::Text mousePosText;
 	sf::RectangleShape mouseIndicator;
 
-	std::shared_ptr<Map> map;
+	//the only reason to have a shr pointer to map instead of an object on the stack is becouse turnSystem need a shr pointer 
+	//otherwise when turnSystem get destroyed before map, which is likely and certain for editor the program gonna crash
+	//dealocating an object on the stack when still used.
+	std::shared_ptr<Map> map; 
 	TurnSystem turnSystem;
 	std::weak_ptr<GameCharacter> actor;
 	Camera cam;

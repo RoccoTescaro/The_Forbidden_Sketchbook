@@ -25,7 +25,7 @@ class Map : public Serializable
 	using GameCharacters = std::unordered_map<const char*, std::map<sf::Vector2<int>, std::shared_ptr<GameCharacter>, Compare>>;
 
 public:
-	Map() : cellDim({ 64,32 }) {};// if (!get<Player>().get()) append({ 0,0 }, new Player); };
+	Map() : cellDim({ 64,32 }) {};
 
 	void render(sf::RenderWindow& window);
 
