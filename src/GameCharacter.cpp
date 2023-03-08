@@ -12,7 +12,6 @@ void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &d
 		auto targetEntity = map.get<GameCharacter>(map.posFloatToInt(target));
 		targetEntity->setHealth(targetEntity->getHealth()-weapon.getAttack());
 		energy -= weapon.getCost();
-		LOG("energy: {1}", (int) energy );
 		if(targetEntity->getHealth() == 0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
 			map.remove(map.posFloatToInt(target));
 	}

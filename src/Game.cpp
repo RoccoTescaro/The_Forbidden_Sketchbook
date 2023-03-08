@@ -26,6 +26,10 @@ Game::Game()
 	
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
+	map->append({ 3,0 }, new Melee{1,1});
+	map->append({ 0,3 }, new Bat{1,1});
+
+
 	cam.lock(true);
 	cam.setTarget(actor.lock()); 
 
