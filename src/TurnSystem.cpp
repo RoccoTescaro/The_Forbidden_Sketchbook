@@ -68,35 +68,47 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
 {
     if (!actionQueue.empty())
         return;
+
+    //ACTOR
     auto actorShr = actor.lock();
-    int range = actorShr->getWeapon().getRange();
-    int energy = actorShr->getEnergy();
-    int dmg = actorShr->getWeapon().getAttack();  
-    int targetHp; 
+    uint8_t range = actorShr->getWeapon().getRange();
+    int energy = actorShr->getEnergy(); //casted to int to allow underflow
+    uint8_t dmg = actorShr->getWeapon().getAttack();  
+   
+    //MAP
     auto mapShr = map.lock();
-    if(mapShr->get<GameCharacter>(mapShr->posFloatToInt(target)))
-        targetHp = mapShr->get<GameCharacter>(mapShr->posFloatToInt(target))->getHealth();
-    bool inRange = (Utils::Math::distance(mapShr->posFloatToInt(actorShr->getPos()),mapShr->posFloatToInt(target))<=range && mapShr->get<GameCharacter>(mapShr->posFloatToInt(target)));
+    
+    //TARGET
+    sf::Vector2<int> targetPos = mapShr->posFloatToInt(target);
+    GameCharacter* targetEntity = mapShr->get<GameCharacter>(targetPos).get();
+    int targetHp = 0; //casted to int to allow underflow
+    if(targetEntity)
+        targetHp = targetEntity->getHealth();
+
+    //MOVEMENT
+    bool inRange = (Utils::Math::distance(mapShr->posFloatToInt(actorShr->getPos()), targetPos) <= range && targetEntity);
+
     std::deque<sf::Vector2<float>> stepQueue = actorShr->getMovementStrategy()->findPath(*mapShr, actorShr->getPos(), target, actorShr->isSolid());
     sf::Vector2<float> newPos = stepQueue.front();
-    while (!stepQueue.empty() && energy && !inRange)
+
+    while (!stepQueue.empty() && energy && !inRange) 
     {
-        if(mapShr->get<GameCharacter>(mapShr->posFloatToInt(newPos)))
-            break;
-        energy-=actorShr->getMovementStrategy()->getMovementCost();
-        actionQueue.emplace(0,newPos);
+        if(mapShr->get<GameCharacter>(mapShr->posFloatToInt(newPos)).get()) break; //check if there is a character in the way
+
+        actionQueue.emplace(Action::Type::Move, newPos);
         stepQueue.pop_front();
-        inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos),mapShr->posFloatToInt(target))<=range && mapShr->get<GameCharacter>(mapShr->posFloatToInt(target)));    //if you can attack u must do it        
-        newPos = stepQueue.front();
 
+        energy -= actorShr->getMovementStrategy()->getMovementCost();
+        inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos),targetPos) <= range && targetEntity); //if you can attack u must do it        
+        if(stepQueue.size() >= 1) newPos = stepQueue.front();
     }
-    while(inRange && energy>=actorShr->getWeapon().getCost() && targetHp)
-    {
-        //energy-=actorShr->getWeapon()->getCost();
-        energy -=actorShr->getWeapon().getCost();
-        targetHp=(  (targetHp-dmg)<actorShr->getMaxHealth() ? (targetHp-dmg):0);
-        actionQueue.emplace(1,target);
 
+    //INTERACT
+    while(inRange && energy >= actorShr->getWeapon().getCost() && targetHp > 0)
+    {
+        energy -= actorShr->getWeapon().getCost();
+        targetHp = targetHp - dmg;
+        actionQueue.emplace(Action::Type::Interact,target);
     }
 }
 
@@ -108,19 +120,16 @@ void TurnSystem::update(const float &dt)
     auto action = actionQueue.front();
     auto actorShr = actor.lock();
         
-
-    if(!action.actionType){
-        actorShr->move(*(map.lock()), action.target, dt);
-        if(Utils::Math::distance(actorShr->getPos(),action.target)<5){
-            actionQueue.pop();
-            }
-    }
-    else{
+    switch (action.type) 
+    {
+    case Action::Type::Move :
+	    actorShr->move(*(map.lock()), action.target, dt);
+        if (Utils::Math::distance(actorShr->getPos(), action.target) < 5) actionQueue.pop(); //TODO fix magic number
+	break;
+    case Action::Type::Interact :
         actorShr->interact(*(map.lock()), action.target, dt);
-        if(actorShr->getWeapon().isAnimationEnded()){
-            actionQueue.pop();
-            }
-        
+        if (actorShr->getWeapon().isAnimationEnded()) actionQueue.pop();
+    break;
     }
 
     if(actionQueue.empty() && !dynamic_cast<Player*>(actorShr.get())) 

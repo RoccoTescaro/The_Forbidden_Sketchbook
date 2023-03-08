@@ -7,10 +7,13 @@
 void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &dt)
 {
 	weapon.update(dt,target);
-	if(weapon.isAnimationEnded()){
-		map.get<GameCharacter>(map.posFloatToInt(target))->subHealth(weapon.getAttack());
-		subEnergy(weapon.getCost());
-		if(map.get<GameCharacter>(map.posFloatToInt(target))->getHealth()==0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
+	if(weapon.isAnimationEnded())
+	{
+		auto targetEntity = map.get<GameCharacter>(map.posFloatToInt(target));
+		targetEntity->setHealth(targetEntity->getHealth()-weapon.getAttack());
+		energy -= weapon.getCost();
+		LOG("energy: {1}", (int) energy );
+		if(targetEntity->getHealth() == 0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
 			map.remove(map.posFloatToInt(target));
 	}
 
@@ -21,13 +24,14 @@ void GameCharacter::move(Map &map, sf::Vector2<float> target, const float &dt)
 
 	sf::Vector2<float> pos = getPos();
 	sf::Vector2<float> direction=target-pos;
-	if(!map.get<GameCharacter>(map.posFloatToInt(target))){
-		subEnergy(getMovementStrategy()->getMovementCost());
+	if(!map.get<GameCharacter>(map.posFloatToInt(target)))
+	{
+		energy -= getMovementStrategy()->getMovementCost();
         map.move(map.posFloatToInt(pos),map.posFloatToInt(target));
 	}
-	pos+={Utils::Math::normalize(direction)*dt*speed};//todo if targethas negative coords it will get a wrong starting pos
+	pos+={Utils::Math::normalize(direction)*dt*speed};//todo if target has negative coords it will get a wrong starting pos
 	setPos(pos);
-    if(Utils::Math::distance(pos,target)<5)
+    if(Utils::Math::distance(pos,target)<5) //TODO fix magic number
         setPos(target);
 }
 

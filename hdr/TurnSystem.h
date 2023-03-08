@@ -9,14 +9,15 @@
 
 class TurnSystem : public Serializable
 {
-    struct Action {
-
-#define MOVE 0
-#define ATTACK 1
-
-        bool actionType;
+    struct Action 
+    {
+        enum Type
+        {
+            Interact = 0,
+			Move = 1
+		};
+        Type type;
         sf::Vector2<float> target;
-
     };
 
 private:

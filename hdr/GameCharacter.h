@@ -41,12 +41,9 @@ public:
         weapon.setPos(pos); 
     };
     
-    inline void setHealth(const uint8_t newHealth) { health = newHealth;}
-    inline void setEnergy(const uint8_t newEnergy) { energy = newEnergy;}
+    inline void setHealth(const uint8_t newHealth) { health = newHealth > maxHealth ? 0 : newHealth; }
+    inline void setEnergy(const uint8_t newEnergy) { energy = newEnergy > maxEnergy ? 0 : newEnergy; }
                                             
-    inline void subHealth(const uint8_t newHealth) { health = ((int)health-newHealth<0 ? health-newHealth : 0);}
-    inline void subEnergy(const uint8_t newEnergy) { energy = ((int)energy-newEnergy<0 ? energy-newEnergy : 0);}
-
     //GAMECHARACTER FUNCTIONS
     inline void turnReset(){ energy=maxEnergy; }; 
     inline void serialize(Archive& fs) 
