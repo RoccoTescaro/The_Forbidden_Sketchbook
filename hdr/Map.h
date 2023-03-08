@@ -193,4 +193,3 @@ private:
 	
 	sf::Vector2<int> cellDim{ 64,32 };
 };
-
