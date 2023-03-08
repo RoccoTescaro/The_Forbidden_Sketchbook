@@ -21,10 +21,10 @@ void Wall::setTexture(uint8_t newType){
 		}
 	Wall::type = newType;
 	sprite.setTexture(*texture[type]);
-	sf::Rect<int> textureRect{0,0,1300,1350};
+	sf::Rect<int> textureRect{0,0,1300,1300};
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(64.f/textureRect.width,96.f/textureRect.height);
-
+	sprite.setOrigin(0.f,867.f);
 }
 
 bool Wall::isSolid() const{
@@ -42,8 +42,10 @@ Hole::Hole(){
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);
-	sprite.setTextureRect({0,0,1080,1080});
-	sprite.setScale(64.f/1080,64.f/1080);
+	sf::Rect<int> textureRect{ 0,0,1080,1080 };
+	sprite.setTextureRect(textureRect);
+	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);
+	sprite.setOrigin(0.f, 405.f);
 }
 
 
@@ -66,8 +68,10 @@ ColorPedestral::ColorPedestral()
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);
-	sprite.setTextureRect({0,0,1080,1080});
-	sprite.setScale(64.f/1080,64.f/1080);
+	sf::Rect<int> textureRect{ 0,0,1080,1080 };
+	sprite.setTextureRect(textureRect);
+	sprite.setScale(64.f / textureRect.width, 64.f / textureRect.height);
+	sprite.setOrigin(0.f, 405.f);
 }
 
 bool ColorPedestral::isSolid() const {

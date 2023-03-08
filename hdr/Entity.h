@@ -18,10 +18,17 @@ public:
 	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 	
 	inline sf::Vector2<float> getPos() const { return sprite.getPosition(); };
-	inline sf::Vector2<float> getSize() const { return { sprite.getTexture()->getSize().x * sprite.getScale().x, sprite.getTexture()->getSize().y * sprite.getScale().y }; };
-	inline sf::Vector2<float> getCenter() const { return (getPos() + getSize() * 0.5f); };
-	virtual bool isSolid() const = 0;
+	inline sf::Vector2<float> getSize() const { return { sprite.getTextureRect().width * sprite.getScale().x, sprite.getTextureRect().height * sprite.getScale().y}; };
+	inline sf::Vector2<float> getCenter() const 
+	{
+		return sf::Vector2<float> {	sprite.getPosition().x - sprite.getOrigin().x * sprite.getScale().x + getSize().x * 0.5f,
+									sprite.getPosition().y - sprite.getOrigin().y * sprite.getScale().y + getSize().y * 0.5f };
+	};
 
+	inline sf::Sprite& getSprite() { return sprite; };
+
+	virtual bool isSolid() const = 0;
+	
 	void serialize(Archive& fs) override 
 	{ 
 		sf::Vector2<float> pos = sprite.getPosition();

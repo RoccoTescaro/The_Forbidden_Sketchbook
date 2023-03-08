@@ -8,10 +8,10 @@ void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &d
 {
 	weapon.update(dt,target);
 	if(weapon.isAnimationEnded()){
-		map.getGameCharacter(map.posFloatToInt(target))->subHealth(weapon.getAttack());
+		map.get<GameCharacter>(map.posFloatToInt(target))->subHealth(weapon.getAttack());
 		subEnergy(weapon.getCost());
-		if(map.getGameCharacter(map.posFloatToInt(target))->getHealth()==0 && map.posFloatToInt(target)!=map.posFloatToInt(map.getPlayer()->getPos()))
-			map.remove(map.posFloatToInt(target));
+		if(map.get<GameCharacter>(map.posFloatToInt(target))->getHealth()==0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
+			map.remove<GameCharacter>(map.posFloatToInt(target));
 	}
 
 }
@@ -21,7 +21,7 @@ void GameCharacter::move(Map &map, sf::Vector2<float> target, const float &dt)
 
 	sf::Vector2<float> pos = getPos();
 	sf::Vector2<float> direction=target-pos;
-	if(!map.getGameCharacter(map.posFloatToInt(target))){
+	if(!map.get<GameCharacter>(map.posFloatToInt(target))){
 		subEnergy(getMovementStrategy()->getMovementCost());
         map.move(map.posFloatToInt(pos),map.posFloatToInt(target));
 	}
@@ -48,9 +48,8 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 	sprite.setTexture(*texture); 
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,64.f/textureRect.height);//TODO ADD GETCELLDIM
-
-
+	sprite.setScale(64.f/textureRect.width,128.f/textureRect.height); //TODO add setOrigin
+	sprite.setOrigin(0.f,1470.f);
 	//FILTER
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
 
@@ -77,6 +76,7 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	sf::Rect<int> textureRect{ 0,0,1080,1920 };
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(64.f/textureRect.width,128.f/textureRect.height);
+	sprite.setOrigin(0.f, 1470.f);
 
 
     movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
@@ -97,9 +97,10 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	}
 
 	sprite.setTexture(*texture); 
-	sf::Rect<int> textureRect{ 115,0,1910,1070 };
+	sf::Rect<int> textureRect{ 110,0,1800,1070 };
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(104.f/textureRect.width,48.f/textureRect.height);
+	sprite.setOrigin(340.f, 1000.f);
 
 
     movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
@@ -121,9 +122,10 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	}
 
 	sprite.setTexture(*texture); 
-	sf::Rect<int> textureRect{ 0,0,1080,1920 };
+	sf::Rect<int> textureRect{ 150,96,780,928 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f/textureRect.width,	128.f/textureRect.height);
+	sprite.setScale(64.f/textureRect.width,	96.f/textureRect.height);
+	sprite.setOrigin(0.f, 619.f);
 
 
     movementStrategy = std::unique_ptr<PathAlgorithm>(new DigletMovement());

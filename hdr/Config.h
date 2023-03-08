@@ -17,7 +17,7 @@ static std::string path(const std::string& path)
 namespace Config
 {
 	const bool debugMode = true;
-	const sf::Vector2<int> windowDim{ 1290,720 };
+	const sf::Vector2<int> windowDim{ 1290,800 };
 	const uint8_t fps{ 60 };
 	const float eps{ 0.0005f };
 	const float maxActivationDistance{2048};
@@ -29,6 +29,7 @@ namespace Config
 
 	const std::string menuBackgroundTexturePath{ PATH("img/MenuBackground.jpg") };
 	const std::string gameBackgroundTexturePath{ PATH("img/GameBackground.jpg") };
+	const std::string placeHolderTexturePath{ PATH("img/PlaceHolderBackground.png") };
 	const std::string playerTexturePath{ PATH("img/Player.png") };
 	const std::string meleeTexturePath{ PATH("img/Melee.png") };
 	const std::string batTexturePath{ PATH("img/Bat.png") };
@@ -64,7 +65,8 @@ namespace Config
 		PATH("aud/Typing5.wav")
 	};
 
-	const std::string gameMapPath{ PATH("test.tfs") };
+	const std::string editorMapPath{ PATH("cfg/Editor.tfs") };
+	const std::string gameMapPath{ PATH("cfg/Game.tfs") };
 };
 
 

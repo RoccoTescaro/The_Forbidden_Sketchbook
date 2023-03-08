@@ -1,7 +1,7 @@
 #include "../hdr/Game.h"
 
 Game::Game()
-	: cam(sf::Vector2<float>{ Application::getWindow().getSize() })
+	: cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)
 {
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
@@ -11,7 +11,7 @@ Game::Game()
 	backgroundShader.setUniform("texture", backgroundTexture);
 
 	mouseIndicator.setOutlineThickness(3);
-	mouseIndicator.setSize(sf::Vector2<float>(map.getCellDim()));
+	mouseIndicator.setSize(sf::Vector2<float>(map->getCellDim()));
 	mouseIndicator.setFillColor(sf::Color(0, 0, 0, 0));
 	mouseIndicator.setOutlineColor(sf::Color(255, 255, 255, 255));
 	mouseFont.loadFromFile(Config::dialogueFontPath);
@@ -21,15 +21,8 @@ Game::Game()
 
 	turnSystem.init(map);
 	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> map >> turnSystem;
-	//ASSERT(!map.getPlayer().get());
+	arc >> *map >> turnSystem;
 
-	//map.add({ 0,0 }, new Player);
-	
-	//map.add({ 8,8 }, new Ranged{100,100});
-	//map.add({ 10,2 }, new Wall{Wall::RU});
-	//map.add({ 7,5 }, new Hole);
-	//map.add({ 7,15 }, new ColorPedestral);
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 
@@ -41,42 +34,39 @@ Game::Game()
 	cam.setTarget(actor.lock()); 
 
 	hud.setView(cam.getView());
-	hud.setPlayer(map.getPlayer());
+	hud.setPlayer(map->get<Player>());
 }
 
 void Game::update()
 {
 
-	LOG("a");
 	//TRANSITION EFFECT
 	transitionEffect.update(dt);
 
-	if (input.isKeyPressed(Input::Enter))
+	if (input.isKeyPressed(Input::Esc))
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::nextState();
+		Application::setState(3);
 
 	//MOUSE
-	mousePos = map.posFloatToInt(input.getMousePos(&cam.getView()));
-	mouseIndicator.setPosition(map.posIntToFloat(mousePos));
+	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
+	mouseIndicator.setPosition(map->posIntToFloat(mousePos));
 	mousePosText.setString(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	mousePosText.setPosition(mouseIndicator.getPosition() + 
-		sf::Vector2<float>{ map.getCellDim().x - mousePosText.getGlobalBounds().width, 
-							map.getCellDim().y - mousePosText.getGlobalBounds().height - 4});
+		sf::Vector2<float>{ map->getCellDim().x - mousePosText.getGlobalBounds().width, 
+							map->getCellDim().y - mousePosText.getGlobalBounds().height - 4});
 
 	//CAMERA
 
 	if (input.isKeyPressed(Input::Space))
 		cam.lock();
 
-	if (input.isKeyReleased(Input::MouseR) && map.getGameCharacter(mousePos).get())
-		cam.setTarget(map.getGameCharacter(mousePos));
+	if (input.isKeyReleased(Input::MouseR) && map->get<GameCharacter>(mousePos).get())
+		cam.setTarget(map->get<GameCharacter>(mousePos));
 
 	cam.update(dt); 
 
-    //TURNSYSTEM
-	LOG("b");
 	//HUD 
 	hud.update(dt);
 
@@ -96,13 +86,13 @@ void Game::update()
         actor=turnSystem.getActor();
 
     if(!turnSystem.isPlayerTurn()){
-		turnSystem.turnBuild(map.getPlayer()->getPos());}
+		turnSystem.turnBuild(map->get<Player>()->getPos());}
 		
     else if(input.isKeyReleased(Input::MouseL)){
-			if(mousePos!=map.posFloatToInt(map.getPlayer()->getPos()))
-            	turnSystem.turnBuild(map.posIntToFloat(mousePos));
+			if(mousePos!=map->posFloatToInt(map->get<Player>()->getPos()))
+            	turnSystem.turnBuild(map->posIntToFloat(mousePos));
 			else
-				map.getPlayer()->setEnergy(0);
+				map->get<Player>()->setEnergy(0);
 			}
     
     turnSystem.update(dt);
@@ -113,7 +103,7 @@ void Game::render()
 {
 	window.setView(cam.getView());
 	window.draw(backgroundSprite, &backgroundShader);
-	map.render(window);
+	map->render(window);
 	window.draw(mouseIndicator);
 	window.draw(mousePosText);
 	hud.render(window);
@@ -123,13 +113,13 @@ void Game::render()
 void Game::save() 
 {
 	Archive arc(Config::gameMapPath, Archive::Save);
-	arc << map << turnSystem;
+	arc << *map << turnSystem;
 }
 
 void Game::load()
 {
 	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> map >> turnSystem;
+	arc >> *map >> turnSystem;
 
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
@@ -138,5 +128,5 @@ void Game::load()
 
 	sf::Vector2<float> size = { (float)window.getSize().x,(float)window.getSize().y };
 	hud.setView(sf::View{ size*0.5f,size });
-	hud.setPlayer(map.getPlayer());
+	hud.setPlayer(map->get<Player>());
 }

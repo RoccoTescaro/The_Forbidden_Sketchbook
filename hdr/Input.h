@@ -11,6 +11,8 @@ public:
         A,
         S,
         D,
+        Left,
+        Right,
         MouseR,
         MouseL,
         Enter,

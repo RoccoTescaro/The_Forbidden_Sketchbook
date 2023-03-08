@@ -22,23 +22,25 @@ bool TurnSystem::isPlayerTurn()
 
 void TurnSystem::newRound()
 {
-    auto& gameCharacters = map->getGameCharacters();
+    auto& gameCharacters = map.lock()->getGameCharacters();
 
-    for(auto &gcs : gameCharacters)
+    for(auto &gameCharactersType : gameCharacters)
     {
-        auto gc = gcs.second;
-
-        if(Config::maxActivationDistance > Utils::Math::distance(map->getPlayer()->getPos(), gc->getPos()))
+        for (auto& gameCharacterPair : gameCharactersType.second) 
         {
-            turnQueue.emplace(gc);
-            gc->turnReset();
+            auto& gameCharacter = gameCharacterPair.second;
+            if(Config::maxActivationDistance > Utils::Math::distance(map.lock()->get<Player>()->getPos(), gameCharacter->getPos()))
+            {
+                turnQueue.emplace(gameCharacter);
+                gameCharacter->turnReset();
+            }
         }
     }
 }
 
-void TurnSystem::init(Map& map) 
+void TurnSystem::init(std::shared_ptr<Map> map)
 {
-    this->map = static_cast<std::shared_ptr<Map>>(&map);//std::make_shared<Map>(map);
+    this->map = map;
 }
 
 void TurnSystem::serialize(Archive& fs) 
@@ -75,19 +77,20 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     int energy = actorShr->getEnergy();
     int dmg = actorShr->getWeapon().getAttack();  
     int targetHp; 
-    if(map->getGameCharacter(map->posFloatToInt(target)))
-        targetHp = map->getGameCharacter(map->posFloatToInt(target))->getHealth();
-    bool inRange = (Utils::Math::distance(map->posFloatToInt(actorShr->getPos()),map->posFloatToInt(target))<=range && map->getGameCharacter(map->posFloatToInt(target)));
-    std::deque<sf::Vector2<float>> stepQueue = actorShr->getMovementStrategy()->findPath(*map, actorShr->getPos(), target, actorShr->isSolid());
+    auto mapShr = map.lock();
+    if(mapShr->get<GameCharacter>(mapShr->posFloatToInt(target)))
+        targetHp = mapShr->get<GameCharacter>(mapShr->posFloatToInt(target))->getHealth();
+    bool inRange = (Utils::Math::distance(mapShr->posFloatToInt(actorShr->getPos()),mapShr->posFloatToInt(target))<=range && mapShr->get<GameCharacter>(mapShr->posFloatToInt(target)));
+    std::deque<sf::Vector2<float>> stepQueue = actorShr->getMovementStrategy()->findPath(*mapShr, actorShr->getPos(), target, actorShr->isSolid());
     sf::Vector2<float> newPos = stepQueue.front();
     while (!stepQueue.empty() && energy && !inRange)
     {
-        if(map->getGameCharacter(map->posFloatToInt(newPos)))
+        if(mapShr->get<GameCharacter>(mapShr->posFloatToInt(newPos)))
             break;
         energy-=actorShr->getMovementStrategy()->getMovementCost();
         actionQueue.emplace(0,newPos);
         stepQueue.pop_front();
-        inRange = (Utils::Math::distance(map->posFloatToInt(newPos),map->posFloatToInt(target))<=range && map->getGameCharacter(map->posFloatToInt(target)));    //if you can attack u must do it        
+        inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos),mapShr->posFloatToInt(target))<=range && mapShr->get<GameCharacter>(mapShr->posFloatToInt(target)));    //if you can attack u must do it        
         newPos = stepQueue.front();
 
     }
@@ -111,13 +114,13 @@ void TurnSystem::update(const float &dt)
         
 
     if(!action.actionType){
-        actorShr->move(*map, action.target, dt);
+        actorShr->move(*(map.lock()), action.target, dt);
         if(Utils::Math::distance(actorShr->getPos(),action.target)<5){
             actionQueue.pop();
             }
     }
     else{
-        actorShr->interact(*map, action.target, dt);
+        actorShr->interact(*(map.lock()), action.target, dt);
         if(actorShr->getWeapon().isAnimationEnded()){
             actionQueue.pop();
             }

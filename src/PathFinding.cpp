@@ -8,7 +8,7 @@ bool PathAlgorithm::isValid(Map &map, const sf::Vector2<int> pos, bool flying, b
     if(ignoreGC){
         return map.isOccupied(pos, flying);
     }else{
-        return !(map.getGameCharacter(pos)||map.isOccupied(pos,flying));
+        return !(map.get<GameCharacter>(pos)||map.isOccupied(pos,flying));
     }
 }
 
@@ -82,7 +82,7 @@ std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fSt
             if (isDestination(k, target))
             {
                 //destinazione valida o nemico
-                if(isValid(map, k,flying) || map.getGameCharacter(k)){
+                if(isValid(map, k,flying) || map.get<GameCharacter>(k)){
                     nodeInfo[k].parentPos = p.second;
                     // costruzione e resa della lista di passi
                     return tracePath(map, nodeInfo, target);

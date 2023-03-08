@@ -33,7 +33,7 @@ private:
     using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, PriorityCompare>;
 public:
 
-    void init(Map& map);
+    void init(std::shared_ptr<Map> map);
   
     std::weak_ptr<GameCharacter> getActor();
     
@@ -53,7 +53,7 @@ private:
     static Serializable* create() { return new TurnSystem; };
     static Register registration;
 
-    std::shared_ptr<Map> map;
+    std::weak_ptr<Map> map;
 
     TurnQueue turnQueue;
     std::weak_ptr<GameCharacter> actor;

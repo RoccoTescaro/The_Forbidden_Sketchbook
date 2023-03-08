@@ -1,6 +1,7 @@
 #include "../hdr/Pause.h"
 #include "../hdr/Config.h"
 #include "../hdr/Game.h"
+#include "../hdr/Editor.h"
 
 Pause::Pause() :
     save({ 0.f, window.getSize().y * 0.15f }, sf::Vector2<int>(window.getSize().x, window.getSize().y *0.14f)),
@@ -19,9 +20,12 @@ Pause::Pause() :
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
     save.setOnClick([this]()
         {
-            Game* game = dynamic_cast<Game*>(Application::getState(1));
-            WARNING(!game, "wrong state index!");
-            game->save();
+            Game* game = dynamic_cast<Game*>(Application::getPrevState());
+            Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
+            ASSERT(!(game || editor));
+            
+            if (game) game->save();
+            else if (editor) editor->save();
         });
     save.setOnMouseOver([this]() { save.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
@@ -35,9 +39,12 @@ Pause::Pause() :
             back.setActive(false);
             menu.setActive(false);
 
-            Game* game = dynamic_cast<Game*>(Application::getState(1)); //TODO make it flexible with editor
-            ASSERT(!game);
-            game->load();
+            Game* game = dynamic_cast<Game*>(Application::getPrevState());
+            Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
+            ASSERT(!(game || editor));
+
+            if (game) game->load();
+            else if (editor) editor->load();
         });
     back.setOnMouseOver([this]() { back.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
@@ -75,9 +82,14 @@ void Pause::update()
         back.setActive(true);
         menu.setActive(true);
         
-        if (back.isClicked()) //TODO make it flexible with editor
+        bool backClicked = back.isClicked();
+
+        back.setClicked(false);
+        menu.setClicked(false);
+
+        if (backClicked)
             Application::prevState(); 
-        else if (menu.isClicked())
+        else //menuClicked
             Application::setState(0);
     }
 }
