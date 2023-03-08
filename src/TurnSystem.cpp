@@ -8,9 +8,9 @@ std::weak_ptr<GameCharacter> TurnSystem::getActor()
     }
     else
         newRound();
+
     actor = turnQueue.top();
     turnQueue.pop();
-
 
     return actor;
 }
@@ -24,16 +24,12 @@ void TurnSystem::newRound()
 {
     auto& gameCharacters = map.lock()->getGameCharacters();
 
-    for(auto &gameCharactersType : gameCharacters)
+    for(auto &gameCharacter : gameCharacters)
     {
-        for (auto& gameCharacterPair : gameCharactersType.second) 
+        if(Config::maxActivationDistance > Utils::Math::distance(map.lock()->get<Player>()->getPos(), gameCharacter.second->getPos()))
         {
-            auto& gameCharacter = gameCharacterPair.second;
-            if(Config::maxActivationDistance > Utils::Math::distance(map.lock()->get<Player>()->getPos(), gameCharacter->getPos()))
-            {
-                turnQueue.emplace(gameCharacter);
-                gameCharacter->turnReset();
-            }
+            turnQueue.emplace(gameCharacter.second);
+            gameCharacter.second->turnReset();
         }
     }
 }
@@ -70,7 +66,7 @@ void TurnSystem::serialize(Archive& fs)
 
 void TurnSystem::turnBuild(sf::Vector2<float> target)
 {
-    if(!actionQueue.empty())
+    if (!actionQueue.empty())
         return;
     auto actorShr = actor.lock();
     int range = actorShr->getWeapon().getRange();

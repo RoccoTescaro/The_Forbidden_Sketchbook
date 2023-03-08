@@ -11,7 +11,7 @@ void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &d
 		map.get<GameCharacter>(map.posFloatToInt(target))->subHealth(weapon.getAttack());
 		subEnergy(weapon.getCost());
 		if(map.get<GameCharacter>(map.posFloatToInt(target))->getHealth()==0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
-			map.remove<GameCharacter>(map.posFloatToInt(target));
+			map.remove(map.posFloatToInt(target));
 	}
 
 }

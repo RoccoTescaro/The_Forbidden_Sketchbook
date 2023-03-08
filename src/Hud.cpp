@@ -26,10 +26,10 @@ Hud::Hud()
 	dialogueManager.setTexture(Config::dialogueTexturePath);
 }
 
-void Hud::setPlayer(const std::shared_ptr<GameCharacter>& player) 
+void Hud::setPlayer(const std::shared_ptr<Player>& player) 
 {
 	this->player = player;
-	filter.setTargetColor(dynamic_cast<Player*>(player.get())->getFilterColor());
+	filter.setTargetColor(player->getFilterColor());
 	playerHealth.setTargetValue(&(player->getHealth()));
 	playerHealth.setTargetMaxValue(player->getMaxHealth());
 	playerEnergy.setTargetValue(&(player->getEnergy()));
@@ -42,7 +42,7 @@ void Hud::update(const float& dt)
 	//auto shrPlayer = player.lock();
 	//if (!shrPlayer) return;
 
-	filter.setTargetColor(dynamic_cast<Player*>(player.lock().get())->getFilterColor());
+	filter.setTargetColor(player.lock()->getFilterColor());
 	filter.update(dt);
 
 	playerHealth.update(dt);

@@ -23,10 +23,10 @@ Editor::Editor()
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
-	Archive arc(Config::editorMapPath, Archive::Load);
-	arc >> *map;
+	//Archive arc(Config::editorMapPath, Archive::Load);
+	//arc >> *map;
 
-	if(!map->get<Player>().get()) map->append({ 0,0 }, new Player);
+	map->append({ 0,0 }, new Player);
 	
 	entitiesFactories.emplace_back(Wall::create);
 	entitiesFactories.emplace_back(Hole::create);
@@ -142,7 +142,7 @@ void Editor::update()
 
 	if (input.isKeyDown(Input::MouseR) && 
 		map->posFloatToInt(input.getMousePos(&cam.getView())) != map->posFloatToInt(map->get<Player>()->getPos())) //TODO update wall texture on remove
-		map->remove<Entity>(map->posFloatToInt(input.getMousePos(&cam.getView())));
+		map->remove(map->posFloatToInt(input.getMousePos(&cam.getView())));
 }
 
 void Editor::render() 

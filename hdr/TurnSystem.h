@@ -9,10 +9,10 @@
 
 class TurnSystem : public Serializable
 {
-    struct Action{
+    struct Action {
 
-        #define MOVE 0
-        #define ATTACK 1
+#define MOVE 0
+#define ATTACK 1
 
         bool actionType;
         sf::Vector2<float> target;
@@ -25,7 +25,7 @@ private:
     {
         bool operator()(const std::weak_ptr<GameCharacter>& p1, const std::weak_ptr<GameCharacter>& p2) const
         {
-            return ( (p1.expired() || p2.expired()) || p1.lock().get()->getPriority() <= p2.lock().get()->getPriority());
+            return ((p1.expired() || p2.expired()) || p1.lock().get()->getPriority() <= p2.lock().get()->getPriority());
         }
     };
 
@@ -41,7 +41,6 @@ public:
     
     void newRound();
 
-    void serialize(Archive& arc);
 
     void turnBuild(sf::Vector2<float> target);
 
@@ -49,6 +48,7 @@ public:
 
     inline bool isActionQueueEmpty(){   return actionQueue.empty(); };
 
+    void serialize(Archive& arc);
 private:
     static Serializable* create() { return new TurnSystem; };
     static Register registration;

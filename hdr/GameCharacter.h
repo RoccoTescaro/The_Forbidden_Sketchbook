@@ -16,7 +16,7 @@ private:
     using StepQueue = std::deque<sf::Vector2<float>>;
 public:
     GameCharacter(uint8_t maxHealth, uint8_t health, uint8_t maxEnergy, uint8_t energy, uint8_t priority) 
-        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health>maxHealth ? maxHealth:health), energy(energy>maxEnergy ? maxEnergy:energy), priority(priority), weapon(5,3) {};
+        : maxHealth(maxHealth), maxEnergy(maxEnergy), health(health), energy(energy), priority(priority), weapon(5,3) {};
 
     //ENTITY
     inline void render(sf::RenderWindow& window) override 
@@ -35,15 +35,20 @@ public:
     inline MovementStrategy& getMovementStrategy() { return movementStrategy; };
     inline Weapon& getWeapon() { return weapon; };
 
-    inline void setPos(const sf::Vector2<float>& pos) override  {   Entity::setPos(pos);
-                                                                    weapon.setPos(pos); };
-    inline void setEnergy(const uint8_t newEnergy) { energy=newEnergy;}
+    inline void setPos(const sf::Vector2<float>& pos) override  
+    {   
+        Entity::setPos(pos);
+        weapon.setPos(pos); 
+    };
+    
+    inline void setHealth(const uint8_t newHealth) { health = newHealth;}
+    inline void setEnergy(const uint8_t newEnergy) { energy = newEnergy;}
                                             
-    inline void subHealth(const uint8_t newHealth) { health = (health-newHealth<maxHealth ? health-newHealth : 0);}
-    inline void subEnergy(const uint8_t newEnergy) { energy = (energy-newEnergy<maxEnergy ? energy-newEnergy : 0);}
+    inline void subHealth(const uint8_t newHealth) { health = ((int)health-newHealth<0 ? health-newHealth : 0);}
+    inline void subEnergy(const uint8_t newEnergy) { energy = ((int)energy-newEnergy<0 ? energy-newEnergy : 0);}
 
     //GAMECHARACTER FUNCTIONS
-    inline void turnReset(){    energy=maxEnergy;     }; 
+    inline void turnReset(){ energy=maxEnergy; }; 
     inline void serialize(Archive& fs) 
     {
         Entity::serialize(fs);
@@ -54,23 +59,18 @@ public:
     virtual void move(Map &map, sf::Vector2<float> target, const float &dt); 
     virtual void interact(Map &map, sf::Vector2<float> target, const float &dt); 
 
-
-
 protected:
-    //STATS
-
+    
     const float speed = 200.f;
     const uint8_t maxHealth = 20;  
     const uint8_t maxEnergy = 20;
     const uint8_t priority = 0;
     uint8_t health = 0;
     uint8_t energy = 0;
-    Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 
-    //MOVEMENT
-    
     MovementStrategy movementStrategy;
 
+    Weapon weapon; //std::unique_ptr<Weapon> weapon = nullptr;
 };
 
 

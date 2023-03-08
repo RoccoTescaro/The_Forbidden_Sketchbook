@@ -11,7 +11,7 @@ public:
 	Hud();
 
 	inline void setView(const sf::View& view) { gui = view; };
-	void setPlayer(const std::shared_ptr<GameCharacter>& player);
+	void setPlayer(const std::shared_ptr<Player>& player);
 
 	void update(const float& dt);
 
@@ -19,7 +19,7 @@ public:
 private:
 	sf::View gui;
 	Filter filter;
-	std::weak_ptr<GameCharacter> player;
+	std::weak_ptr<Player> player;
 	Bar<uint8_t> playerHealth;
 	Bar<uint8_t> playerEnergy;
 	DialogueManager dialogueManager;

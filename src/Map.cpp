@@ -3,75 +3,6 @@
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
 
-template<>
-std::shared_ptr<Tile> Map::get<Tile>(const sf::Vector2<int>& pos) 
-{
-	for (auto& tile : tiles)
-		if (tile.second.find(pos) != tile.second.end())
-			return tile.second.at(pos);
-	return nullptr;
-}
-
-template<>
-std::shared_ptr<GameCharacter> Map::get<GameCharacter>(const sf::Vector2<int>& pos) 
-{
-	for (auto& gameCharacter : gameCharacters)
-		if (gameCharacter.second.find(pos) != gameCharacter.second.end())
-			return gameCharacter.second.at(pos);
-	return nullptr;
-}
-
-template<>
-std::shared_ptr<Entity> Map::get<Entity>(const sf::Vector2<int>& pos) 
-{
-	std::shared_ptr<Tile> tile = get<Tile>(pos);
-	std::shared_ptr<GameCharacter> gameCharacter = get<GameCharacter>(pos);
-	if (tile.get()) return tile;
-	else if (gameCharacter.get()) return gameCharacter;
-	return nullptr;
-}
-
-template<>
-Map& Map::remove<Tile>(const sf::Vector2<int>& pos) 
-{
-	for (auto& tile : tiles) 
-	{
-		if (tile.second.erase(pos))
-		{
-			//LOG("a Tile removed at pos {{1},{2}}", pos.x, pos.y);
-			return *this;
-		}
-		else;
-			//LOG("no Tile at pos {{1},{2}}", pos.x, pos.y);
-	}
-	return *this;
-}
-
-template<>
-Map& Map::remove<GameCharacter>(const sf::Vector2<int>& pos)
-{
-	for (auto& gameCharacter : gameCharacters) 
-	{
-		if (gameCharacter.second.erase(pos)) {
-			//LOG("a GameCharacter removed at pos {{1},{2}}", pos.x, pos.y);
-			return *this;
-		}
-		else;
-			//LOG("no GameCharacter at pos {{1},{2}}", pos.x, pos.y);
-	}
-	return *this;
-}
-
-template<>
-Map& Map::remove<Entity>(const sf::Vector2<int>& pos) 
-{
-	remove<Tile>(pos);
-	remove<GameCharacter>(pos);
-	
-	return *this;
-}
-
-
 #define MAX_AREA_PROPERLY_RENDERED 1500 //50*30
 #define RENDER_OVERSHOOT 3 
 
@@ -96,14 +27,42 @@ void Map::render(sf::RenderWindow& window)
 			}
 	else 
 	{
-		for (auto& tileType : tiles)
-			for (auto& tile : tileType.second)
-				tile.second->render(window);
+		for (auto& tile : tiles)
+			tile.second->render(window);
 
-		for (auto& gameCharacterType : gameCharacters)
-			for (auto& gameCharacter : gameCharacterType.second)
-				gameCharacter.second->render(window);
+		for (auto& gameCharacter : gameCharacters)
+			gameCharacter.second->render(window);
 	}
+}
+
+Map& Map::append(const sf::Vector2<int>& pos, Entity* entity)
+{
+	auto tile = dynamic_cast<Tile*>(entity);
+	auto gameCharacter = dynamic_cast<GameCharacter*>(entity);
+
+	entity->setPos(posIntToFloat(pos));
+
+	if (tile)
+		tiles[pos] = std::shared_ptr<Tile>(tile);
+	else if (gameCharacter)
+	{
+		if (auto player = dynamic_cast<Player*>(entity)) playerPos = pos;
+		gameCharacters[pos] = std::shared_ptr<GameCharacter>(gameCharacter);
+	}
+	else
+	{
+		ERROR("entity is not a tile or a gameCharacter");
+		delete entity;
+	}
+
+	return *this;
+}
+
+Map& Map::remove(const sf::Vector2<int>& pos)
+{
+	if (tiles.count(pos)) tiles.erase(pos);
+	if (gameCharacters.count(pos)) gameCharacters.erase(pos);
+	return *this;
 }
 
 bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
@@ -113,18 +72,11 @@ bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
 
 void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end) //#TODO test
 {
-	for (auto& gameCharacter : gameCharacters)
-		if (gameCharacter.second.find(start) != gameCharacter.second.end())
-		{
-			auto entity = gameCharacter.second.extract(start);
+	auto gameCharacter = gameCharacters.extract(start);
+	if (gameCharacter) gameCharacters[end] = gameCharacter.mapped();
+	else ERROR("no gameCharacter at start position");
 
-			if (entity)
-			{
-				entity.key() = end;
-				gameCharacter.second.insert(std::move(entity));
-			}
-
-		}
+	if (start == playerPos) playerPos = end;
 }
 
 sf::Vector2<float> Map::posIntToFloat(const sf::Vector2<int>&pos) const 
@@ -143,55 +95,34 @@ void Map::serialize(Archive& fs)
 	//but we can save each entity one by one
 	if (fs.getMode() == Archive::Save) 
 	{
-		uint32_t sizeTiles = tiles.size();
-		fs.serialize(sizeTiles);
-		for (auto& tileType : tiles) 
-		{
-			uint32_t sizeType = tileType.second.size();
-			fs.serialize(sizeType);
-			for (auto& tile : tileType.second)
+		uint32_t size = tiles.size();
+		fs.serialize(size);
+		for (auto& tile : tiles) 
 				fs.serialize(tile.second);
-		}
-		uint32_t sizeGameCharacters = gameCharacters.size();
-		fs.serialize(sizeGameCharacters);
-		for (auto& gameCharactersType : gameCharacters)
-		{
-			uint32_t sizeType = gameCharactersType.second.size();
-			fs.serialize(sizeType);
-			for (auto& gameCharacter : gameCharactersType.second)
-				fs.serialize(gameCharacter.second);
-		}
+		size = gameCharacters.size();
+		fs.serialize(size);
+		for (auto& gameCharacter : gameCharacters)
+			fs.serialize(gameCharacter.second);
 	}
 	else 
 	{
 		tiles.clear();
 		gameCharacters.clear();
 
-		uint32_t sizeTiles;
-		fs.serialize(sizeTiles);
-		for (uint32_t i = 0; i < sizeTiles; i++)
+		uint32_t size;
+		fs.serialize(size);
+		for (uint32_t i = 0; i < size; i++)
 		{
-			uint32_t sizeType;
-			fs.serialize(sizeType);
-			for (uint32_t j = 0; j < sizeType; j++)
-			{
-				Tile* tile;
-				fs.serialize(tile);
-				append<Tile>(posFloatToInt(tile->getPos()), tile);
-			}
+			Tile* tile;
+			fs.serialize(tile);
+			append(posFloatToInt(tile->getPos()), tile);
 		}
-		uint32_t sizeGameCharacters;
-		fs.serialize(sizeGameCharacters);
-		for (uint32_t i = 0; i < sizeGameCharacters; i++)
+		fs.serialize(size);
+		for (uint32_t i = 0; i < size; i++)
 		{
-			uint32_t sizeType;
-			fs.serialize(sizeType);
-			for (uint32_t j = 0; j < sizeType; j++)
-			{
-				GameCharacter* gameCharacter;
-				fs.serialize(gameCharacter);
-				append<GameCharacter>(posFloatToInt(gameCharacter->getPos()), gameCharacter);
-			}
+			GameCharacter* gameCharacter;
+			fs.serialize(gameCharacter);
+			append(posFloatToInt(gameCharacter->getPos()), gameCharacter);
 		}
 	}
 	

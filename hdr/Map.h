@@ -5,11 +5,8 @@
 #include "Entity.h"
 #include "Tile.h"
 #include "GameCharacter.h"
-#include <unordered_map>
 #include <map>
 #include <memory>
-#include "GameCharacter.h"
-#include "Tile.h"
 
 class Map : public Serializable
 {
@@ -21,24 +18,20 @@ class Map : public Serializable
 		}
 	};
 
-	using Tiles = std::unordered_map<const char*, std::map<sf::Vector2<int>, std::shared_ptr<Tile>, Compare>>;
-	using GameCharacters = std::unordered_map<const char*, std::map<sf::Vector2<int>, std::shared_ptr<GameCharacter>, Compare>>;
+	using Tiles = std::map<sf::Vector2<int>, std::shared_ptr<Tile>, Compare>;
+	using GameCharacters = std::map<sf::Vector2<int>, std::shared_ptr<GameCharacter>, Compare>;
 
 public:
-	Map() : cellDim({ 64,32 }) {};
-
 	void render(sf::RenderWindow& window);
-
+	
 	template<class Type>
-	std::shared_ptr<Type> get(const sf::Vector2<int>& pos) 
+	std::shared_ptr<Type> get(const sf::Vector2<int>& pos)
 	{
-		const char* id = typeid(Type).name();
-		if constexpr (std::is_base_of<Tile, Type>::value)
-			if(tiles.find(id) != tiles.end() && tiles.at(id).find(pos) != tiles.at(id).end())
-				return std::static_pointer_cast<Type>(tiles.at(id).at(pos));
-		else if constexpr (std::is_base_of<GameCharacter, Type>::value)
-			if (gameCharacters.find(id) != gameCharacters.end() && gameCharacters.at(id).find(pos) != gameCharacters.at(id).end())
-				return std::static_pointer_cast<Type>(gameCharacters.at(id).at(pos));
+		if constexpr (std::is_base_of<Tile, Type>::value || std::is_same<Tile, Type>::value)
+			if(tiles.count(pos)) return std::static_pointer_cast<Type>(tiles.at(pos));
+		
+		if constexpr (std::is_base_of<GameCharacter, Type>::value || std::is_same<GameCharacter, Type>::value)
+			if(gameCharacters.count(pos)) return std::static_pointer_cast<Type>(gameCharacters.at(pos));
 
 		return std::shared_ptr<Type>(nullptr);
 	}
@@ -46,58 +39,16 @@ public:
 	template<class Player>
 	std::shared_ptr<Player> get()
 	{
-		auto& players = gameCharacters.at(typeid(Player).name());
-		for (auto& player : players)
-			return std::dynamic_pointer_cast<Player>(player.second);
+		if(gameCharacters.count(playerPos) && dynamic_cast<Player*>(gameCharacters[playerPos].get()))
+			return std::static_pointer_cast<Player>(gameCharacters.at(playerPos));
+		
+		gameCharacters[playerPos] = std::shared_ptr<GameCharacter>(new Player);
+		return std::static_pointer_cast<Player>(gameCharacters.at(playerPos));
 	}
+	
+	Map& append(const sf::Vector2<int>& pos, Entity* entity);
 
-	template<class Type>
-	Map& append(const sf::Vector2<int>& pos, Type* entity) 
-	{
-		const char* id = typeid(*entity).name();
-		Tile* tile = dynamic_cast<Tile*>(entity);
-		GameCharacter* gameCharacter = dynamic_cast<GameCharacter*>(entity);
-
-		bool occupied = isOccupied(pos, entity->isSolid()) || (gameCharacter && get<GameCharacter>(pos).get()) || (tile && get<Tile>(pos).get());
-
-		if (!occupied)
-		{
-			if (tile)
-			{
-				tiles[id][pos] = static_cast<std::shared_ptr<Tile>>(tile);
-				tile->setPos(posIntToFloat(pos));
-				//LOG("allocated instance of {3} at pos {{1},{2}}", pos.x, pos.y, id);
-			}
-			else if (gameCharacter)
-			{
-				gameCharacters[id][pos] = static_cast<std::shared_ptr<GameCharacter>>(gameCharacter);
-				gameCharacter->setPos(posIntToFloat(pos));
-				//LOG("allocated instance of {3} at pos {{1},{2}}", pos.x, pos.y, id);
-			}
-			else
-			{
-				WARNING(!tile && !gameCharacter, "attempt to allocate a non valid entity");
-				delete entity;
-			}
-		}
-		else
-			delete entity;
-
-		return *this;
-	}
-
-	template<class Type>
-	Map& remove(const sf::Vector2<int>& pos)
-	{
-		const char* id = typeid(Type).name();
-		if (tiles.find(id) != tiles.end())
-			tiles[id].erase(pos);
-		else if (gameCharacters.find(id) != gameCharacters.end())
-			gameCharacters[id].erase(pos);
-		else
-			ERROR("attempt to remove a non valid entity");
-		return *this;
-	}
+	Map& remove(const sf::Vector2<int>& pos);
 
 	inline const Tiles& getTiles() const { return tiles; };
 	inline const GameCharacters& getGameCharacters() const { return gameCharacters; };
@@ -118,6 +69,8 @@ private:
 
 	Tiles tiles;
 	GameCharacters gameCharacters;
+
+	sf::Vector2<int> playerPos{ 0,0 };
 	
 	sf::Vector2<int> cellDim{ 64,32 };
 };
