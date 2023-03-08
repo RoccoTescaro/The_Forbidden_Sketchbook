@@ -3,37 +3,38 @@
 
 //GAMECHARACTER
 
-void GameCharacter::update(Map &map, const float &dt)
+//todo remove subEnergy
+void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &dt)
 {
-	/*while (!isStepQueueEmpty()) {
-	setPos(getPos()+stepQueue.at(0));
-	stepQueue.pop_front();
-	setEnergy(0);
-	}*/
+	weapon.update(dt,target);
+	if(weapon.isAnimationEnded()){
+		map.get<GameCharacter>(map.posFloatToInt(target))->subHealth(weapon.getAttack());
+		subEnergy(weapon.getCost());
+		if(map.get<GameCharacter>(map.posFloatToInt(target))->getHealth()==0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
+			map.remove<GameCharacter>(map.posFloatToInt(target));
+	}
+
 }
 
-void GameCharacter::execute(GameCharacter &gameCharacter, Map &map)
+void GameCharacter::move(Map &map, sf::Vector2<float> target, const float &dt)
 {
 
-}
-
-bool GameCharacter::isInRange(Map &map) const
-{
-	return true;
-}
-
-void GameCharacter::updateStepQueue(const sf::Vector2<float> target)
-{
-	/*
-	if(stepQueue.empty())
-		stepQueue={{0,64},{64,0},{0,64}};
-	*/
+	sf::Vector2<float> pos = getPos();
+	sf::Vector2<float> direction=target-pos;
+	if(!map.get<GameCharacter>(map.posFloatToInt(target))){
+		subEnergy(getMovementStrategy()->getMovementCost());
+        map.move(map.posFloatToInt(pos),map.posFloatToInt(target));
+	}
+	pos+={Utils::Math::normalize(direction)*dt*speed};//todo if targethas negative coords it will get a wrong starting pos
+	setPos(pos);
+    if(Utils::Math::distance(pos,target)<5)
+        setPos(target);
 }
 
 //PLAYER
 
 Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB)
-	: GameCharacter(100,health,100,energy,0) 
+	: GameCharacter(100,health,20,energy,0)
 {
 
 	static sf::Texture* texture;
@@ -51,16 +52,17 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 	sprite.setOrigin(0.f,1470.f);
 	//FILTER
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
-	
-    //MOVEMENTSTRATEGY
-    //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
 }
 
 
 //MELEE
 
 Melee::Melee(uint8_t health, uint8_t energy)
-	: GameCharacter(30, health, 10, energy, 2)
+	: GameCharacter(30, health, 5, energy, 2)
 {
 	static sf::Texture* texture;
 	if (!texture)
@@ -76,14 +78,15 @@ Melee::Melee(uint8_t health, uint8_t energy)
 	sprite.setScale(64.f/textureRect.width,128.f/textureRect.height);
 	sprite.setOrigin(0.f, 1470.f);
 
-    //MOVEMENTSTRATEGY
-   //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
 }
 
 //BAT
 
 Bat::Bat(uint8_t health, uint8_t energy)
-	: GameCharacter(10, health, 30, energy, 3)
+	: GameCharacter(10, health, 8, energy, 3)
 {
 	static sf::Texture* texture;
 	if (!texture)
@@ -99,8 +102,9 @@ Bat::Bat(uint8_t health, uint8_t energy)
 	sprite.setScale(104.f/textureRect.width,48.f/textureRect.height);
 	sprite.setOrigin(340.f, 1000.f);
 
-    //MOVEMENTSTRATEGY
-    //movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new AStar());
+
 }
 
 //RANGED
@@ -123,6 +127,7 @@ Ranged::Ranged(uint8_t health, uint8_t energy)
 	sprite.setScale(64.f/textureRect.width,	96.f/textureRect.height);
 	sprite.setOrigin(0.f, 619.f);
 
-    //MOVEMENTSTRATEGY
-    //movementStrategy = std::unique_ptr<PathAlgorithm>(new DiglettMovement());
+
+    movementStrategy = std::unique_ptr<PathAlgorithm>(new DigletMovement());
+
 }

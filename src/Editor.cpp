@@ -25,6 +25,7 @@ Editor::Editor()
 
 	Archive arc(Config::editorMapPath, Archive::Load);
 	arc >> *map;
+
 	if(!map->get<Player>().get()) map->append({ 0,0 }, new Player);
 	
 	entitiesFactories.emplace_back(Wall::create);

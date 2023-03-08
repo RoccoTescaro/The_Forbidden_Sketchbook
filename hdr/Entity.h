@@ -14,10 +14,8 @@ public:
 
 	inline virtual void render(sf::RenderWindow& window) { window.draw(sprite); };
 
-	virtual void update(Map &map, const float &dt) = 0;
-	virtual void execute(GameCharacter &gameCharacter, Map &map) = 0;
 
-	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
+	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 	
 	inline sf::Vector2<float> getPos() const { return sprite.getPosition(); };
 	inline sf::Vector2<float> getSize() const { return { sprite.getTextureRect().width * sprite.getScale().x, sprite.getTextureRect().height * sprite.getScale().y}; };

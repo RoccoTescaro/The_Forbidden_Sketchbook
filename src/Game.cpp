@@ -22,8 +22,13 @@ Game::Game()
 	turnSystem.init(map);
 	Archive arc(Config::gameMapPath, Archive::Load);
 	arc >> *map >> turnSystem;
-	
+
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
+
+
+	//map.add({ 0,3 }, new Melee{100,100});
+	//map.add({ 5,3 }, new Bat{100,100});
+
 
 	cam.lock(true);
 	cam.setTarget(actor.lock()); 
@@ -34,6 +39,7 @@ Game::Game()
 
 void Game::update()
 {
+
 	//TRANSITION EFFECT
 	transitionEffect.update(dt);
 
@@ -72,15 +78,24 @@ void Game::update()
 	backgroundShader.setUniform("viewPos", sf::Glsl::Vec2(bgPos));
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
-	//ACTOR
-	auto actorShr = actor.lock();
-	if (actorShr->getEnergy() == 0)
-	{
-		actorShr->turnReset();
-		actor = turnSystem.getActor();
-		if (cam.isLocked())
-			cam.setTarget(actor.lock());
-	}
+	//UPDATE ACTOR
+
+    auto actorShr = actor.lock();
+
+	if(actorShr->getEnergy()==0 && turnSystem.isActionQueueEmpty())//turn ended
+        actor=turnSystem.getActor();
+
+    if(!turnSystem.isPlayerTurn()){
+		turnSystem.turnBuild(map->get<Player>()->getPos());}
+		
+    else if(input.isKeyReleased(Input::MouseL)){
+			if(mousePos!=map->posFloatToInt(map->get<Player>()->getPos()))
+            	turnSystem.turnBuild(map->posIntToFloat(mousePos));
+			else
+				map->get<Player>()->setEnergy(0);
+			}
+    
+    turnSystem.update(dt);
 
 }
 

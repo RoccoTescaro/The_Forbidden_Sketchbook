@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class Weapon
 {
@@ -10,10 +11,12 @@ public:
 	{
 	public:
 
-		Bullet(const sf::Vector2<float>& target, float speed = 2.5f);
+		Bullet(const sf::Vector2<float>& target, float speed = 800.f);
 
 		void update(const float& dt);
 		void render(sf::RenderWindow& window);
+
+		inline sf::Vector2<float> getPos(){ return sprite.getPosition();};
 
 		float getTargetDistance();
 
@@ -27,13 +30,19 @@ public:
 
 	Weapon(uint8_t attack, uint8_t cost, uint8_t range = 1, bool hidden = false);
 
-	void update(const float& dt);
+	void update(const float& dt, const sf::Vector2<float>& target);
 	void render(sf::RenderWindow& window);
 
-	void shoot(const sf::Vector2<float>& target);
+    inline uint8_t getAttack() const { return attack; }; 
+    inline uint8_t getCost() const { return cost; }; 
+    inline uint8_t getRange() const { return range; }; 
 
-	//bool isAnimationEnded();
 
+	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
+
+
+	inline bool isAnimationEnded() { return !bullet.get();};
+ 
 private:
 	const uint8_t attack;
 	const uint8_t cost;

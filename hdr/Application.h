@@ -19,7 +19,7 @@ public:
 	inline static void nextState() { app.previousStateIndex = app.currentStateIndex; app.currentStateIndex++; };
 	inline static void prevState() { std::swap(app.currentStateIndex,app.previousStateIndex); };
 
-	inline static sf::RenderWindow& getWindow() { return app.window; };
+	inline static sf::RenderWindow& getWindow() { return *app.window; };
 	inline static const float& getDeltaTime() { return app.dt; };
 
 	inline static Input& getInput() { return app.input; };
@@ -35,7 +35,7 @@ private:
 
 	uint8_t currentStateIndex = 0;
 	uint8_t previousStateIndex = -1; 
-	sf::RenderWindow window;
+	std::unique_ptr<sf::RenderWindow> window;
 	float dt = 0.f;
 
 	Input input{};

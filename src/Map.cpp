@@ -3,6 +3,75 @@
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
 
+template<>
+std::shared_ptr<Tile> Map::get<Tile>(const sf::Vector2<int>& pos) 
+{
+	for (auto& tile : tiles)
+		if (tile.second.find(pos) != tile.second.end())
+			return tile.second.at(pos);
+	return nullptr;
+}
+
+template<>
+std::shared_ptr<GameCharacter> Map::get<GameCharacter>(const sf::Vector2<int>& pos) 
+{
+	for (auto& gameCharacter : gameCharacters)
+		if (gameCharacter.second.find(pos) != gameCharacter.second.end())
+			return gameCharacter.second.at(pos);
+	return nullptr;
+}
+
+template<>
+std::shared_ptr<Entity> Map::get<Entity>(const sf::Vector2<int>& pos) 
+{
+	std::shared_ptr<Tile> tile = get<Tile>(pos);
+	std::shared_ptr<GameCharacter> gameCharacter = get<GameCharacter>(pos);
+	if (tile.get()) return tile;
+	else if (gameCharacter.get()) return gameCharacter;
+	return nullptr;
+}
+
+template<>
+Map& Map::remove<Tile>(const sf::Vector2<int>& pos) 
+{
+	for (auto& tile : tiles) 
+	{
+		if (tile.second.erase(pos))
+		{
+			//LOG("a Tile removed at pos {{1},{2}}", pos.x, pos.y);
+			return *this;
+		}
+		else;
+			//LOG("no Tile at pos {{1},{2}}", pos.x, pos.y);
+	}
+	return *this;
+}
+
+template<>
+Map& Map::remove<GameCharacter>(const sf::Vector2<int>& pos)
+{
+	for (auto& gameCharacter : gameCharacters) 
+	{
+		if (gameCharacter.second.erase(pos)) {
+			//LOG("a GameCharacter removed at pos {{1},{2}}", pos.x, pos.y);
+			return *this;
+		}
+		else;
+			//LOG("no GameCharacter at pos {{1},{2}}", pos.x, pos.y);
+	}
+	return *this;
+}
+
+template<>
+Map& Map::remove<Entity>(const sf::Vector2<int>& pos) 
+{
+	remove<Tile>(pos);
+	remove<GameCharacter>(pos);
+	
+	return *this;
+}
+
+
 #define MAX_AREA_PROPERLY_RENDERED 1500 //50*30
 #define RENDER_OVERSHOOT 3 
 

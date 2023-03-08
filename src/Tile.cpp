@@ -78,4 +78,3 @@ bool ColorPedestral::isSolid() const {
 	return true;
 }
 
-void ColorPedestral::execute(GameCharacter &gameCharacter, Map &map){}
