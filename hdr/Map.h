@@ -33,7 +33,6 @@ public:
 	std::shared_ptr<Type> get(const sf::Vector2<int>& pos) 
 	{
 		const char* id = typeid(Type).name();
-
 		if constexpr (std::is_base_of<Tile, Type>::value)
 			if(tiles.find(id) != tiles.end() && tiles.at(id).find(pos) != tiles.at(id).end())
 				return std::static_pointer_cast<Type>(tiles.at(id).at(pos));
@@ -41,40 +40,11 @@ public:
 			if (gameCharacters.find(id) != gameCharacters.end() && gameCharacters.at(id).find(pos) != gameCharacters.at(id).end())
 				return std::static_pointer_cast<Type>(gameCharacters.at(id).at(pos));
 
-		return std::shared_ptr<Type>(nullptr);;
-	}
-
-	template<>
-	std::shared_ptr<Entity> get<Entity>(const sf::Vector2<int>& pos) 
-	{
-		std::shared_ptr<Tile> tile = get<Tile>(pos);
-		std::shared_ptr<GameCharacter> gameCharacter = get<GameCharacter>(pos);
-
-		if (tile.get()) return tile;
-		else if (gameCharacter.get()) return gameCharacter;
-		return nullptr;
-	}
-
-	template<>
-	std::shared_ptr<Tile> get<Tile>(const sf::Vector2<int>& pos) 
-	{
-		for (auto& tile : tiles)
-			if (tile.second.find(pos) != tile.second.end())
-				return tile.second.at(pos);
-		return nullptr;
-	}
-
-	template<>
-	std::shared_ptr<GameCharacter> get<GameCharacter>(const sf::Vector2<int>& pos) 
-	{
-		for (auto& gameCharacter : gameCharacters)
-			if (gameCharacter.second.find(pos) != gameCharacter.second.end())
-				return gameCharacter.second.at(pos);
-		return nullptr;
+		return std::shared_ptr<Type>(nullptr);
 	}
 
 	template<class Player>
-	std::shared_ptr<Player> get() 
+	std::shared_ptr<Player> get()
 	{
 		auto& players = gameCharacters.at(typeid(Player).name());
 		for (auto& player : players)
@@ -117,59 +87,17 @@ public:
 	}
 
 	template<class Type>
-	Map& remove(const sf::Vector2<int>& pos) 
+	Map& remove(const sf::Vector2<int>& pos)
 	{
 		const char* id = typeid(Type).name();
-
 		if (tiles.find(id) != tiles.end())
 			tiles[id].erase(pos);
 		else if (gameCharacters.find(id) != gameCharacters.end())
 			gameCharacters[id].erase(pos);
 		else
 			ERROR("attempt to remove a non valid entity");
-
 		return *this;
 	}
-
-	template<>
-	Map& remove<Entity>(const sf::Vector2<int>& pos) 
-	{
-		remove<Tile>(pos);
-		remove<GameCharacter>(pos);
-		return *this;
-	}
-
-	template<>
-	Map& remove<Tile>(const sf::Vector2<int>& pos) 
-	{
-		for (auto& tile : tiles) 
-		{
-			if (tile.second.erase(pos))
-			{
-				//LOG("a Tile removed at pos {{1},{2}}", pos.x, pos.y);
-				return *this;
-			}
-			else;
-				//LOG("no Tile at pos {{1},{2}}", pos.x, pos.y);
-		}
-		return *this;
-	}
-
-	template<>
-	Map& remove<GameCharacter>(const sf::Vector2<int>& pos)
-	{
-		for (auto& gameCharacter : gameCharacters) 
-		{
-			if (gameCharacter.second.erase(pos)) {
-				//LOG("a GameCharacter removed at pos {{1},{2}}", pos.x, pos.y);
-				return *this;
-			}
-			else;
-				//LOG("no GameCharacter at pos {{1},{2}}", pos.x, pos.y);
-		}
-		return *this;
-	}
-
 
 	inline const Tiles& getTiles() const { return tiles; };
 	inline const GameCharacters& getGameCharacters() const { return gameCharacters; };

@@ -20,9 +20,10 @@ Game::Game()
 	window.setMouseCursorVisible(false);
 
 	turnSystem.init(map);
-	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> *map >> turnSystem;
-	
+	//Archive arc(Config::gameMapPath, Archive::Load);
+	//arc >> *map >> turnSystem;
+	map->append({0,0}, new Player);
+
 	actor = turnSystem.getActor(); //we need to initialize the actor to update him
 
 	cam.lock(true);

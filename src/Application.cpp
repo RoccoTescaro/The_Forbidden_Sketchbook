@@ -30,26 +30,31 @@ void Application::run()
 	//in a non deterministic way and we must ensure that config variables are declared before the 
 	//istanciation of the singleton
 
+	app.window.reset(new sf::RenderWindow(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Close));
 	app.states.emplace_back(new Menu);
+	LOG("menu generated");
 	app.states.emplace_back(new Game);
+	LOG("game generated");
 	app.states.emplace_back(new Editor);
+	LOG("Editor generated");
 	app.states.emplace_back(new Pause);
-	app.window.create(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Close);
+	LOG("Pause generated");
+	app.window->setFramerateLimit(Config::fps);
 
 	sf::Clock clock;
 	app.dt = Config::eps;
 
 	sf::Event ev{};
 
-	while (app.window.isOpen())
+	while (app.window->isOpen())
 	{
 		State& state = *Application::getState(app.currentStateIndex);
 		app.input.update();
 		state.update();
 
-		app.window.clear(sf::Color(255,255,255,255));
+		app.window->clear(sf::Color(255,255,255,255));
 		state.render();
-		app.window.display();
+		app.window->display();
 
 		app.dt = std::max(clock.getElapsedTime().asSeconds(), Config::eps);
 		clock.restart();
@@ -57,9 +62,7 @@ void Application::run()
 };
 
 Application::Application() 
-	: window(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Default)
 {
-	window.setFramerateLimit(Config::fps);
 	states.reserve(0);
 };
 
