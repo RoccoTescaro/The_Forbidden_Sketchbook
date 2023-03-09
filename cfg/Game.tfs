@@ -590,4 +590,4 @@
 				h : 255
 10TurnSystem -
 	std::string : 10TurnSystem
-	j : 1
+	j : 2
