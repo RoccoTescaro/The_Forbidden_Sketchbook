@@ -6,6 +6,8 @@ class Tile : public Entity
 {
 public:
 
+    
+
     void serialize(Archive& fs) override { Entity::serialize(fs); };
 
 };
@@ -38,6 +40,8 @@ public:
         setTexture(type);
     }
 
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+
     static Serializable* create() { return new Wall; };
 private:
     static Register registration;
@@ -51,6 +55,8 @@ public:
 
     bool isSolid() const override;
 
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+
     static Serializable* create() { return new Hole; };
 private:
     static Register registration;
@@ -62,6 +68,8 @@ public:
     ColorPedestral();
 
     bool isSolid() const override;
+
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
 
     void serialize(Archive& fs) 
     { 

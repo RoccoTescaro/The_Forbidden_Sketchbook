@@ -5,16 +5,13 @@
 
 void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &dt)
 {
-	weapon.update(dt,target);
-	if(weapon.isAnimationEnded())
-	{
-		auto targetEntity = map.get<GameCharacter>(map.posFloatToInt(target));
-		targetEntity->setHealth(targetEntity->getHealth()-weapon.getAttack());
-		energy -= weapon.getCost();
-		if(targetEntity->getHealth() == 0 && map.posFloatToInt(target)!=map.posFloatToInt(map.get<Player>()->getPos()))
-			map.remove(map.posFloatToInt(target));
-	}
+	auto actor = map.get<GameCharacter>(map.posFloatToInt(target));
+	setHealth(health-actor->getWeapon().getAttack());
+	actor->setEnergy(actor->getEnergy() - weapon.getCost());
 
+	if(health <= 0 && map.posFloatToInt(getPos())!=map.posFloatToInt(map.get<Player>()->getPos()))
+		map.remove(map.posFloatToInt(getPos()));
+	
 }
 
 void GameCharacter::move(Map &map, sf::Vector2<float> target, const float &dt)

@@ -36,6 +36,8 @@ public:
 		sprite.setPosition(pos);
 	};
 
+	virtual void interact(Map &map, sf::Vector2<float> target, const float &dt)=0; 
+
 protected:
 	sf::Sprite sprite;
 };

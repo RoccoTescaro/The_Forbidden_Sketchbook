@@ -127,8 +127,12 @@ void TurnSystem::update(const float &dt)
         if (Utils::Math::distance(actorShr->getPos(), action.target) < 5) actionQueue.pop(); //TODO fix magic number
 	break;
     case Action::Type::Interact :
-        actorShr->interact(*(map.lock()), action.target, dt);
-        if (actorShr->getWeapon().isAnimationEnded()) actionQueue.pop();
+        actorShr->getWeapon().update(dt, action.target);
+        if (actorShr->getWeapon().isAnimationEnded()) 
+        {
+            map.lock()->get<GameCharacter>(map.lock()->posFloatToInt(action.target))->interact(*(map.lock()), actorShr->getPos(), dt);
+            actionQueue.pop();
+        }
     break;
     }
 
