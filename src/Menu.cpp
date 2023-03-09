@@ -44,43 +44,31 @@ Menu::Menu() :
     title.setPosition(window.getSize().x * 0.5f - titleBound.width * 0.5f, window.getSize().y * 1.2 * UNIT - titleBound.height * 0.5f);
 
     //BUTTONS
+    auto onClick = [this]() 
+    {
+        transitionEffect.start();
+        start.setActive(false); //not allow to press any other button if scene is changing
+        load.setActive(false);
+        editor.setActive(false);
+        exit.setActive(false);
+    };
+
     start.setFont(Config::buttonFontPath);
     start.setText(" StaRt ", window.getSize().y * 0.8 * UNIT);
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
-    start.setOnClick([this]() 
-        { 
-            transitionEffect.start();
-            start.setActive(false); //not allow to press any other button if scene is changing
-            load.setActive(false); 
-            editor.setActive(false); 
-            exit.setActive(false); 
-        });
+    start.setOnClick(onClick);
     start.setOnMouseOver([this]() { start.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
     load.setFont(Config::buttonFontPath);
     load.setText(" LoaD ", window.getSize().y * 0.8 * UNIT);
     load.getText().setFillColor(sf::Color(0, 0, 0, 255));
-    load.setOnClick([this]()
-        {
-            transitionEffect.start();
-            start.setActive(false); //not allow to press any other button if scene is changing
-            load.setActive(false);
-            editor.setActive(false);
-            exit.setActive(false);
-        });
+    load.setOnClick(onClick);
     load.setOnMouseOver([this]() { load.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
     editor.setFont(Config::buttonFontPath);
     editor.setText(" EdiToR ", window.getSize().y * 0.8 * UNIT);
     editor.getText().setFillColor(sf::Color(0, 0, 0, 255));
-    editor.setOnClick([this]()
-        {
-            transitionEffect.start();
-            start.setActive(false); //not allow to press any other button if scene is changing
-            load.setActive(false);
-            editor.setActive(false);
-            exit.setActive(false);
-        });
+    editor.setOnClick(onClick);
     editor.setOnMouseOver([this]() { editor.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 
     exit.setFont(Config::buttonFontPath);

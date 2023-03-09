@@ -3,10 +3,9 @@
 
 //WALL
 
-Wall::Wall(uint8_t type):type(type)
+Wall::Wall(uint8_t type) : type(type)
 {
     setTexture(type);
-
 }
 
 void Wall::setTexture(uint8_t newType){
@@ -19,7 +18,7 @@ void Wall::setTexture(uint8_t newType){
 			texture[i]->loadFromFile(Config::wallTexturePath[i]);
 			texture[i]->generateMipmap();
 		}
-	Wall::type = newType;
+	type = newType;
 	sprite.setTexture(*texture[type]);
 	sf::Rect<int> textureRect{0,0,1300,1300};
 	sprite.setTextureRect(textureRect);
@@ -27,7 +26,8 @@ void Wall::setTexture(uint8_t newType){
 	sprite.setOrigin(0.f,867.f);
 }
 
-bool Wall::isSolid() const{
+bool Wall::isSolid() const
+{
 	return true;
 }
 
@@ -58,9 +58,8 @@ bool Hole::isSolid() const {
 
 
 ColorPedestral::ColorPedestral()
-	: color(255,0,0)
+	: color(255,0,0,255)
 {
-
 	static sf::Texture* texture;
 	if(!texture){
 		texture = new sf::Texture;

@@ -28,9 +28,9 @@ public:
 
 public:
 
-	Weapon(uint8_t attack, uint8_t cost, uint8_t range = 1, bool hidden = false);
+	Weapon(uint8_t attack = 1, uint8_t cost = 1, uint8_t range = 1, bool hidden = false);
 
-	void update(const float& dt, const sf::Vector2<float>& target);
+	void update(const sf::Vector2<float>& target, const float& dt);
 	void render(sf::RenderWindow& window);
 
     inline uint8_t getAttack() const { return attack; }; 

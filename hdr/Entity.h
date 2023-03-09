@@ -13,8 +13,6 @@ public:
 	virtual ~Entity() = default;
 
 	inline virtual void render(sf::RenderWindow& window) { window.draw(sprite); };
-
-
 	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 	
 	inline sf::Vector2<float> getPos() const { return sprite.getPosition(); };
@@ -27,7 +25,7 @@ public:
 
 	inline sf::Sprite& getSprite() { return sprite; };
 
-	virtual bool isSolid() const = 0;
+	virtual bool isSolid() const = 0; 
 	
 	void serialize(Archive& fs) override 
 	{ 

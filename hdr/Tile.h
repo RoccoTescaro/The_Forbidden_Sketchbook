@@ -1,21 +1,18 @@
 #pragma once
-
 #include "Entity.h"
 
 class Tile : public Entity
 {
 public:
-
     void serialize(Archive& fs) override { Entity::serialize(fs); };
-
 };
 
-class Wall : public Tile{
-
+class Wall : public Tile
+{
 public:
     enum Type
     {
-        RL,
+        RL, 
         UD,
         RU,
         LU,
@@ -25,7 +22,6 @@ public:
     };
 
     Wall(uint8_t type);
-    Wall() : Wall(RL) {};
 
     void setTexture(uint8_t newType) ;
 
@@ -38,14 +34,14 @@ public:
         setTexture(type);
     }
 
-    static Serializable* create() { return new Wall; };
+    static Serializable* create() { return new Wall{ RL }; };
 private:
     static Register registration;
     uint8_t type = 0;
 };
 
-class Hole : public Tile{
-
+class Hole : public Tile
+{
 public:
     Hole();
 

@@ -26,8 +26,8 @@ public:
 
 private:
 	sf::View view;
-	const float viewZoomSpeed = 0.02f;
-	float viewMovementSpeed = 0.02f; //movement speed changes with view dim.
+	const float viewZoomSpeed = Config::viewZoomSpeed;
+	float viewMovementSpeed = Config::viewMovementSpeed; //movement speed not const couse changes accordingly with view dim.
 
 	std::weak_ptr<GameCharacter> target;
 	bool locked = false;

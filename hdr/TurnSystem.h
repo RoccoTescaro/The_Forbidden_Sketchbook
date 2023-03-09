@@ -1,14 +1,12 @@
 #pragma once
-
 #include <memory>
 #include "GameCharacter.h"
 #include "Map.h"
 #include "Utils.h"
 
-
-
 class TurnSystem : public Serializable
 {
+private:
     struct Action 
     {
         enum Type
@@ -20,44 +18,37 @@ class TurnSystem : public Serializable
         sf::Vector2<float> target;
     };
 
-private:
-
-    struct PriorityCompare
+    struct Compare
     {
         bool operator()(const std::weak_ptr<GameCharacter>& p1, const std::weak_ptr<GameCharacter>& p2) const
         {
-            return ((p1.expired() || p2.expired()) || p1.lock().get()->getPriority() <= p2.lock().get()->getPriority());
+            //the gameCharacters in the queue might be expired due to death, so we need to check for that even to use .top() function
+            return ((p1.expired() || p2.expired()) || p1.lock().get()->getPriority() <= p2.lock().get()->getPriority()); 
         }
     };
 
     using ActionQueue = std::queue<Action>;
-    using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, PriorityCompare>;
+    using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, Compare>;
 public:
-
     void init(std::shared_ptr<Map> map);
   
-    std::weak_ptr<GameCharacter> getActor();
-    
-    bool isPlayerTurn();
-    
-    void newRound();
+    void update(const float &dt); //update actor accordingly to actionQueue
+    void turnBuild(sf::Vector2<float> target); //update actionQueue accordingly to input
 
-
-    void turnBuild(sf::Vector2<float> target);
-
-    void update(const float &dt);
-
-    inline bool isActionQueueEmpty(){   return actionQueue.empty(); };
-
-    void serialize(Archive& arc);
+    inline std::weak_ptr<GameCharacter> getActor() { return actor; };
+    inline bool isPlayerTurn() const { return turnQueue.empty(); };  //Player has priority 0 so it will allways be the last one in the queue (no need for dynamic_cast)
+       
+    void serialize(Archive& arc); //#TODO fix
 private:
+    void newRound(); 
+    void newTurn();
+    
     static Serializable* create() { return new TurnSystem; };
     static Register registration;
 
     std::weak_ptr<Map> map;
 
     TurnQueue turnQueue;
-    std::weak_ptr<GameCharacter> actor;
-
     ActionQueue actionQueue;
+    std::weak_ptr<GameCharacter> actor;
 };

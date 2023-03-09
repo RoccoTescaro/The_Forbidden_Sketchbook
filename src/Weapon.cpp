@@ -7,12 +7,12 @@ Weapon::Weapon(uint8_t attack, uint8_t cost, uint8_t range, bool hidden)
 	//TODO load sprite
 }
 
-void Weapon::update(const float& dt, const sf::Vector2<float>& target)
+void Weapon::update(const sf::Vector2<float>& target, const float& dt)
 {
 	if (bullet.get()) 
 	{
 		bullet->update(dt);
-		if (bullet->getTargetDistance() < 5.f)
+		if (bullet->getTargetDistance() < Config::epsDistance)
 			bullet.reset();
 		return;
 	}

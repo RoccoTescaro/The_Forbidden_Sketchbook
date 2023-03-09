@@ -22,7 +22,7 @@ public:
 	{
 		if (!targetValue) return; //handled died
 
-		value += transitionSpeed * dt * (*targetValue - value);
+		value += transitionSpeed * dt * (*targetValue - value); 
 		
 		shader.setUniform("value", value/(targetMaxValue));
 		text.setString(std::to_string(static_cast<Type>(round(value))));
@@ -30,7 +30,7 @@ public:
 	
 	void render(sf::RenderWindow& window) 
 	{
-		shader.setUniform("windowHeight", window.getView().getSize().y); 
+		shader.setUniform("windowHeight", window.getView().getSize().y); //fix the bar height to the window height
 		window.draw(sprite, &shader);
 		//fix text pos according to number of digits
 		text.setPosition(sprite.getPosition().x + relativeTextCenteredPos.x - static_cast<int>(text.getGlobalBounds().width * 0.5f),  //cast to int fix the text position to an int value preventing antialiasing blur effect

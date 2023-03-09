@@ -26,7 +26,7 @@ Editor::Editor()
 	//Archive arc(Config::editorMapPath, Archive::Load);
 	//arc >> *map;
 
-	map->append({ 0,0 }, new Player);
+	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
 	
 	entitiesFactories.emplace_back(Wall::create);
 	entitiesFactories.emplace_back(Hole::create);
@@ -35,7 +35,7 @@ Editor::Editor()
 	entitiesFactories.emplace_back(Bat::create);
 	entitiesFactories.emplace_back(Ranged::create);
 
-	placeHolderBackgroundTexture.loadFromFile(Config::placeHolderTexturePath);
+	placeHolderBackgroundTexture.loadFromFile(Config::placeHolderTexturePath); //TODO fix magic numbers
 	placeHolderBackground.setTexture(placeHolderBackgroundTexture);
 	placeHolderBackground.setOrigin(placeHolderBackgroundTexture.getSize().x*0.5f, placeHolderBackgroundTexture.getSize().y*0.5f);
 	placeHolderBackground.setScale(1.5f, 1.5f);
@@ -59,7 +59,7 @@ void Editor::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::setState(3);
+		Application::setState(3); //Pause State
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
@@ -102,15 +102,17 @@ void Editor::update()
 	}
 
 	//CREATION
-	if (input.isKeyDown(Input::MouseL) && !map->get<Entity>(mousePos).get())
+	if (input.isKeyDown(Input::MouseL))
 	{
-		if (dynamic_cast<Wall*>(placeHolderEntity.get()) && !map->get<Wall>(mousePos).get()) 
+		bool thereIsNoWall = !map->get<Wall>(mousePos).get();
+		LOG("there is no wall : {1}", thereIsNoWall);
+		if (dynamic_cast<Wall*>(placeHolderEntity.get()) && thereIsNoWall) 
 		{
 			bool canBuild = true;
 			sf::Vector2<int> adj[5] = { {0,-1},{1,0},{0,1},{-1,0},{0,0} };
 			for (auto i = 0; i < 5; i++)
 			{
-				if (!map->get<Wall>(mousePos + adj[i]).get()) continue;
+				if (!map->get<Wall>(mousePos + adj[i]).get() && i != 4) continue;
 				uint8_t nWall = 0;
 				
 				for (auto j = 0; j < 4; j++) 
@@ -163,7 +165,6 @@ void Editor::save()
 {
 	TurnSystem turnSystem;
 	turnSystem.init(map);
-	turnSystem.getActor();
 	Archive arc(Config::editorMapPath, Archive::Save);
 	arc << *map << turnSystem;
 }

@@ -9,6 +9,9 @@
 #include <map>
 #include <unordered_map>
 
+//The code is higly ispired from a conference of Cris Ryan in CppNow 2022 (https://youtu.be/aWPI7vDOAK8)
+//which goes trought the implementation of a binary serialization system 
+//I've added some features and made some changes, like changed serialization from binary to textual for easier debugging
 
 template<class Type> constexpr bool is_Pod = std::is_trivial<Type>::value && std::is_standard_layout<Type>::value;
 template<class Type> constexpr bool is_Serializable = std::is_base_of<Serializable, Type>::value;
@@ -21,7 +24,7 @@ public:
 
 	enum Mode
 	{
-		Save = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc,
+		Save = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc, //trunc is used to overwrite the file
 		Load = std::ios_base::binary | std::ios_base::in,
 	};
 
@@ -63,16 +66,13 @@ private:
 	template<typename Type> if_Serializable<Type> save(Type& obj);
 	template<typename Type> if_Serializable<Type> load(Type& obj);
 
-	template<typename Type, size_t size> void save(Type(&array)[size]);
-	template<typename Type, size_t size> void load(Type(&array)[size]);
-
 	template<typename Type> if_Pod<Type> save(Type*& ptr);
 	template<typename Type> if_Pod<Type> load(Type*& ptr);
 	template<typename Type> if_Serializable<Type> save(Type*& ptr);
 	template<typename Type> if_Serializable<Type> load(Type*& ptr);
 
 	//definition of a series of template function for some types of class without a serializable function
-	//not derivable from Serializable (we could actually use the Adapter pattern but 
+	//not derivable from Serializable (we could actually use the Adapter Pattern but 
 	//would be too inefficent in terms of lines of code). The copiler choose the best fitting overloaded function
 	//by parameter comparison, if noone of this is fitting it uses the reference one and let the object
 	//to define of to serialize itself.
@@ -91,10 +91,7 @@ private:
 
 	template<typename Type> void save(std::list<Type>& list);
 	template<typename Type> void load(std::list<Type>& list);
-
-	template<typename Type, size_t size> void save(std::array<Type, size>& array);
-	template<typename Type, size_t size> void load(std::array<Type, size>& array);
-
+	
 	template<typename Key, typename Value> void save(std::map<Key, Value>& map);
 	template<typename Key, typename Value> void load(std::map<Key, Value>& map);	
 	
@@ -153,7 +150,7 @@ private:
 		string = toParse;
 	}
 
-	inline void tab()
+	inline void tab() //beutify loader file
 	{
 		for (auto i = 0; i < nTab; i++)
 			file << "\t";
@@ -245,37 +242,6 @@ if_Serializable<Type> Archive::load(Type& obj)
 
 	obj.serialize(*this);
 }
-
-/* TODO fix and test 
-template<typename Type, size_t size>
-void Archive::save(Type(&array)[size])
-{
-	//there is no real need to save the size or neither the type 
-	//since in the corresponding load function will receive it as imput anyways
-	//but improve error handling further more
-	tab();
-	file << "array of " << typeid(Type).name() << " -" << std::endl;
-	save(size);
-	nTab++;
-	for (auto& elm : array)
-		save(elm);
-	nTab--;
-}
-
-template<typename Type, size_t size>
-void Archive::load(Type(&array)[size])
-{
-	//remove info
-	std::string info;
-	std::getline(file, info);
-
-	size_t savedSize;
-	load(savedSize);
-	ASSERT(savedSize == size, "trying to load an array with wrong size");
-	for (auto& elm : array)
-		load(elm);
-}
-*/
 
 template<typename Type>
 if_Pod<Type> Archive::save(Type*& ptr)
@@ -501,32 +467,7 @@ void Archive::load(std::list<Type>& list)
 			list.push_back(type);
 	}
 }
-/*
-template<typename Type, size_t size>
-void Archive::save(std::array<Type, size>& array) //is not allowed with Type abstract or neither poiter to abstract (TODO fix me)
-{
-	tab();
-	file << "array of " << typeid(Type).name() << " -" << std::endl;
-	nTab++;
-	save(size); //not really needed
-	for (Type& item : array)
-		save(item);
-	nTab--;
-}
 
-template<typename Type, size_t size>
-void Archive::load(std::array<Type, size>& array)
-{
-	std::string arrayIntro;
-	std::getline(file, arrayIntro);
-
-	size_t savedSize;
-	load(savedSize);
-	ASSERT(savedSize == size, "trying to load an array with wrong size");
-	for (Type& item : array)
-		load(item);
-}
-*/
 template<typename Key, typename Value>
 void Archive::save(std::map<Key, Value>& map)
 {

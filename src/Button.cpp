@@ -62,12 +62,8 @@ void Button::update(const Input& input)
 {
     if (!active) return;
 
-    sprite.setColor(sf::Color::Black);
-
     if (isMouseOver(input))
     {
-        sprite.setColor(sf::Color::White);
-
         if (onMouseOver)
             onMouseOver();
 

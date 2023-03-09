@@ -46,7 +46,8 @@ Map& Map::append(const sf::Vector2<int>& pos, Entity* entity)
 		tiles[pos] = std::shared_ptr<Tile>(tile);
 	else if (gameCharacter)
 	{
-		if (auto player = dynamic_cast<Player*>(entity)) playerPos = pos;
+		auto player = dynamic_cast<Player*>(entity);
+		if (player) playerPos = pos;
 		gameCharacters[pos] = std::shared_ptr<GameCharacter>(gameCharacter);
 	}
 	else
@@ -70,7 +71,7 @@ bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
 	return get<Tile>(pos).get() && (get<Tile>(pos)->isSolid() || solid);
 }
 
-void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end) //#TODO test
+void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end) 
 {
 	auto gameCharacter = gameCharacters.extract(start);
 	if (gameCharacter) gameCharacters[end] = gameCharacter.mapped();
@@ -91,7 +92,7 @@ sf::Vector2<int> Map::posFloatToInt(const sf::Vector2<float>&pos) const
 
 void Map::serialize(Archive& fs)
 {
-	//can't easily serialize the tiles and gamecharacters maps becoude of compare function
+	//can't easily serialize the tiles and gamecharacters maps becouse of compare function
 	//but we can save each entity one by one
 	if (fs.getMode() == Archive::Save) 
 	{

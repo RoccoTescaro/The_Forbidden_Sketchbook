@@ -14,7 +14,7 @@ class Map : public Serializable
 	{
 		bool operator() (const sf::Vector2<int>& pos1, const sf::Vector2<int>& pos2) const
 		{
-			return (pos1.y < pos2.y||(pos1.y == pos2.y && pos1.x <pos2.x ));
+			return (pos1.y < pos2.y||(pos1.y == pos2.y && pos1.x > pos2.x ));
 		}
 	};
 
@@ -25,7 +25,7 @@ public:
 	void render(sf::RenderWindow& window);
 	
 	template<class Type>
-	std::shared_ptr<Type> get(const sf::Vector2<int>& pos)
+	std::shared_ptr<Type> get(const sf::Vector2<int>& pos) //doesn't work for get<Entity>
 	{
 		if constexpr (std::is_base_of<Tile, Type>::value || std::is_same<Tile, Type>::value)
 			if(tiles.count(pos)) return std::static_pointer_cast<Type>(tiles.at(pos));
@@ -42,7 +42,7 @@ public:
 		if(gameCharacters.count(playerPos) && dynamic_cast<Player*>(gameCharacters[playerPos].get()))
 			return std::static_pointer_cast<Player>(gameCharacters.at(playerPos));
 		
-		gameCharacters[playerPos] = std::shared_ptr<GameCharacter>(new Player);
+		gameCharacters[playerPos] = std::shared_ptr<GameCharacter>(new Player{50,15,190,190,190});
 		return std::static_pointer_cast<Player>(gameCharacters.at(playerPos));
 	}
 	
@@ -53,9 +53,9 @@ public:
 	inline const Tiles& getTiles() const { return tiles; };
 	inline const GameCharacters& getGameCharacters() const { return gameCharacters; };
 	
-	void move(const sf::Vector2<int>& start, const sf::Vector2<int>& end);
+	void move(const sf::Vector2<int>& start, const sf::Vector2<int>& end); //can move only gameCharacters
 
-	bool isOccupied(const sf::Vector2<int>& pos, bool solid = false);
+	bool isOccupied(const sf::Vector2<int>& pos, bool solid = false); //check if tile is solid or occupied by a gameCharacter (for pathfinding)
 
 	inline const sf::Vector2<int>& getCellDim() const { return cellDim; };
 

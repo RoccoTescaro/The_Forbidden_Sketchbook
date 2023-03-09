@@ -31,7 +31,6 @@ private:
 	//dealocating an object on the stack when still used.
 	std::shared_ptr<Map> map; 
 	TurnSystem turnSystem;
-	std::weak_ptr<GameCharacter> actor;
 	Camera cam;
 	Hud hud;
 };

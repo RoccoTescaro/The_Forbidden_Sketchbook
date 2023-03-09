@@ -22,13 +22,8 @@ Game::Game()
 	turnSystem.init(map);
 	//Archive arc(Config::gameMapPath, Archive::Load);
 	//arc >> *map >> turnSystem;
-	map->append({ 0,0 }, new Player);
+	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
 	
-	actor = turnSystem.getActor(); //we need to initialize the actor to update him
-
-	cam.lock(true);
-	cam.setTarget(actor.lock()); 
-
 	hud.setView(cam.getView());
 	hud.setPlayer(map->get<Player>());
 }
@@ -58,6 +53,9 @@ void Game::update()
 	if (input.isKeyPressed(Input::Space))
 		cam.lock();
 
+	if(cam.isLocked())
+		cam.setTarget(turnSystem.getActor().lock());
+
 	if (input.isKeyReleased(Input::MouseR) && map->get<GameCharacter>(mousePos).get())
 		cam.setTarget(map->get<GameCharacter>(mousePos));
 
@@ -75,21 +73,14 @@ void Game::update()
 	backgroundShader.setUniform("viewDim", sf::Glsl::Vec2(bgSize));
 
 	//UPDATE ACTOR
-
-    auto actorShr = actor.lock();
-
-	if(actorShr->getEnergy()==0 && turnSystem.isActionQueueEmpty())//turn ended
-        actor=turnSystem.getActor();
-
-    if(!turnSystem.isPlayerTurn()){
-		turnSystem.turnBuild(map->get<Player>()->getPos());}
-		
-    else if(input.isKeyReleased(Input::MouseL)){
-			if(mousePos!=map->posFloatToInt(map->get<Player>()->getPos()))
-            	turnSystem.turnBuild(map->posIntToFloat(mousePos));
-			else
-				map->get<Player>()->setEnergy(0);
-			}
+    if(!turnSystem.isPlayerTurn())
+		turnSystem.turnBuild(map->get<Player>()->getPos());
+    else if(input.isKeyReleased(Input::MouseL))
+	{
+		if(mousePos != map->posFloatToInt(map->get<Player>()->getPos()))
+            turnSystem.turnBuild(map->posIntToFloat(mousePos));
+		else map->get<Player>()->setEnergy(0);
+	}
     
     turnSystem.update(dt);
 
@@ -117,10 +108,8 @@ void Game::load()
 	Archive arc(Config::gameMapPath, Archive::Load);
 	arc >> *map >> turnSystem;
 
-	actor = turnSystem.getActor(); //we need to initialize the actor to update him
-
 	cam.lock(true);
-	cam.setTarget(actor.lock());
+	cam.setCenter({0,0});
 
 	sf::Vector2<float> size = { (float)window.getSize().x,(float)window.getSize().y };
 	hud.setView(sf::View{ size*0.5f,size });

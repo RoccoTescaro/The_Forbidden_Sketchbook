@@ -39,8 +39,8 @@ void Hud::setPlayer(const std::shared_ptr<Player>& player)
 
 void Hud::update(const float& dt)
 {
-	//auto shrPlayer = player.lock();
-	//if (!shrPlayer) return;
+	auto shrPlayer = player.lock();
+	if (!shrPlayer) return;
 
 	filter.setTargetColor(player.lock()->getFilterColor());
 	filter.update(dt);
@@ -57,8 +57,8 @@ void Hud::render(sf::RenderWindow& window)
 
 	filter.render(window);
 	
-	//auto shrPlayer = player.lock();
-	//if (!shrPlayer) return;
+	auto shrPlayer = player.lock();
+	if (!shrPlayer) return;
 
 	playerHealth.render(window);
 	playerEnergy.render(window);

@@ -20,7 +20,7 @@ private:
 	sf::View gui;
 	Filter filter;
 	std::weak_ptr<Player> player;
-	Bar<uint8_t> playerHealth;
-	Bar<uint8_t> playerEnergy;
+	Bar<int8_t> playerHealth;
+	Bar<int8_t> playerEnergy;
 	DialogueManager dialogueManager;
 };
