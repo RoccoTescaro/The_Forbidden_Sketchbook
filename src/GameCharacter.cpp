@@ -3,7 +3,6 @@
 
 //GAMECHARACTER
 
-//todo remove subEnergy
 void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &dt)
 {
 	weapon.update(dt,target);
@@ -28,7 +27,7 @@ void GameCharacter::move(Map &map, sf::Vector2<float> target, const float &dt)
 		energy -= getMovementStrategy()->getMovementCost();
         map.move(map.posFloatToInt(pos),map.posFloatToInt(target));
 	}
-	pos+={Utils::Math::normalize(direction)*dt*speed};//todo if target has negative coords it will get a wrong starting pos
+	pos+={Utils::Math::normalize(direction)*dt*speed};
 	setPos(pos);
     if(Utils::Math::distance(pos,target)<5) //TODO fix magic number
         setPos(target);
