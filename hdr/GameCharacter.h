@@ -46,15 +46,15 @@ public:
     //FUNCTIONS
     inline void turnReset(){ energy = maxEnergy; }; 
     
-    virtual void move(Map &map, sf::Vector2<float> target, const float &dt); 
-    virtual void interact(Map &map, sf::Vector2<float> target, const float &dt); 
-    
     inline void serialize(Archive& fs) 
     {
         Entity::serialize(fs);
         fs.serialize(health);
         fs.serialize(energy);
     }
+
+    virtual void move(Map &map, sf::Vector2<float> target, const float &dt); 
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override; 
 
 protected:
     const float speed = 200.f;

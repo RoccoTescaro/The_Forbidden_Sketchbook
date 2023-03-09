@@ -27,14 +27,18 @@ public:
 
     bool isSolid() const override;
 
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+
+   
     void serialize(Archive& fs) override 
     {
         Tile::serialize(fs);
         fs.serialize(type);
         setTexture(type);
     }
-
+    
     static Serializable* create() { return new Wall{ RL }; };
+
 private:
     static Register registration;
     uint8_t type = 0;
@@ -47,6 +51,8 @@ public:
 
     bool isSolid() const override;
 
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+
     static Serializable* create() { return new Hole; };
 private:
     static Register registration;
@@ -58,6 +64,8 @@ public:
     ColorPedestral();
 
     bool isSolid() const override;
+
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
 
     void serialize(Archive& fs) 
     { 

@@ -3,6 +3,10 @@
 void TurnSystem::init(std::shared_ptr<Map> map)
 {
     this->map = map;
+    while (!turnQueue.empty())
+        turnQueue.pop();
+    while (!actionQueue.empty())
+		actionQueue.pop();
 }
 
 void TurnSystem::update(const float& dt)
@@ -139,3 +143,4 @@ void TurnSystem::serialize(Archive& fs)
         //LOG("onLoad turnQueue size: {1}", size);
     }
 }
+

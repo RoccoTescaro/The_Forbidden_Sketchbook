@@ -23,7 +23,9 @@ Game::Game()
 	//Archive arc(Config::gameMapPath, Archive::Load);
 	//arc >> *map >> turnSystem;
 	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
+	map->append({ 5,3 }, new Melee{ 30, 5 }); //#TODO remove
 	
+
 	hud.setView(cam.getView());
 	hud.setPlayer(map->get<Player>());
 }
