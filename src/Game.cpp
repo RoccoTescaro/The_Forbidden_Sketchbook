@@ -1,4 +1,5 @@
 #include "../hdr/Game.h"
+#include "../hdr/Player.h"
 
 Game::Game()
 	: cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)

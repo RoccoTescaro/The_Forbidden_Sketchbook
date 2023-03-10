@@ -8,7 +8,7 @@
 #include <cmath>
 
 
-class GameCharacter : public Entity
+class GameCharacter : public Entity //TODO make abstract
 {
 public:
     GameCharacter(uint8_t maxHealth, int8_t health, uint8_t maxEnergy, int8_t energy, uint8_t priority) 
@@ -71,83 +71,4 @@ protected:
 };
 
 
-class Player : public GameCharacter
-{
-public:
-    Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
 
-    virtual ~Player() {};
-
-    inline const sf::Color& getFilterColor() const { return filterColor; };
-    inline void setFilterColor(const sf::Color &color) {filterColor = color;};
-
-    void serialize(Archive& fs) override 
-    {
-        GameCharacter::serialize(fs);
-        fs.serialize(filterColor);
-        uint8_t attack = weapon->getAttack();
-        uint8_t cost = weapon->getCost();
-        uint8_t range = weapon->getRange();
-        bool hidden = weapon->isHidden();
-        fs.serialize(attack);
-        fs.serialize(cost);
-        fs.serialize(range);
-        fs.serialize(hidden);
-        weapon.reset(new Weapon{attack, cost, range, hidden});
-    }
-
-    static Serializable* create() { return new Player{50,15,190,190,190}; };
-private:
-    static Register registration;
-    sf::Color filterColor; 
-};
-
-
-class Melee : public GameCharacter
-{
-public:
-    Melee(uint8_t health, uint8_t energy);
-
-    virtual ~Melee() {};
-
-    static Serializable* create() { return new Melee{30,5}; };
-private:
-    static Register registration;
-};
-
-
-class Bat : public GameCharacter
-{
-public:
-    Bat(uint8_t health, uint8_t energy);
-
-    virtual ~Bat() {};
-
-    inline bool isSolid() const override { return false; };
-
-    static Serializable* create() { return new Bat{10,10}; };
-private:
-    static Register registration;
-};
-
-
-class Ranged : public GameCharacter
-{
-public:
-    Ranged(uint8_t health, uint8_t energy);
-
-    virtual ~Ranged() {};
-
-    void serialize(Archive& fs) override 
-    {
-        GameCharacter::serialize(fs);
-        fs.serialize(animationTime);
-    }
-
-    static Serializable* create() { return new Ranged{5,15}; };
-private:
-    static Register registration;
-
-    const float animationDuration = 0.f;
-    float animationTime = 0.f;
-};

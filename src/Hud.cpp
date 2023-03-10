@@ -1,4 +1,5 @@
 #include "../hdr/Hud.h"
+#include "../hdr/Player.h"
 
 Hud::Hud()
 {

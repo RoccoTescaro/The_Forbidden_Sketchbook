@@ -2,6 +2,13 @@
 #include "../hdr/Config.h"
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
+#include "../hdr/Player.h"
+#include "../hdr/Ranged.h"
+#include "../hdr/Melee.h"
+#include "../hdr/Bat.h"
+#include "../hdr/Wall.h"
+#include "../hdr/Hole.h"
+#include "../hdr/ColorPedestral.h"
 #include "../hdr/TurnSystem.h"
 
 Editor::Editor() 

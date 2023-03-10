@@ -1,4 +1,5 @@
 #include "../hdr/TurnSystem.h"
+#include "../hdr/Player.h"
 
 void TurnSystem::init(std::shared_ptr<Map> map)
 {

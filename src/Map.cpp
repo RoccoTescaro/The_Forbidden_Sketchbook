@@ -2,6 +2,7 @@
 #include "../hdr/Entity.h"
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
+#include "../hdr/Player.h"
 
 #define MAX_AREA_PROPERLY_RENDERED 1500 //50*30
 #define RENDER_OVERSHOOT 3 
