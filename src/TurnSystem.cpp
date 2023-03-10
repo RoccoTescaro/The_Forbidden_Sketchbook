@@ -52,6 +52,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
 {
     if (!actionQueue.empty()) return;
 
+
     //ACTOR
     auto actorShr = actor.lock();
     uint8_t range = actorShr->getWeapon().getRange();
@@ -67,6 +68,9 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     int targetHp = 0; 
     if (targetEntity)
         targetHp = targetEntity->getHealth();
+
+    //player turn will be skipped if he clicks on himself
+    if(targetPos == mapShr->posFloatToInt(actorShr->getPos())){newTurn(); return;} 
 
     //MOVEMENT
     bool inRange = (Utils::Math::distance(mapShr->posFloatToInt(actorShr->getPos()), targetPos) <= range && targetEntity);

@@ -4,7 +4,6 @@
 Weapon::Weapon(uint8_t attack, uint8_t cost, uint8_t range, bool hidden)
 	: attack(attack), cost(cost), range(range), hidden(hidden)
 {
-	//TODO load sprite
 	static sf::Texture* meleeTexture;
 	static sf::Texture* rangedTexture;
 	if (!meleeTexture||!rangedTexture)
@@ -63,7 +62,6 @@ Weapon::Bullet::Bullet(const sf::Vector2<float>& pos, const sf::Vector2<float>& 
 	sprite.setScale(24.f / textureRect.width, 24.f / textureRect.height);
 	sprite.setOrigin(0.f, 50.f);
 	sprite.setPosition(pos);
-	//*Config::textures["bullet"]); TODO refactor config
 }
 
 void Weapon::Bullet::update(const float& dt)

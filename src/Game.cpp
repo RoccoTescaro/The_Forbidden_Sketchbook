@@ -84,8 +84,8 @@ void Game::update()
 	//UPDATE ACTOR
     if(!turnSystem.isPlayerTurn())
 		turnSystem.turnBuild(map->get<Player>()->getPos());
-    else if(input.isKeyPressed(Input::MouseL) && mousePos != map->posFloatToInt(map->get<Player>()->getPos()))
-	    turnSystem.turnBuild(map->posIntToFloat(mousePos)); //TODO add the possibility for player to pass the turn
+    else if(input.isKeyPressed(Input::MouseL))
+	    turnSystem.turnBuild(map->posIntToFloat(mousePos)); 
 		
 	turnSystem.update(dt);
 }
