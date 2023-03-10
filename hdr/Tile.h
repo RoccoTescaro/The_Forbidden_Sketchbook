@@ -25,7 +25,7 @@ public:
 
     void setTexture(uint8_t newType) ;
 
-    bool isSolid() const override;
+    inline bool isSolid() const override { return true; };
 
     void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
 
@@ -49,7 +49,7 @@ class Hole : public Tile
 public:
     Hole();
 
-    bool isSolid() const override;
+    inline bool isSolid() const override { return false; };
 
     void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
 
@@ -63,9 +63,11 @@ class ColorPedestral : public Tile
 public:
     ColorPedestral();
 
-    bool isSolid() const override;
+    void render(sf::RenderWindow &window) override;
 
-    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+    inline bool isSolid() const override { return true; };
+
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override; 
 
     void serialize(Archive& fs) 
     { 
@@ -78,4 +80,22 @@ private:
     static Register registration;
 
 	sf::Color color; 
+    const sf::Color nullColor{0,0,0,0};
+
+    sf::CircleShape colorSprite{8};
+};
+
+
+class WeaponBench : public Tile
+{
+public:
+    WeaponBench();
+
+    inline bool isSolid() const override { return true; };
+
+    void interact(Map &map, sf::Vector2<float> target, const float &dt) override; 
+
+    static Serializable* create() { return new WeaponBench; };
+private:
+    static Register registration;
 };

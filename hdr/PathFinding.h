@@ -6,7 +6,6 @@
 #include <set>
 #include <random>
 
-//todo using for long types
 
 class Map;
 
