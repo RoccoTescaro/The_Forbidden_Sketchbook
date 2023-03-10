@@ -22,8 +22,8 @@ void Map::render(sf::RenderWindow& window)
 			{
 				auto tile = get<Tile>(posFloatToInt({ i,j }));
 				auto gameCharater = get<GameCharacter>(posFloatToInt({ i,j }));
-				if (tile) tile->render(window);
-				else if (gameCharater) gameCharater->render(window);
+				if (tile.get()) tile->render(window);
+				if (gameCharater.get()) gameCharater->render(window);
 			}
 	else 
 	{

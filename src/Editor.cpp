@@ -163,10 +163,8 @@ void Editor::render()
 
 void Editor::save()
 {
-	TurnSystem turnSystem;
-	turnSystem.init(map);
 	Archive arc(Config::editorMapPath, Archive::Save);
-	arc << *map << turnSystem;
+	arc << *map;
 }
 
 void Editor::load()
