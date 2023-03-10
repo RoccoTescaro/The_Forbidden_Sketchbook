@@ -12,8 +12,9 @@ void TurnSystem::init(std::shared_ptr<Map> map)
 void TurnSystem::update(const float& dt)
 {
     auto actorShr = actor.lock();
+    if (!actorShr.get()) newTurn();
+
     auto mapShr = map.lock();
-    if (!actorShr.get() || actorShr->getEnergy() == 0 ) newTurn();
     if ( actionQueue.empty() ) return;
 
     auto action = actionQueue.front();
@@ -22,27 +23,29 @@ void TurnSystem::update(const float& dt)
     {
     case Action::Type::Move:
         actorShr->move(*mapShr, action.target, dt);
-        if (Utils::Math::distance(actorShr->getPos(), action.target) < Config::epsDistance) actionQueue.pop(); 
+        if (Utils::Math::distance(actorShr->getPos(), action.target) < Config::epsDistance)
+        {   
+            actorShr->setPos(action.target);
+            actionQueue.pop();
+            if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
+        }
         break;
     case Action::Type::Interact:
         auto targetEntity = mapShr->get<GameCharacter>(mapShr->posFloatToInt(action.target));
-        if (targetEntity)
+        if (targetEntity.get())
         {
             actorShr->getWeapon().update(action.target, dt);
             if (actorShr->getWeapon().isAnimationEnded())
             {
                 targetEntity->interact(*mapShr, actorShr->getPos(), dt);
                 actionQueue.pop();
+                if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
             }
         }
         else;
             //mapShr->get<Tile>(mapShr->posFloatToInt(action.target))->interact();
         break;
     }
-
-    if (actionQueue.empty() && !isPlayerTurn())
-        actorShr->setEnergy(0);
-
 }
 
 void TurnSystem::turnBuild(sf::Vector2<float> target)
@@ -52,7 +55,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     //ACTOR
     auto actorShr = actor.lock();
     uint8_t range = actorShr->getWeapon().getRange();
-    int energy = actorShr->getEnergy(); //casted to int to allow underflow
+    int energy = actorShr->getEnergy(); 
     uint8_t dmg = actorShr->getWeapon().getAttack();
 
     //MAP
@@ -61,7 +64,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     //TARGET
     sf::Vector2<int> targetPos = mapShr->posFloatToInt(target);
     GameCharacter* targetEntity = mapShr->get<GameCharacter>(targetPos).get();
-    int targetHp = 0; //casted to int to allow underflow
+    int targetHp = 0; 
     if (targetEntity)
         targetHp = targetEntity->getHealth();
 
@@ -74,12 +77,13 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     while (!stepQueue.empty() && energy && !inRange)
     {
         if (mapShr->get<GameCharacter>(mapShr->posFloatToInt(newPos)).get()) break; //check if there is a character in the way
-
+        
         actionQueue.emplace(Action::Type::Move, newPos);
         stepQueue.pop_front();
 
         energy -= actorShr->getMovementStrategy()->getMovementCost();
         inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos), targetPos) <= range && targetEntity); //if you can attack u must do it        
+        
         if (stepQueue.size() >= 1) newPos = stepQueue.front();
     }
 
@@ -87,8 +91,9 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     while (inRange && energy >= actorShr->getWeapon().getCost() && targetHp > 0)
     {
         energy -= actorShr->getWeapon().getCost();
-        targetHp = targetHp - dmg;
+        targetHp -= dmg;
         actionQueue.emplace(Action::Type::Interact, target);
+        if (isPlayerTurn()) break; //if it's the player's turn, he can decide how to distribute damage between targets
     }
 }
 
@@ -97,13 +102,8 @@ void TurnSystem::newRound()
     auto& gameCharacters = map.lock()->getGameCharacters();
 
     for (auto& gameCharacter : gameCharacters)
-    {
         if (Config::maxActivationDistance > Utils::Math::distance(map.lock()->get<Player>()->getPos(), gameCharacter.second->getPos()))
-        {
             turnQueue.emplace(gameCharacter.second);
-            gameCharacter.second->turnReset();
-        }
-    }
 }
 
 void TurnSystem::newTurn()
@@ -116,6 +116,7 @@ void TurnSystem::newTurn()
         newRound();
 
     actor = turnQueue.top();
+    actor.lock()->turnReset();
     turnQueue.pop();
 }
 
@@ -124,23 +125,32 @@ void TurnSystem::serialize(Archive& fs)
     if (fs.getMode() == Archive::Save)
     {
         uint32_t size = turnQueue.size();
-        size++;
         fs.serialize(size);
-        //LOG("onSave turnQueue size: {1}", size);
+        //the deserialization will regenerate the queue based on map but when newTurn will be called it will reset
+        //the energy of the actor. So we need to save the energy of the actor before in order to re-reload it
+        int8_t energy = actor.lock()->getEnergy();
+        fs.serialize(energy);
     }
     else 
     {
         while (!turnQueue.empty()) //clear the queue to load it properly
             turnQueue.pop();
+
+        while(!actionQueue.empty())
+            actionQueue.pop();
         
         uint32_t size;
         fs.serialize(size);
 
-        newRound();
+        //its important to call newRound before newTurn because it might happens that size will be 0 (player turn)
+        //this means that the while loop will never cycle, newTurn will never be called and actor never reloaded making crash
+        newRound(); 
         while (size != turnQueue.size())
-            turnQueue.pop();
+            newTurn();
 
-        //LOG("onLoad turnQueue size: {1}", size);
+        int8_t energy;
+        fs.serialize(energy);
+        actor.lock()->setEnergy(energy); 
     }
 }
 

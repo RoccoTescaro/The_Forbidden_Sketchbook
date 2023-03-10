@@ -45,7 +45,7 @@ private:
 	Application();
 	static Application app;
 
-	std::vector<std::unique_ptr<State>> states;
+	std::vector<std::unique_ptr<State>> states; //could use a map from string to state or an enum to make easier to access a specific state like getState("pause")
 	uint8_t currentStateIndex = 0;
 	uint8_t previousStateIndex = -1; //initialized with invalid state index
 

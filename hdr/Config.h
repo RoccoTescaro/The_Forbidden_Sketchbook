@@ -14,7 +14,7 @@ static std::string path(const std::string& path)
 #define PATH(string) string 
 #endif
 
-namespace Config
+namespace Config //see weapon for refactor
 {
 	const bool debugMode = true;
 	const sf::Vector2<int> windowDim{ 1290,800 };

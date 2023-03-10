@@ -38,9 +38,9 @@ public:
     inline std::weak_ptr<GameCharacter> getActor() { return actor; };
     inline bool isPlayerTurn() const { return turnQueue.empty(); };  //Player has priority 0 so it will allways be the last one in the queue (no need for dynamic_cast)
        
-    void serialize(Archive& arc); //#TODO fix
+    void serialize(Archive& arc); 
 private:
-    void newRound(); 
+    void newRound();
     void newTurn();
     
     static Serializable* create() { return new TurnSystem; };

@@ -17,8 +17,7 @@ void Weapon::update(const sf::Vector2<float>& target, const float& dt)
 		return;
 	}
 	
-	bullet = static_cast<std::unique_ptr<Bullet>>(new Bullet{target});
-
+	bullet = static_cast<std::unique_ptr<Bullet>>(new Bullet{ sprite.getPosition(), target, range*50.f }); //TODO adapt in a better way
 }
 
 void Weapon::render(sf::RenderWindow& window)
@@ -27,15 +26,15 @@ void Weapon::render(sf::RenderWindow& window)
 	if (bullet) bullet->render(window);
 }
 
-Weapon::Bullet::Bullet(const sf::Vector2<float>& target, float speed)
+Weapon::Bullet::Bullet(const sf::Vector2<float>& pos, const sf::Vector2<float>& target, float speed)
 	: target(target), speed(speed)
 {
-	//TODO load sprite
+	sprite.setPosition(pos);
+	//*Config::textures["bullet"]); TODO refactor config
 }
 
 void Weapon::Bullet::update(const float& dt)
 {
-
 	sf::Vector2<float> pos = sprite.getPosition();
 	sf::Vector2<float> dir = Utils::Math::normalize(target - pos);
 	pos += dir * speed * dt;

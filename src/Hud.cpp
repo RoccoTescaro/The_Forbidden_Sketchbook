@@ -6,7 +6,7 @@ Hud::Hud()
 	playerHealth.setPos({ 8,128 }); 
 	playerHealth.setScale(0.25f,0.25f);
 	playerHealth.setMask(Config::healthBarMaskTexturePath);
-	playerHealth.setColorMask({ 242,0,0 });
+	playerHealth.setColorMask({ 255,20,20 });
 	playerHealth.setChargingLine({55,85}, {55,310});
 	playerHealth.setFont(Config::barFontPath);
 	playerHealth.setCharacterSize(32);
