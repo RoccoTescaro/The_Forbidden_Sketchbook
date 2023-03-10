@@ -4,6 +4,8 @@
 class Tile : public Entity
 {
 public:
+    virtual ~Tile() = default;
+
     void serialize(Archive& fs) override { Entity::serialize(fs); };
 };
 
@@ -22,6 +24,8 @@ public:
     };
 
     Wall(uint8_t type);
+
+    virtual ~Wall() {};
 
     void setTexture(uint8_t newType) ;
 
@@ -48,6 +52,8 @@ class Hole : public Tile
 {
 public:
     Hole();
+    
+    virtual ~Hole() {};
 
     inline bool isSolid() const override { return false; };
 
@@ -62,6 +68,8 @@ class ColorPedestral : public Tile
 {
 public:
     ColorPedestral();
+
+    virtual ~ColorPedestral() {};
 
     void render(sf::RenderWindow &window) override;
 
@@ -90,6 +98,8 @@ class WeaponBench : public Tile
 {
 public:
     WeaponBench();
+
+    virtual ~WeaponBench() {};
 
     inline bool isSolid() const override { return true; };
 

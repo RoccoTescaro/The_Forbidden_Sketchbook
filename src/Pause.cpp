@@ -98,7 +98,7 @@ void Pause::update()
         if (backClicked)
             Application::prevState(); 
         else //menuClicked
-            Application::setState(0);
+            Application::setState(Application::Index::MENU);
     }
 }
 

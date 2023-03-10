@@ -59,7 +59,7 @@ void Editor::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::setState(3); //Pause State
+		Application::setState(Application::Index::PAUSE);
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));

@@ -110,15 +110,15 @@ void Menu::update()
         load.setClicked(false);
         editor.setClicked(false);
 
-        if (startClicked)  Application::setState(1);
+        if (startClicked)  Application::setState(Application::Index::GAME);
         else if (loadClicked)
         {
-            Game* game = dynamic_cast<Game*>(Application::getState(1));
+            Game* game = dynamic_cast<Game*>(Application::getState(Application::Index::GAME));
             ASSERT(!game);
             game->load();
-            Application::setState(1);
+            Application::setState(Application::Index::GAME);
         }
-        else if (editorClicked) Application::setState(2);
+        else if (editorClicked) Application::setState(Application::Index::EDITOR);
         else Application::getWindow().close();
     }
 }

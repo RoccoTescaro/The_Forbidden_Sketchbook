@@ -18,6 +18,8 @@ public:
         setEnergy(energy); //fix energy if greater tha maxEnergy
     };
 
+    virtual ~GameCharacter() = default;
+
     inline void render(sf::RenderWindow& window) override 
     {   
         Entity::render(window);
@@ -74,6 +76,8 @@ class Player : public GameCharacter
 public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
 
+    virtual ~Player() {};
+
     inline const sf::Color& getFilterColor() const { return filterColor; };
     inline void setFilterColor(const sf::Color &color) {filterColor = color;};
 
@@ -104,6 +108,8 @@ class Melee : public GameCharacter
 public:
     Melee(uint8_t health, uint8_t energy);
 
+    virtual ~Melee() {};
+
     static Serializable* create() { return new Melee{30,5}; };
 private:
     static Register registration;
@@ -114,6 +120,8 @@ class Bat : public GameCharacter
 {
 public:
     Bat(uint8_t health, uint8_t energy);
+
+    virtual ~Bat() {};
 
     inline bool isSolid() const override { return false; };
 
@@ -127,6 +135,8 @@ class Ranged : public GameCharacter
 {
 public:
     Ranged(uint8_t health, uint8_t energy);
+
+    virtual ~Ranged() {};
 
     void serialize(Archive& fs) override 
     {
