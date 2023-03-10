@@ -7,7 +7,7 @@ static std::string path(const std::string& path)
 	return prefix + path;
 };
 
-#define VSC 0
+#define VSC 1
 #if VSC
 #define PATH(string) path(string) 
 #else
@@ -37,6 +37,9 @@ namespace Config //see weapon for refactor
 	const std::string meleeTexturePath{ PATH("img/Melee.png") };
 	const std::string batTexturePath{ PATH("img/Bat.png") };
 	const std::string rangedTexturePath{ PATH("img/Ranged.png") };
+	const std::string meleeWeaponTexturePath{ PATH("img/MeleeWeapon.png") };
+	const std::string rangedWeaponTexturePath{ PATH("img/RangedWeapon.png") };
+	const std::string bulletTexturePath{ PATH("img/Bullet.png") };
 	const uint8_t nWallTextures = 6;
 	const std::string wallTexturePath[nWallTextures]{
 		PATH("img/Wall0.png"),

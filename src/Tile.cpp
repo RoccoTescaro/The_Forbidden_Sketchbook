@@ -67,10 +67,10 @@ ColorPedestral::ColorPedestral()
 		texture->generateMipmap();	
 	}
 	sprite.setTexture(*texture);
-	sf::Rect<int> textureRect{ 0,0,1080,1080 };
+	sf::Rect<int> textureRect{ 200,0,900,1300 };
 	sprite.setTextureRect(textureRect);
-	sprite.setScale(64.f / textureRect.width, 64.f / textureRect.height);
-	sprite.setOrigin(0.f, 405.f);
+	sprite.setScale(64.f / textureRect.width, 96.f / textureRect.height);
+	sprite.setOrigin(0.f, 867.f);
 }
 
 bool ColorPedestral::isSolid() const {
