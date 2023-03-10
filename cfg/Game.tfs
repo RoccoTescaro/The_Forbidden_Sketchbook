@@ -4,40 +4,40 @@ class Map -
 	unsigned int : 3
 	pointer to class GameCharacter -
 		unsigned int : 1
-		std::string : class Player
-		class GameCharacter -
-			std::string : class Player
-			sf::Vector2<float> -
-				float : 0
-				float : 0
-			signed char : 44
-			signed char : 9
-			sf::Color -
-				unsigned char : 190
-				unsigned char : 190
-				unsigned char : 190
-				unsigned char : 255
-	pointer to class GameCharacter -
-		unsigned int : 2
 		std::string : class Melee
 		class GameCharacter -
 			std::string : class Melee
 			sf::Vector2<float> -
 				float : 64
 				float : 32
-			signed char : 18
-			signed char : 5
+			signed char : 28
+			signed char : 1
+	pointer to class GameCharacter -
+		unsigned int : 2
+		std::string : class Player
+		class GameCharacter -
+			std::string : class Player
+			sf::Vector2<float> -
+				float : 320
+				float : 32
+			signed char : 36
+			signed char : 3
+			sf::Color -
+				unsigned char : 190
+				unsigned char : 190
+				unsigned char : 190
+				unsigned char : 255
 	pointer to class GameCharacter -
 		unsigned int : 3
 		std::string : class Bat
 		class GameCharacter -
 			std::string : class Bat
 			sf::Vector2<float> -
-				float : 960
-				float : 480
-			signed char : 5
+				float : 1024
+				float : 448
 			signed char : 10
+			signed char : 0
 class TurnSystem -
 	std::string : class TurnSystem
 	unsigned int : 0
-	signed char : 9
+	signed char : 3

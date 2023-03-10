@@ -24,7 +24,8 @@ Game::Game()
 	//arc >> *map >> turnSystem;
 	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
 	map->append({ 1,1 }, new Melee{ 30, 5 }); //#TODO remove
-	map->append({ 20,20 }, new Bat{ 5, 15 }); //#TODO remove
+	map->append({ 20,20 }, new Bat{ 10, 10 }); //#TODO remove
+	map->append({ 5,5 }, new Ranged{ 5, 15 }); //#TODO remove
 
 	cam.lock(true);
 
@@ -46,7 +47,11 @@ void Game::update()
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
+	mouseIndicator.setOutlineColor(sf::Color{ 255,255,255,255 });
 	mouseIndicator.setPosition(map->posIntToFloat(mousePos));
+	if(map->get<GameCharacter>(mousePos).get())
+		mouseIndicator.setOutlineColor(sf::Color{ 255,0,0,255 });
+
 	mousePosText.setString(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	mousePosText.setPosition(mouseIndicator.getPosition() + 
 		sf::Vector2<float>{ map->getCellDim().x - mousePosText.getGlobalBounds().width, 

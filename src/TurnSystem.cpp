@@ -84,6 +84,8 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
         energy -= actorShr->getMovementStrategy()->getMovementCost();
         inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos), targetPos) <= range && targetEntity); //if you can attack u must do it        
         
+        LOG("Entity: {4}, move to target: {{1},{2}}, remaing energy {3}", newPos.x, newPos.y, energy, typeid(*actorShr.get()).name());
+
         if (stepQueue.size() >= 1) newPos = stepQueue.front();
     }
 
@@ -93,6 +95,9 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
         energy -= actorShr->getWeapon().getCost();
         targetHp -= dmg;
         actionQueue.emplace(Action::Type::Interact, target);
+
+        LOG("Entity: {4}, interact with target: {{1},{2}}, remaing energy {3}", newPos.x, newPos.y, energy, typeid(*actorShr.get()).name());
+
         if (isPlayerTurn()) break; //if it's the player's turn, he can decide how to distribute damage between targets
     }
 }

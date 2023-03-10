@@ -3,11 +3,8 @@
 
 //PATHALGORITHM
 
-bool PathAlgorithm::isValid(Map &map, const sf::Vector2<int> pos, bool flying, bool ignoreGC)
+bool PathAlgorithm::isValid(Map &map, const sf::Vector2<int> pos, bool flying)
 {
-    if(ignoreGC)
-        return map.isOccupied(pos, flying);
-    else
         return !(map.get<GameCharacter>(pos)||map.isOccupied(pos,flying));
 }
 
@@ -114,25 +111,25 @@ std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fSt
 std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying) 
 {
 
-    sf::Vector2<int> start=map.posFloatToInt(fStart);
-    sf::Vector2<int> target= map.posFloatToInt(fTarget);
+    sf::Vector2<int> start = map.posFloatToInt(fStart);
+    sf::Vector2<int> target = map.posFloatToInt(fTarget);
 
     std::list<sf::Vector2<int>> openList;
     std::unordered_map<sf::Vector2<int>, int, Hash> nodeInfo;
     std::vector<sf::Vector2<int>> possibleTargets;
 
-    openList.push_back({0, 0});
+    openList.push_back({0, 0}); //nodes are calculated relativley to the target position
     nodeInfo[{0, 0}] = 0;
-    int targetDistance = -1; 
+    int targetDistance = -1; //most far away distance from target
     const int maxDistance = 3; 
 
     while (!openList.empty())
     {   
 
-        sf::Vector2i p = *openList.begin();
+        sf::Vector2<int> p = *openList.begin();
         openList.erase(openList.begin());
 
-        if (isValid(map, sf::Vector2<int>{(int)target.x + p.x,(int) target.y + p.y}, true)&&nodeInfo[{p.x, p.y}] >= targetDistance)
+        if (isValid(map, sf::Vector2<int>{(int)target.x + p.x,(int) target.y + p.y}, true) && nodeInfo[{p.x, p.y}] >= targetDistance)
         {
            
             if (nodeInfo[{p.x, p.y}] > targetDistance)
@@ -145,12 +142,12 @@ std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<f
 
         if (nodeInfo[{p.x, p.y}] < maxDistance)
         {
-            std::vector<sf::Vector2i> possibleSteps = {{p.x - 1, p.y - 1}, {p.x + 1, p.y + 1}, {p.x + 1, p.y - 1}, {p.x - 1, p.y + 1}};
+            std::vector<sf::Vector2<int>> possibleSteps = { {p.x - 1, p.y - 1}, {p.x + 1, p.y + 1}, {p.x + 1, p.y - 1}, {p.x - 1, p.y + 1} };
             for (auto k : possibleSteps)
             {
-                if (nodeInfo.find(k)==nodeInfo.end())
+                if (nodeInfo.find(k) == nodeInfo.end())
                 {   
-                    if (isValid(map, sf::Vector2<int>{(int)target.x + k.x,(int) target.y + k.y}, false, true))
+                    if (!map.isOccupied(sf::Vector2<int>{(int)target.x + k.x, (int)target.y + k.y}, false))
                         openList.push_back(k);
                     nodeInfo[k] = nodeInfo[{p.x, p.y}] + 1; 
                 }
@@ -161,6 +158,5 @@ std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<f
     sf::Vector2<int> &d = possibleTargets.at(rand() % possibleTargets.size());
     destination.push_front(fTarget);
     destination.emplace_front(d.x*map.getCellDim().x,d.y*map.getCellDim().y);
-    destination.push_front(fStart);
     return destination;
 }

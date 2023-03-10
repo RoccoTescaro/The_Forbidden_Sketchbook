@@ -30,7 +30,7 @@ protected:
         }
     };
 
-    bool isValid(Map &map, const sf::Vector2<int> pos, bool flying, bool ignoreGC=false);
+    bool isValid(Map &map, const sf::Vector2<int> pos, bool flying);
 
     const uint8_t movementCost = 1; 
 };
