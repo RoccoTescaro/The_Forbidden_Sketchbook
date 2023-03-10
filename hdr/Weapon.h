@@ -28,7 +28,7 @@ public:
 
 public:
 
-	Weapon(uint8_t attack = 1, uint8_t cost = 1, uint8_t range = 1, bool hidden = false);
+	Weapon(uint8_t attack = 1, uint8_t cost = 1, uint8_t range = 1, bool hidden = true);
 
 	void update(const sf::Vector2<float>& target, const float& dt);
 	void render(sf::RenderWindow& window);
