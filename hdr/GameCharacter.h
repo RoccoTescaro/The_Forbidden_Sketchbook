@@ -31,9 +31,10 @@ public:
     inline const int8_t& getHealth() const { return health; };
     inline const int8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };
-    inline  std::unique_ptr<PathAlgorithm>& getMovementStrategy() { return movementStrategy; };
+    inline std::unique_ptr<PathAlgorithm>& getMovementStrategy() { return movementStrategy; };
     inline Weapon& getWeapon() { return *weapon; };
 
+    inline void setWeapon(const Weapon &newWeapon){ weapon.reset(new Weapon(newWeapon));};
     inline void setPos(const sf::Vector2<float>& pos) override  
     {   
         Entity::setPos(pos);
@@ -74,7 +75,8 @@ public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
-  
+    inline void setFilterColor(const sf::Color &color) {filterColor = color;};
+
     void serialize(Archive& fs) override 
     {
         GameCharacter::serialize(fs);

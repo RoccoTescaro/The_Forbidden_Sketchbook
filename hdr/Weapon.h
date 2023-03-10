@@ -30,14 +30,18 @@ public:
 
 	Weapon(uint8_t attack = 1, uint8_t cost = 1, uint8_t range = 1, bool hidden = true);
 
+	Weapon(const Weapon &weapon): Weapon(weapon.getAttack(), weapon.getCost(), weapon.getRange(), weapon.isHidden()){};
+
 	void update(const sf::Vector2<float>& target, const float& dt);
 	void render(sf::RenderWindow& window);
 
     inline uint8_t getAttack() const { return attack; }; 
     inline uint8_t getCost() const { return cost; }; 
     inline uint8_t getRange() const { return range; }; 
+    inline bool isHidden() const { return hidden; }; 
 
-	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
+
+	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos+sf::Vector2<float>{28,-32}); };
 
 	inline bool isAnimationEnded() { return !bullet.get();}; 
 private:

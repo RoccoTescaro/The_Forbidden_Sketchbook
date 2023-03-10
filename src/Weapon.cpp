@@ -21,8 +21,7 @@ Weapon::Weapon(uint8_t attack, uint8_t cost, uint8_t range, bool hidden)
 	sf::Rect<int> textureRect{ 0,0,420,420 };
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(32.f / textureRect.width, 32.f / textureRect.height);
-	sprite.setOrigin(-400.f, 600.f);
-
+	sprite.setOrigin(0.f, 210.f);
 
 }
 

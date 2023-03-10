@@ -42,8 +42,11 @@ void TurnSystem::update(const float& dt)
                 if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
             }
         }
-        else;
-            //mapShr->get<Tile>(mapShr->posFloatToInt(action.target))->interact();
+        else
+        {
+            mapShr->get<Tile>(mapShr->posFloatToInt(action.target))->interact(*mapShr, action.target, dt);
+            actionQueue.pop();
+        }
         break;
     }
 }
@@ -64,16 +67,17 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
 
     //TARGET
     sf::Vector2<int> targetPos = mapShr->posFloatToInt(target);
-    GameCharacter* targetEntity = mapShr->get<GameCharacter>(targetPos).get();
+    GameCharacter* targetGameCharacter = mapShr->get<GameCharacter>(targetPos).get();
+    Tile* targetTile = mapShr->get<Tile>(targetPos).get();
     int targetHp = 0; 
-    if (targetEntity)
-        targetHp = targetEntity->getHealth();
+    if (targetGameCharacter)
+        targetHp = targetGameCharacter->getHealth();
 
     //player turn will be skipped if he clicks on himself
     if(targetPos == mapShr->posFloatToInt(actorShr->getPos())){newTurn(); return;} 
 
     //MOVEMENT
-    bool inRange = (Utils::Math::distance(mapShr->posFloatToInt(actorShr->getPos()), targetPos) <= range && targetEntity);
+    bool inRange = (Utils::Math::distance(mapShr->posFloatToInt(actorShr->getPos()), targetPos) <= range && (targetGameCharacter||targetTile));
 
     std::deque<sf::Vector2<float>> stepQueue = actorShr->getMovementStrategy()->findPath(*mapShr, actorShr->getPos(), target, actorShr->isSolid());
     sf::Vector2<float> newPos = stepQueue.front();
@@ -86,7 +90,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
         stepQueue.pop_front();
 
         energy -= actorShr->getMovementStrategy()->getMovementCost();
-        inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos), targetPos) <= range && targetEntity); //if you can attack u must do it        
+        inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos), targetPos) <= range && (targetGameCharacter||targetTile)); //if you can attack u must do it        
         
         LOG("Entity: {4}, move to target: {{1},{2}}, remaing energy {3}", newPos.x, newPos.y, energy, typeid(*actorShr.get()).name());
 
@@ -94,7 +98,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
     }
 
     //INTERACT
-    while (inRange && energy >= actorShr->getWeapon().getCost() && targetHp > 0)
+    while (inRange && energy >= actorShr->getWeapon().getCost() && (targetHp > 0 || targetTile))
     {
         energy -= actorShr->getWeapon().getCost();
         targetHp -= dmg;
