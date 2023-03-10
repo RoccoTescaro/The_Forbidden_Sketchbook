@@ -11,7 +11,7 @@ public:
 	{
 	public:
 
-		Bullet(const sf::Vector2<float>& target, float speed = 800.f);
+		Bullet(const sf::Vector2<float>& pos, const sf::Vector2<float>& target, float speed = 300.f);
 
 		void update(const float& dt);
 		void render(sf::RenderWindow& window);
@@ -37,12 +37,9 @@ public:
     inline uint8_t getCost() const { return cost; }; 
     inline uint8_t getRange() const { return range; }; 
 
+	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
 
-	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
-
-
-	inline bool isAnimationEnded() { return !bullet.get();};
- 
+	inline bool isAnimationEnded() { return !bullet.get();}; 
 private:
 	const uint8_t attack;
 	const uint8_t cost;

@@ -14,7 +14,7 @@ class Map : public Serializable
 	{
 		bool operator() (const sf::Vector2<int>& pos1, const sf::Vector2<int>& pos2) const
 		{
-			return (pos1.y < pos2.y||(pos1.y == pos2.y && pos1.x > pos2.x ));
+			return (pos1.y < pos2.y||(pos1.y == pos2.y && pos1.x < pos2.x ));
 		}
 	};
 
@@ -42,6 +42,7 @@ public:
 		if(gameCharacters.count(playerPos) && dynamic_cast<Player*>(gameCharacters[playerPos].get()))
 			return std::static_pointer_cast<Player>(gameCharacters.at(playerPos));
 		
+		LOG("no player!!!");
 		gameCharacters[playerPos] = std::shared_ptr<GameCharacter>(new Player{50,15,190,190,190});
 		return std::static_pointer_cast<Player>(gameCharacters.at(playerPos));
 	}

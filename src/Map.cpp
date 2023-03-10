@@ -77,6 +77,7 @@ bool Map::isOccupied(const sf::Vector2<int>& pos, bool solid)
 
 void Map::move(const sf::Vector2<int>& start, const sf::Vector2<int>& end) 
 {
+
 	auto gameCharacter = gameCharacters.extract(start);
 	if (gameCharacter) gameCharacters[end] = gameCharacter.mapped();
 	else ERROR("no gameCharacter at start position");

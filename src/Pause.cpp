@@ -43,8 +43,16 @@ Pause::Pause() :
             Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
             ASSERT(!(game || editor));
 
-            if (game) game->load();
-            else if (editor) editor->load();
+            if (game)
+            {   
+                game->save();
+                game->load();
+            }
+            else if (editor)
+            {
+                editor->save();
+                editor->load();
+            }
         });
     back.setOnMouseOver([this]() { back.getText().setFillColor(sf::Color(255, 255, 255, 255)); });
 

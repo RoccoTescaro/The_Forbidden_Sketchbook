@@ -157,7 +157,7 @@ std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<f
             }
         }
     }
-    std::deque<sf::Vector2f> destination;
+    std::deque<sf::Vector2<float>> destination;
     sf::Vector2<int> &d = possibleTargets.at(rand() % possibleTargets.size());
     destination.push_front(fTarget);
     destination.emplace_front(d.x*map.getCellDim().x,d.y*map.getCellDim().y);

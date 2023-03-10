@@ -23,8 +23,10 @@ Game::Game()
 	//Archive arc(Config::gameMapPath, Archive::Load);
 	//arc >> *map >> turnSystem;
 	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
-	map->append({ 5,3 }, new Melee{ 30, 5 }); //#TODO remove
-	
+	map->append({ 1,1 }, new Melee{ 30, 5 }); //#TODO remove
+	map->append({ 20,20 }, new Bat{ 5, 15 }); //#TODO remove
+
+	cam.lock(true);
 
 	hud.setView(cam.getView());
 	hud.setPlayer(map->get<Player>());
@@ -77,15 +79,10 @@ void Game::update()
 	//UPDATE ACTOR
     if(!turnSystem.isPlayerTurn())
 		turnSystem.turnBuild(map->get<Player>()->getPos());
-    else if(input.isKeyReleased(Input::MouseL))
-	{
-		if(mousePos != map->posFloatToInt(map->get<Player>()->getPos()))
-            turnSystem.turnBuild(map->posIntToFloat(mousePos));
-		else map->get<Player>()->setEnergy(0);
-	}
-    
-    turnSystem.update(dt);
-
+    else if(input.isKeyPressed(Input::MouseL) && mousePos != map->posFloatToInt(map->get<Player>()->getPos()))
+	    turnSystem.turnBuild(map->posIntToFloat(mousePos)); //TODO add the possibility for player to pass the turn
+		
+	turnSystem.update(dt);
 }
 
 void Game::render() 
