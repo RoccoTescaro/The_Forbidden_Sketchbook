@@ -1,24 +1,59 @@
 class Map -
 	std::string : class Map
-	unsigned int : 0
-	unsigned int : 3
-	pointer to class GameCharacter -
+	unsigned int : 2
+	pointer to class Tile -
 		unsigned int : 1
+		std::string : class WeaponBench
+		class Tile -
+			std::string : class WeaponBench
+			sf::Vector2<float> -
+				float : 512
+				float : 0
+	pointer to class Tile -
+		unsigned int : 2
+		std::string : class ColorPedestral
+		class Tile -
+			std::string : class ColorPedestral
+			sf::Vector2<float> -
+				float : 640
+				float : 0
+			sf::Color -
+				unsigned char : 0
+				unsigned char : 0
+				unsigned char : 0
+				unsigned char : 0
+	unsigned int : 4
+	pointer to class GameCharacter -
+		unsigned int : 3
+		std::string : class Melee
+		class GameCharacter -
+			std::string : class Melee
+			sf::Vector2<float> -
+				float : 64
+				float : 32
+			signed char : 30
+			signed char : 5
+	pointer to class GameCharacter -
+		unsigned int : 4
 		std::string : class Player
 		class GameCharacter -
 			std::string : class Player
 			sf::Vector2<float> -
-				float : 448
-				float : 0
-			signed char : 26
-			signed char : 8
+				float : 576
+				float : 32
+			signed char : 36
+			signed char : 5
 			sf::Color -
-				unsigned char : 190
-				unsigned char : 190
-				unsigned char : 190
 				unsigned char : 255
+				unsigned char : 125
+				unsigned char : 125
+				unsigned char : 255
+			unsigned char : 5
+			unsigned char : 2
+			unsigned char : 1
+			bool : 0
 	pointer to class GameCharacter -
-		unsigned int : 2
+		unsigned int : 5
 		std::string : class Ranged
 		class GameCharacter -
 			std::string : class Ranged
@@ -26,19 +61,19 @@ class Map -
 				float : 192
 				float : 96
 			signed char : 5
-			signed char : 0
+			signed char : 15
 			float : 0
 	pointer to class GameCharacter -
-		unsigned int : 3
+		unsigned int : 6
 		std::string : class Bat
 		class GameCharacter -
 			std::string : class Bat
 			sf::Vector2<float> -
-				float : 576
-				float : 352
+				float : 896
+				float : 512
 			signed char : 10
-			signed char : 0
+			signed char : 10
 class TurnSystem -
 	std::string : class TurnSystem
 	unsigned int : 0
-	signed char : 8
+	signed char : 5

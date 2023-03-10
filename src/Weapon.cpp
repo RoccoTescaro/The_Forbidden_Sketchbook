@@ -4,20 +4,7 @@
 Weapon::Weapon(uint8_t attack, uint8_t cost, uint8_t range, bool hidden)
 	: attack(attack), cost(cost), range(range), hidden(hidden)
 {
-	static sf::Texture* meleeTexture;
-	static sf::Texture* rangedTexture;
-	if (!meleeTexture||!rangedTexture)
-	{
-		meleeTexture = new sf::Texture;
-		meleeTexture->loadFromFile(Config::meleeWeaponTexturePath);
-		meleeTexture->generateMipmap();
-
-		rangedTexture = new sf::Texture;
-		rangedTexture->loadFromFile(Config::rangedWeaponTexturePath);
-		rangedTexture->generateMipmap();
-	}
-
-	sprite.setTexture(range > 1 ? *rangedTexture : *meleeTexture);
+	updateTexture();
 	sf::Rect<int> textureRect{ 0,0,420,420 };
 	sprite.setTextureRect(textureRect);
 	sprite.setScale(32.f / textureRect.width, 32.f / textureRect.height);
@@ -42,6 +29,24 @@ void Weapon::render(sf::RenderWindow& window)
 {
 	if (!hidden) window.draw(sprite);
 	if (bullet) bullet->render(window);
+}
+
+void Weapon::updateTexture() 
+{
+	static sf::Texture* meleeTexture;
+	static sf::Texture* rangedTexture;
+	if (!meleeTexture || !rangedTexture)
+	{
+		meleeTexture = new sf::Texture;
+		meleeTexture->loadFromFile(Config::meleeWeaponTexturePath);
+		meleeTexture->generateMipmap();
+
+		rangedTexture = new sf::Texture;
+		rangedTexture->loadFromFile(Config::rangedWeaponTexturePath);
+		rangedTexture->generateMipmap();
+	}
+
+	sprite.setTexture(range > 1 ? *rangedTexture : *meleeTexture);
 }
 
 Weapon::Bullet::Bullet(const sf::Vector2<float>& pos, const sf::Vector2<float>& target, float speed)

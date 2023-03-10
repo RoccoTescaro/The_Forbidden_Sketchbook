@@ -7,7 +7,7 @@ static std::string path(const std::string& path)
 	return prefix + path;
 };
 
-#define VSC 1
+#define VSC 0
 #if VSC
 #define PATH(string) path(string) 
 #else

@@ -81,6 +81,15 @@ public:
     {
         GameCharacter::serialize(fs);
         fs.serialize(filterColor);
+        uint8_t attack = weapon->getAttack();
+        uint8_t cost = weapon->getCost();
+        uint8_t range = weapon->getRange();
+        bool hidden = weapon->isHidden();
+        fs.serialize(attack);
+        fs.serialize(cost);
+        fs.serialize(range);
+        fs.serialize(hidden);
+        weapon.reset(new Weapon{attack, cost, range, hidden});
     }
 
     static Serializable* create() { return new Player{50,15,190,190,190}; };

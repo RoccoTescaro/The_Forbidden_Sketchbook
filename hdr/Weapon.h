@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-class Weapon
+class Weapon //TODO make it serializable
 {
 public:
 
@@ -40,10 +40,12 @@ public:
     inline uint8_t getRange() const { return range; }; 
     inline bool isHidden() const { return hidden; }; 
 
-
 	inline void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos+sf::Vector2<float>{28,-32}); };
 
 	inline bool isAnimationEnded() { return !bullet.get();}; 
+
+	void updateTexture();
+
 private:
 	const uint8_t attack;
 	const uint8_t cost;
