@@ -37,6 +37,9 @@ namespace Config
 	const std::string meleeTexturePath{ PATH("img/Melee.png") };
 	const std::string batTexturePath{ PATH("img/Bat.png") };
 	const std::string rangedTexturePath{ PATH("img/Ranged.png") };
+	const std::string meleeWeaponTexturePath{ PATH("img/MeleeWeapon.png") };
+	const std::string rangedWeaponTexturePath{ PATH("img/RangedWeapon.png") };
+	const std::string bulletTexturePath{ PATH("img/Bullet.png") };
 	const uint8_t nWallTextures = 6;
 	const std::string wallTexturePath[nWallTextures]{
 		PATH("img/Wall0.png"),

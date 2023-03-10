@@ -56,7 +56,7 @@ Player::Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t fil
 	filterColor = sf::Color(filterColorR, filterColorG, filterColorB, 255);
 
     movementStrategy.reset(new AStar);
-	weapon.reset(new Weapon{2,1,1});
+	weapon.reset(new Weapon{2,1,3});
 }
 
 
