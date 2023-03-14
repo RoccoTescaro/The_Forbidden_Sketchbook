@@ -3,6 +3,7 @@
 #include "GameCharacter.h"
 #include "Map.h"
 #include "Utils.h"
+#include "Trigger.h"
 
 class TurnSystem : public Serializable
 {
@@ -51,4 +52,8 @@ private:
     TurnQueue turnQueue;
     ActionQueue actionQueue;
     std::weak_ptr<GameCharacter> actor;
+
+    Trigger firstStep{ Achievement{"One small step", "First successful movement in the game", 1} };
+    Trigger firstAttack{ Achievement{"The best defence is a good offence", "First attack landed in the game", 1} };
+    Trigger threeKill{ Achievement{"Never underestimate the power of a small group of committed people", "Three enemies killed in the game", 3} };
 };

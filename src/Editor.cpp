@@ -112,7 +112,6 @@ void Editor::update()
 	if (input.isKeyDown(Input::MouseL))
 	{
 		bool thereIsNoWall = !map->get<Wall>(mousePos).get();
-		LOG("there is no wall : {1}", thereIsNoWall);
 		if (dynamic_cast<Wall*>(placeHolderEntity.get()) && thereIsNoWall) 
 		{
 			bool canBuild = true;

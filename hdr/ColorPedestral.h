@@ -1,5 +1,6 @@
 #pragma once
 #include "Tile.h"
+#include "Trigger.h"
 
 class ColorPedestral : public Tile
 {
@@ -28,4 +29,5 @@ private:
     const sf::Color nullColor{ 0,0,0,0 };
 
     sf::CircleShape colorSprite{ 8 };
+    static Trigger trigger;
 };

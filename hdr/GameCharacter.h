@@ -28,8 +28,8 @@ public:
     
     //GETTER AND SETTER
     inline bool isSolid() const override { return true; };
-    inline uint8_t getMaxHealth() const { return maxHealth; }; 
-    inline uint8_t getMaxEnergy() const { return maxEnergy; };
+    inline const uint8_t& getMaxHealth() const { return maxHealth; }; 
+    inline const uint8_t& getMaxEnergy() const { return maxEnergy; };
     inline const int8_t& getHealth() const { return health; };
     inline const int8_t& getEnergy() const { return energy; };
     inline uint8_t getPriority() const { return priority; };

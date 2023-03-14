@@ -17,17 +17,14 @@ public:
         }
     };
 
+    bool isAnimationEnded() { return charIndex == dialogueBuffer.front().length() && timer > readTime; };
+
     void next()
     {
         if (!visible) return;
-        bufferIndex++;
         charIndex = 0;
-        if (bufferIndex >= dialogueBuffer.size()) //reset
-        {
-            visible = false;
-            dialogueBuffer.clear();
-            bufferIndex = 0;
-        }
+        timer = 0.f;
+        dialogueBuffer.pop_front();
     };
 
     void show() { visible = true; };
@@ -35,12 +32,14 @@ public:
 
     void update(const float& dt)
     {
+        if (dialogueBuffer.empty()) visible = false;
         if (!visible) return;
+        
+        auto& currentText = dialogueBuffer.front();
 
-        auto& currentText = dialogueBuffer[bufferIndex];
         timer += dt;
 
-        if (timer > typingSpeed)
+        if (timer > typingSpeed && charIndex != currentText.length())
         {
             timer = 0.f;
             if (charIndex < currentText.size())
@@ -72,12 +71,12 @@ public:
 
             if (backIndex != std::string::npos)
             {
-                dialogueBuffer.insert(dialogueBuffer.begin() + bufferIndex + 1, currentText.substr(backIndex + 1, currentText.size()));
+                dialogueBuffer.insert(++dialogueBuffer.begin(), currentText.substr(backIndex + 1, currentText.size()));
                 currentText = currentText.substr(0, backIndex);
             }
             else
             {
-                dialogueBuffer.insert(dialogueBuffer.begin() + bufferIndex + 1, currentText.substr(charIndex - 3, currentText.size()));
+                dialogueBuffer.insert(++dialogueBuffer.begin(), currentText.substr(charIndex - 3, currentText.size()));
                 currentText = currentText.substr(0, charIndex - 3);
             }
 
@@ -93,10 +92,14 @@ public:
     };
 
     void addText(const std::string& string) { dialogueBuffer.push_back(string); };
-    void setTypingSpeed(const float& typingSpeed) { this->typingSpeed = typingSpeed; };
 
     //TEXTURE
-    void setTexture(const std::string& path) { texture.loadFromFile(path); };
+    void setTexture(const std::string& path) 
+    { 
+        texture.loadFromFile(path); 
+        sprite.setTexture(texture);
+    };
+
     void setTextureRect(const sf::Rect<int>& rect) { textBox = rect; };
     void setPos(const sf::Vector2<int>& pos) { sprite.setPosition(pos.x, pos.y); };
     void setScale(float x, float y) { sprite.setScale(x, y); };
@@ -126,12 +129,12 @@ public:
 
 private:
     
-    std::vector<std::string> dialogueBuffer;
-    uint32_t bufferIndex = 0;
+    std::list<std::string> dialogueBuffer;
     uint32_t charIndex = 0;
-    float typingSpeed = 0.075f;
+    const float readTime = 3.f;
+    const float typingSpeed = 0.075f;
     float timer = 0.f;
-    bool visible = false;
+    bool visible = true;
 
     //TEXTURE
     sf::Texture texture;

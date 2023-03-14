@@ -46,14 +46,14 @@ Map& Map::append(const sf::Vector2<int>& pos, Entity* entity)
 	if (tile)
 	{
 		tiles[pos] = std::shared_ptr<Tile>(tile);
-		LOG("new istance of type {1}, at pos {{2},{3}}", typeid(*entity).name(), pos.x, pos.y);
+		//LOG("new istance of type {1}, at pos {{2},{3}}", typeid(*entity).name(), pos.x, pos.y);
 	}
 	else if (gameCharacter)
 	{
 		auto player = dynamic_cast<Player*>(entity);
 		if (player) playerPos = pos;
 		gameCharacters[pos] = std::shared_ptr<GameCharacter>(gameCharacter);
-		LOG("new istance of type {1}, at pos {{2},{3}}", typeid(*entity).name(), pos.x, pos.y);
+		//LOG("new istance of type {1}, at pos {{2},{3}}", typeid(*entity).name(), pos.x, pos.y);
 	}
 	else
 	{

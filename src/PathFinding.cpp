@@ -101,7 +101,7 @@ std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fSt
     std::deque<sf::Vector2f> path = tracePath(map, nodeInfo,(*std::min_element(nodeInfo.begin(),nodeInfo.end(),
                                               [](const std::pair<const sf::Vector2<int>, Node> &p1, const std::pair<const sf::Vector2<int>, Node> &p2)
                                               { return (p1.second.h < p2.second.h); })).first );
-    path.push_back(map.posIntToFloat(target));
+    //path.push_back(map.posIntToFloat(target));
 
     return path;
 };
