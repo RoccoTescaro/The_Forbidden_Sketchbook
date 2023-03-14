@@ -36,7 +36,7 @@ void TurnSystem::update(const float& dt)
         auto targetEntity = mapShr->get<GameCharacter>(mapShr->posFloatToInt(action.target));
         if (targetEntity.get())
         {
-            actorShr->getWeapon().update(action.target, dt);
+            actorShr->getWeapon().update(targetEntity->getCenter(), dt);
             if (actorShr->getWeapon().isAnimationEnded())
             {
                 targetEntity->interact(*mapShr, actorShr->getPos(), dt);

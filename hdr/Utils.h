@@ -5,6 +5,8 @@
 #include <cmath>
 #include<sstream>
 
+#define PI 3.14159265358979323846f
+
 namespace Utils 
 {
 
