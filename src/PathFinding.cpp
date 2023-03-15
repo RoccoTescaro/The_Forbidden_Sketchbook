@@ -3,9 +3,9 @@
 
 //PATHALGORITHM
 
-bool PathAlgorithm::isValid(Map &map, const sf::Vector2<int> pos, bool flying)
+bool PathAlgorithm::isValid(Map &map, const sf::Vector2<int> pos, bool solid)
 {
-        return !(map.get<GameCharacter>(pos)||map.isOccupied(pos,flying));
+        return !(map.get<GameCharacter>(pos)||map.isOccupied(pos,solid));
 }
 
 //ASTAR
@@ -25,7 +25,7 @@ std::deque<sf::Vector2<float>> AStar::tracePath(Map &map, std::unordered_map<sf:
     return finalPath;
 };
 
-std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying) 
+std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool solid) 
 {
     sf::Vector2<int> start=map.posFloatToInt(fStart);
     sf::Vector2<int> target=map.posFloatToInt(fTarget);
@@ -64,12 +64,12 @@ std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fSt
         //new possible steps evaluation
         for (auto &k : possibleSteps)
         {
-            if (!(isValid(map, k, flying)|| k == target))
+            if (!(isValid(map, k, solid)|| k == target))
                 continue;
 
             if (k == target)
             {
-                if(isValid(map, k,flying) || map.get<GameCharacter>(k))
+                if(isValid(map, k,solid) || map.get<GameCharacter>(k))
                 {
                     nodeInfo[k].parentPos = p.second;
                     return tracePath(map, nodeInfo, target);
@@ -79,7 +79,7 @@ std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fSt
                     nodeInfo[k].parentPos = p.second;
                     std::deque<sf::Vector2f> path = tracePath(map, nodeInfo, target);
                     path.pop_back();
-                    if(path.size() == 1) path.clear();
+                    //if(path.size() == 1) path.clear();
                     return path;
                 }
             }
@@ -100,15 +100,13 @@ std::deque<sf::Vector2<float>> AStar::findPath( Map &map, sf::Vector2<float> fSt
 
     std::deque<sf::Vector2f> path = tracePath(map, nodeInfo,(*std::min_element(nodeInfo.begin(),nodeInfo.end(),
                                               [](const std::pair<const sf::Vector2<int>, Node> &p1, const std::pair<const sf::Vector2<int>, Node> &p2)
-                                              { return (p1.second.h < p2.second.h); })).first );
-    path.push_back(map.posIntToFloat(target));
-
+                                              { return ((p1.second.h < p2.second.h)||((p1.second.h == p2.second.h)&&(p1.second.g < p2.second.g))); })).first );
     return path;
 };
 
 //DIGLETMOVEMENT
 
-std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying) 
+std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool solid) 
 {
 
     sf::Vector2<int> start = map.posFloatToInt(fStart);
@@ -155,8 +153,14 @@ std::deque<sf::Vector2<float>> DigletMovement::findPath( Map &map, sf::Vector2<f
         }
     }
     std::deque<sf::Vector2<float>> destination;
-    sf::Vector2<int> &d = possibleTargets.at(rand() % possibleTargets.size());
     destination.push_front(fTarget);
-    destination.emplace_front(d.x*map.getCellDim().x,d.y*map.getCellDim().y);
+    if(!possibleTargets.empty()){
+
+        auto rd = std::random_device{};
+        auto r = std::default_random_engine{rd()};
+        std::shuffle(possibleTargets.begin(), possibleTargets.end(), r);
+
+        destination.emplace_front(possibleTargets.begin()->x*map.getCellDim().x,possibleTargets.begin()->y*map.getCellDim().y);
+    }
     return destination;
 }

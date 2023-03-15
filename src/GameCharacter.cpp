@@ -3,7 +3,7 @@
 
 //GAMECHARACTER
 
-void GameCharacter::interact(Map &map, sf::Vector2<float> target, const float &dt)
+void GameCharacter::interact(Map &map, sf::Vector2<float> target)
 {
 
 	auto actor = map.get<GameCharacter>(map.posFloatToInt(target));

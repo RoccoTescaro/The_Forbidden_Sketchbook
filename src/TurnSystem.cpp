@@ -37,14 +37,14 @@ void TurnSystem::update(const float& dt)
             actorShr->getWeapon().update(action.target, dt);
             if (actorShr->getWeapon().isAnimationEnded())
             {
-                targetEntity->interact(*mapShr, actorShr->getPos(), dt);
+                targetEntity->interact(*mapShr, actorShr->getPos());
                 actionQueue.pop();
                 if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
             }
         }
         else
         {
-            mapShr->get<Tile>(mapShr->posFloatToInt(action.target))->interact(*mapShr, action.target, dt);
+            mapShr->get<Tile>(mapShr->posFloatToInt(action.target))->interact(*mapShr, action.target);
             actionQueue.pop();
         }
         break;

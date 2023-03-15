@@ -27,7 +27,7 @@ public:
 
     inline bool isSolid() const override { return true; };
 
-    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+    void interact(Map &map, sf::Vector2<float> target) override {}; 
 
    
     void serialize(Archive& fs) override 
@@ -51,7 +51,7 @@ public:
 
     inline bool isSolid() const override { return false; };
 
-    void interact(Map &map, sf::Vector2<float> target, const float &dt) override {}; 
+    void interact(Map &map, sf::Vector2<float> target) override {}; 
 
     static Serializable* create() { return new Hole; };
 private:
@@ -67,7 +67,7 @@ public:
 
     inline bool isSolid() const override { return true; };
 
-    void interact(Map &map, sf::Vector2<float> target, const float &dt) override; 
+    void interact(Map &map, sf::Vector2<float> target) override; 
 
     void serialize(Archive& fs) 
     { 
@@ -93,7 +93,7 @@ public:
 
     inline bool isSolid() const override { return true; };
 
-    void interact(Map &map, sf::Vector2<float> target, const float &dt) override; 
+    void interact(Map &map, sf::Vector2<float> target) override; 
 
     static Serializable* create() { return new WeaponBench; };
 private:

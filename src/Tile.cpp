@@ -74,7 +74,7 @@ void ColorPedestral::render(sf::RenderWindow &window)
 	Tile::render(window);
 };
 
-void ColorPedestral::interact(Map &map, sf::Vector2<float> target, const float &dt) 
+void ColorPedestral::interact(Map &map, sf::Vector2<float> target) 
 {
 	auto playerShr = map.get<Player>();
 
@@ -103,7 +103,7 @@ WeaponBench::WeaponBench()
 	sprite.setOrigin(0.f, 867.f);
 }
 
-void WeaponBench::interact(Map &map, sf::Vector2<float> target, const float &dt) 
+void WeaponBench::interact(Map &map, sf::Vector2<float> target) 
 {
 	
 	auto playerShr = map.get<Player>();

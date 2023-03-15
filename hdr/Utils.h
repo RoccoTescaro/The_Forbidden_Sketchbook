@@ -55,7 +55,7 @@ namespace Utils
     }
 
     template<typename T>
-    static void assert(const T& condition, const char* expression)
+    static void ass(const T& condition, const char* expression)
     {
         if (condition)
             Utils::error(expression);
@@ -129,6 +129,6 @@ namespace Utils
 
 #define LOG(...) Utils::log(__VA_ARGS__)
 #define ERROR(...) Utils::error(__VA_ARGS__)
-#define ASSERT(condition) Utils::assert(condition, #condition)
+#define ASS(condition) Utils::ass(condition, #condition)
 #define WARNING(...) Utils::warning(__VA_ARGS__)
 

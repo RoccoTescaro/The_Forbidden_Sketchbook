@@ -114,7 +114,7 @@ void Menu::update()
         else if (loadClicked)
         {
             Game* game = dynamic_cast<Game*>(Application::getState(1));
-            ASSERT(!game);
+            ASS(!game);
             game->load();
             Application::setState(1);
         }

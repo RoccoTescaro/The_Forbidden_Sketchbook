@@ -27,7 +27,7 @@ public:
 
 	virtual bool isSolid() const = 0; 
 	
-	virtual void interact(Map &map, sf::Vector2<float> target, const float &dt) = 0; 
+	virtual void interact(Map &map, sf::Vector2<float> target) = 0; 
 
 	void serialize(Archive& fs) override 
 	{ 

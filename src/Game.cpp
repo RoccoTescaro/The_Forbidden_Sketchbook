@@ -20,10 +20,10 @@ Game::Game()
 	window.setMouseCursorVisible(false);
 
 	turnSystem.init(map);
-	Archive arc(Config::gameMapPath, Archive::Load);
-	arc >> *map >> turnSystem;
-	//map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
-	//map->append({ 1,1 }, new Melee{ 30, 5 }); //#TODO remove
+	//Archive arc(Config::gameMapPath, Archive::Load);
+	//arc >> *map >> turnSystem;
+	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
+	map->append({ 1,1 }, new Melee{ 30, 5 }); //#TODO remove
 	//map->append({ 20,20 }, new Bat{ 10, 10 }); //#TODO remove
 	//map->append({ 5,5 }, new Ranged{ 5, 15 }); //#TODO remove
 	//map->append({ 10,0 }, new ColorPedestral); //#TODO remove

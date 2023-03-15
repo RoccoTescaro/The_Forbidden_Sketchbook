@@ -36,7 +36,6 @@ void Application::run()
 	//of the singleton is called aswell as a static variable. Static variable are declare and define
 	//in a non deterministic way and we must ensure that config variables are declared before the 
 	//istanciation of the singleton
-
 	app.states.emplace_back(new Menu);
 	app.states.emplace_back(new Game);
 	app.states.emplace_back(new Editor);

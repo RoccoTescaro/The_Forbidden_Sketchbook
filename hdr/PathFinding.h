@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <set>
 #include <random>
+#include <climits>
+
 
 
 class Map;
@@ -13,7 +15,7 @@ class PathAlgorithm
 {
 public:
 
-    virtual std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying) = 0;
+    virtual std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool solid) = 0;
 
     inline uint8_t getMovementCost() const { return movementCost; };
 
@@ -38,7 +40,7 @@ class AStar : public PathAlgorithm
 {
 public:
 
-    std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying) override;
+    std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool solid) override;
 
 private:
 
@@ -66,6 +68,6 @@ class DigletMovement : public PathAlgorithm
 {
 public:
 
-    std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool flying) override;
+    std::deque<sf::Vector2<float>> findPath( Map &map, sf::Vector2<float> fStart,sf::Vector2<float> fTarget, bool solid) override;
 
 };

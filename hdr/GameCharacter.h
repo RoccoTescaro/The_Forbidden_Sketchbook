@@ -55,7 +55,7 @@ public:
     }
 
     virtual void move(Map &map, sf::Vector2<float> target, const float &dt); 
-    void interact(Map &map, sf::Vector2<float> target, const float &dt) override; 
+    void interact(Map &map, sf::Vector2<float> target) override; 
 
 protected:
     const float speed = 200.f;
