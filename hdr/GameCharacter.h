@@ -18,7 +18,7 @@ public:
         setEnergy(energy); //fix energy if greater tha maxEnergy
     };
 
-    virtual ~GameCharacter() = default;
+    virtual ~GameCharacter() = 0 {};
 
     inline void render(sf::RenderWindow& window) override 
     {   

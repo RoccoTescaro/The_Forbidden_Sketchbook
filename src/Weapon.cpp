@@ -68,7 +68,7 @@ Weapon::Bullet::Bullet(const sf::Vector2<float>& pos, const sf::Vector2<float>& 
 	sprite.setPosition(pos);
 	sf::Vector2<float> dir = target - pos;
 	float angleBetween = std::acos(dir.x/Utils::Math::mod(dir)) * 180.f / PI;
-	float angle = dir.y < 0? 360- angleBetween : angleBetween;
+	float angle = dir.y < 0? 360 - angleBetween : angleBetween;
 	sprite.setRotation(angle);
 }
 

@@ -22,7 +22,7 @@ Pause::Pause() :
         {
             Game* game = dynamic_cast<Game*>(Application::getPrevState());
             Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
-            ASSERT(!(game || editor));
+            //ASSERT(!(game || editor));
             
             if (game) game->save();
             else if (editor) editor->save();
@@ -41,7 +41,7 @@ Pause::Pause() :
 
             Game* game = dynamic_cast<Game*>(Application::getPrevState());
             Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
-            ASSERT(!(game || editor));
+            //ASSERT(!(game || editor));
 
             if (game)
             {   

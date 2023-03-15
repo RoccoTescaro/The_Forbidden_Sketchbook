@@ -56,12 +56,13 @@ namespace Utils
         exit(1);
     }
 
+    /*
     template<typename T>
     static void assert(const T& condition, const char* expression)
     {
         if (condition)
             Utils::error(expression);
-    }
+    }*/
 
     template<typename T, typename... Args>
     static void warning(const T& condition, const char* message, Args... args)
@@ -131,6 +132,6 @@ namespace Utils
 
 #define LOG(...) Utils::log(__VA_ARGS__)
 #define ERROR(...) Utils::error(__VA_ARGS__)
-#define ASSERT(condition) Utils::assert(condition, #condition)
+//#define ASSERT(condition) Utils::assert(condition, #condition)
 #define WARNING(...) Utils::warning(__VA_ARGS__)
 
