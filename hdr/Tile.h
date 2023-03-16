@@ -4,8 +4,9 @@
 class Tile : public Entity
 {
 public:
-    virtual ~Tile() = default;
+    virtual ~Tile() = 0;
 
     void serialize(Archive& fs) override { Entity::serialize(fs); };
 };
 
+inline Tile::~Tile() {}

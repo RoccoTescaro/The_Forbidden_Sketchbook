@@ -7,7 +7,7 @@ class ColorPedestral : public Tile
 public:
     ColorPedestral();
 
-    virtual ~ColorPedestral() {};
+    inline virtual ~ColorPedestral() override {};
 
     void render(sf::RenderWindow& window) override;
 

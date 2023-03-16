@@ -1,5 +1,7 @@
 #include "../hdr/Game.h"
 #include "../hdr/Player.h"
+#include "../hdr/WeaponBench.h"
+
 
 Game::Game()
 	: cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)
@@ -21,14 +23,14 @@ Game::Game()
 	window.setMouseCursorVisible(false);
 
 	turnSystem.init(map);
-	//Archive arc(Config::gameMapPath, Archive::Load);
-	//arc >> *map >> turnSystem;
-	map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
-	map->append({ 1,1 }, new Melee{ 30, 5 }); //#TODO remove
+	Archive arc(Config::gameMapPath, Archive::Load);
+	arc >> *map >> turnSystem;
+	//map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
+	//map->append({ 1,1 }, new Melee{ 30, 5 }); //#TODO remove
 	//map->append({ 20,20 }, new Bat{ 10, 10 }); //#TODO remove
 	//map->append({ 5,5 }, new Ranged{ 5, 15 }); //#TODO remove
 	//map->append({ 10,0 }, new ColorPedestral); //#TODO remove
-	//map->append({ 8,0 }, new WeaponBench); //#TODO remove
+	//map->append({ 0,6 }, new WeaponBench); //#TODO remove
 
 	cam.lock(true);
 

@@ -17,7 +17,7 @@ public:
 
     Wall(uint8_t type) : type(type) { setTexture(type); }
 
-    virtual ~Wall() {};
+    inline virtual ~Wall() override {};
 
     void setTexture(uint8_t newType) 
     {

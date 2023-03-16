@@ -5,7 +5,7 @@ class Player : public GameCharacter
 {
 public:
     Player(uint8_t health, uint8_t energy, uint8_t filterColorR, uint8_t filterColorG, uint8_t filterColorB);
-    virtual ~Player() {};
+    inline virtual ~Player() override {};
 
     inline const sf::Color& getFilterColor() const { return filterColor; };
     inline void setFilterColor(const sf::Color& color) { filterColor = color; };

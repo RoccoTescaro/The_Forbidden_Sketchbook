@@ -6,7 +6,7 @@ class WeaponBench : public Tile
 {
 public:
     WeaponBench();
-    virtual ~WeaponBench() {};
+    inline virtual ~WeaponBench() override {};
 
     inline bool isSolid() const override { return true; };
 

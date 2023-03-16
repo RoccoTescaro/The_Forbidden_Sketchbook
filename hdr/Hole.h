@@ -19,7 +19,7 @@ public:
 		sprite.setOrigin(0.f, 405.f);
 	}
 
-    virtual ~Hole() {};
+    inline virtual ~Hole() override {};
 
     inline bool isSolid() const override { return false; };
 

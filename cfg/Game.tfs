@@ -1,906 +1,1276 @@
-class Map -
-	std::string : class Map
-	unsigned int : 95
-	pointer to class Tile -
-		unsigned int : 1
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -224
-			unsigned char : 4
-	pointer to class Tile -
-		unsigned int : 2
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -256
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 3
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -192
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 4
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -128
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 5
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -64
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 6
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 0
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 7
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 64
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 8
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 128
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 9
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 192
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 10
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 256
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 11
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 320
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 12
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 384
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 13
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 448
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 14
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 512
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 15
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 576
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 16
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 640
-				float : -224
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 17
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -224
-			unsigned char : 5
-	pointer to class Tile -
-		unsigned int : 18
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -192
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 19
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -192
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 20
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -160
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 21
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -160
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 22
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -128
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 23
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -128
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 24
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -96
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 25
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -96
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 26
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -64
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 27
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -64
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 28
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : -32
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 29
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : -32
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 30
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 0
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 31
-		std::string : class ColorPedestral
-		class Tile -
-			std::string : class ColorPedestral
-			sf::Vector2<float> -
-				float : 320
-				float : 0
+3Map -
+	std::string : 3Map
+	j : 138
+	pointer to 4Tile -
+		j : 1
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -128
+				f : -192
+			h : 4
+	pointer to 4Tile -
+		j : 2
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -64
+				f : -192
+			h : 0
+	pointer to 4Tile -
+		j : 3
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 0
+				f : -192
+			h : 0
+	pointer to 4Tile -
+		j : 4
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 64
+				f : -192
+			h : 0
+	pointer to 4Tile -
+		j : 5
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 128
+				f : -192
+			h : 5
+	pointer to 4Tile -
+		j : 6
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -192
+				f : -160
+			h : 4
+	pointer to 4Tile -
+		j : 7
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -128
+				f : -160
+			h : 3
+	pointer to 4Tile -
+		j : 8
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 128
+				f : -160
+			h : 2
+	pointer to 4Tile -
+		j : 9
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 192
+				f : -160
+			h : 5
+	pointer to 4Tile -
+		j : 10
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -256
+				f : -128
+			h : 4
+	pointer to 4Tile -
+		j : 11
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -192
+				f : -128
+			h : 3
+	pointer to 4Tile -
+		j : 12
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 192
+				f : -128
+			h : 2
+	pointer to 4Tile -
+		j : 13
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 256
+				f : -128
+			h : 5
+	pointer to 4Tile -
+		j : 14
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -256
+				f : -96
+			h : 1
+	pointer to 4Tile -
+		j : 15
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 256
+				f : -96
+			h : 1
+	pointer to 4Tile -
+		j : 16
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : -64
+			h : 4
+	pointer to 4Tile -
+		j : 17
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -256
+				f : -64
+			h : 3
+	pointer to 4Tile -
+		j : 18
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 256
+				f : -64
+			h : 2
+	pointer to 4Tile -
+		j : 19
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 320
+				f : -64
+			h : 5
+	pointer to 4Tile -
+		j : 20
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : -32
+			h : 1
+	pointer to 4Tile -
+		j : 21
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 320
+				f : -32
+			h : 1
+	pointer to 4Tile -
+		j : 22
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 0
+			h : 1
+	pointer to 4Tile -
+		j : 23
+		std::string : 14ColorPedestral
+		4Tile -
+			std::string : 14ColorPedestral
+			sf::Vector2<f> -
+				f : 192
+				f : 0
 			sf::Color -
-				unsigned char : 255
-				unsigned char : 125
-				unsigned char : 125
-				unsigned char : 255
-	pointer to class Tile -
-		unsigned int : 32
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 0
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 33
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 32
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 34
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 32
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 35
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 64
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 36
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 64
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 37
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 96
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 38
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 96
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 39
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 128
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 40
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 128
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 41
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 160
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 42
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 160
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 43
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 192
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 44
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 192
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 45
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 224
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 46
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 224
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 47
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 256
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 48
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 256
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 49
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 288
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 50
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 288
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 51
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 320
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 52
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 320
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 53
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 352
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 54
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 352
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 55
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 384
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 56
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 384
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 57
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 416
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 58
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 416
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 59
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 448
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 60
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 448
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 61
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 480
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 62
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 480
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 63
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 512
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 64
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 512
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 65
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 544
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 66
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 544
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 67
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 576
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 68
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 576
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 69
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 608
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 70
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 608
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 71
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 640
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 72
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 640
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 73
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 672
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 74
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 672
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 75
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 704
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 76
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 704
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 77
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 736
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 78
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 736
-			unsigned char : 1
-	pointer to class Tile -
-		unsigned int : 79
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -320
-				float : 768
-			unsigned char : 2
-	pointer to class Tile -
-		unsigned int : 80
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -256
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 81
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -192
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 82
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -128
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 83
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : -64
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 84
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 0
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 85
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 64
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 86
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 128
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 87
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 192
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 88
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 256
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 89
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 320
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 90
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 384
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 91
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 448
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 92
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 512
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 93
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 576
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 94
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 640
-				float : 768
-			unsigned char : 0
-	pointer to class Tile -
-		unsigned int : 95
-		std::string : class Wall
-		class Tile -
-			std::string : class Wall
-			sf::Vector2<float> -
-				float : 704
-				float : 768
-			unsigned char : 3
-	unsigned int : 3
-	pointer to class GameCharacter -
-		unsigned int : 96
-		std::string : class Player
-		class GameCharacter -
-			std::string : class Player
-			sf::Vector2<float> -
-				float : 0
-				float : 0
-			signed char : 50
-			signed char : 15
+				h : 255
+				h : 125
+				h : 125
+				h : 255
+	pointer to 4Tile -
+		j : 24
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 320
+				f : 0
+			h : 1
+	pointer to 4Tile -
+		j : 25
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 32
+			h : 1
+	pointer to 4Tile -
+		j : 26
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 320
+				f : 32
+			h : 1
+	pointer to 4Tile -
+		j : 27
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 64
+			h : 1
+	pointer to 4Tile -
+		j : 28
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 320
+				f : 64
+			h : 2
+	pointer to 4Tile -
+		j : 29
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 384
+				f : 64
+			h : 5
+	pointer to 4Tile -
+		j : 30
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 96
+			h : 1
+	pointer to 4Tile -
+		j : 31
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 384
+				f : 96
+			h : 1
+	pointer to 4Tile -
+		j : 32
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 128
+			h : 1
+	pointer to 4Tile -
+		j : 33
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 384
+				f : 128
+			h : 2
+	pointer to 4Tile -
+		j : 34
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 448
+				f : 128
+			h : 5
+	pointer to 4Tile -
+		j : 35
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 160
+			h : 1
+	pointer to 4Tile -
+		j : 36
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 448
+				f : 160
+			h : 1
+	pointer to 4Tile -
+		j : 37
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 192
+			h : 1
+	pointer to 4Tile -
+		j : 38
+		std::string : 11WeaponBench
+		4Tile -
+			std::string : 11WeaponBench
+			sf::Vector2<f> -
+				f : 0
+				f : 192
+	pointer to 4Tile -
+		j : 39
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 448
+				f : 192
+			h : 2
+	pointer to 4Tile -
+		j : 40
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 512
+				f : 192
+			h : 5
+	pointer to 4Tile -
+		j : 41
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 224
+			h : 1
+	pointer to 4Tile -
+		j : 42
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 512
+				f : 224
+			h : 2
+	pointer to 4Tile -
+		j : 43
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 576
+				f : 224
+			h : 5
+	pointer to 4Tile -
+		j : 44
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 832
+				f : 224
+			h : 4
+	pointer to 4Tile -
+		j : 45
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 896
+				f : 224
+			h : 0
+	pointer to 4Tile -
+		j : 46
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 960
+				f : 224
+			h : 5
+	pointer to 4Tile -
+		j : 47
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 256
+			h : 1
+	pointer to 4Tile -
+		j : 48
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 576
+				f : 256
+			h : 2
+	pointer to 4Tile -
+		j : 49
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 640
+				f : 256
+			h : 0
+	pointer to 4Tile -
+		j : 50
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 704
+				f : 256
+			h : 0
+	pointer to 4Tile -
+		j : 51
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 768
+				f : 256
+			h : 0
+	pointer to 4Tile -
+		j : 52
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 832
+				f : 256
+			h : 3
+	pointer to 4Tile -
+		j : 53
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 960
+				f : 256
+			h : 2
+	pointer to 4Tile -
+		j : 54
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1024
+				f : 256
+			h : 0
+	pointer to 4Tile -
+		j : 55
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1088
+				f : 256
+			h : 0
+	pointer to 4Tile -
+		j : 56
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1152
+				f : 256
+			h : 0
+	pointer to 4Tile -
+		j : 57
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 256
+			h : 5
+	pointer to 4Tile -
+		j : 58
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 288
+			h : 1
+	pointer to 4Tile -
+		j : 59
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 288
+			h : 1
+	pointer to 4Tile -
+		j : 60
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 320
+			h : 1
+	pointer to 4Tile -
+		j : 61
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 896
+				f : 320
+	pointer to 4Tile -
+		j : 62
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 960
+				f : 320
+	pointer to 4Tile -
+		j : 63
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1024
+				f : 320
+	pointer to 4Tile -
+		j : 64
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 320
+			h : 1
+	pointer to 4Tile -
+		j : 65
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 352
+			h : 1
+	pointer to 4Tile -
+		j : 66
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 832
+				f : 352
+	pointer to 4Tile -
+		j : 67
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 896
+				f : 352
+	pointer to 4Tile -
+		j : 68
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1024
+				f : 352
+	pointer to 4Tile -
+		j : 69
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1088
+				f : 352
+	pointer to 4Tile -
+		j : 70
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 352
+			h : 1
+	pointer to 4Tile -
+		j : 71
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 384
+			h : 1
+	pointer to 4Tile -
+		j : 72
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 832
+				f : 384
+	pointer to 4Tile -
+		j : 73
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1088
+				f : 384
+	pointer to 4Tile -
+		j : 74
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 384
+			h : 1
+	pointer to 4Tile -
+		j : 75
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 416
+			h : 1
+	pointer to 4Tile -
+		j : 76
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 832
+				f : 416
+	pointer to 4Tile -
+		j : 77
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 896
+				f : 416
+	pointer to 4Tile -
+		j : 78
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1024
+				f : 416
+	pointer to 4Tile -
+		j : 79
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1088
+				f : 416
+	pointer to 4Tile -
+		j : 80
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 416
+			h : 1
+	pointer to 4Tile -
+		j : 81
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 448
+			h : 1
+	pointer to 4Tile -
+		j : 82
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 896
+				f : 448
+	pointer to 4Tile -
+		j : 83
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 960
+				f : 448
+	pointer to 4Tile -
+		j : 84
+		std::string : 4Hole
+		4Tile -
+			std::string : 4Hole
+			sf::Vector2<f> -
+				f : 1024
+				f : 448
+	pointer to 4Tile -
+		j : 85
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 448
+			h : 1
+	pointer to 4Tile -
+		j : 86
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 480
+			h : 1
+	pointer to 4Tile -
+		j : 87
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 480
+			h : 1
+	pointer to 4Tile -
+		j : 88
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 512
+			h : 1
+	pointer to 4Tile -
+		j : 89
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 512
+			h : 1
+	pointer to 4Tile -
+		j : 90
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 544
+			h : 1
+	pointer to 4Tile -
+		j : 91
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 544
+			h : 1
+	pointer to 4Tile -
+		j : 92
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 576
+			h : 1
+	pointer to 4Tile -
+		j : 93
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 576
+			h : 1
+	pointer to 4Tile -
+		j : 94
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 608
+			h : 1
+	pointer to 4Tile -
+		j : 95
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 608
+			h : 1
+	pointer to 4Tile -
+		j : 96
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 640
+			h : 1
+	pointer to 4Tile -
+		j : 97
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 640
+			h : 1
+	pointer to 4Tile -
+		j : 98
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 672
+			h : 1
+	pointer to 4Tile -
+		j : 99
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 672
+			h : 1
+	pointer to 4Tile -
+		j : 100
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 704
+			h : 1
+	pointer to 4Tile -
+		j : 101
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 704
+			h : 1
+	pointer to 4Tile -
+		j : 102
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 736
+			h : 1
+	pointer to 4Tile -
+		j : 103
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 736
+			h : 1
+	pointer to 4Tile -
+		j : 104
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 768
+			h : 1
+	pointer to 4Tile -
+		j : 105
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 768
+			h : 1
+	pointer to 4Tile -
+		j : 106
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 800
+			h : 1
+	pointer to 4Tile -
+		j : 107
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 800
+			h : 1
+	pointer to 4Tile -
+		j : 108
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 832
+			h : 1
+	pointer to 4Tile -
+		j : 109
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 832
+			h : 1
+	pointer to 4Tile -
+		j : 110
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 864
+			h : 1
+	pointer to 4Tile -
+		j : 111
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 864
+			h : 1
+	pointer to 4Tile -
+		j : 112
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 896
+			h : 1
+	pointer to 4Tile -
+		j : 113
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 896
+			h : 1
+	pointer to 4Tile -
+		j : 114
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -320
+				f : 928
+			h : 2
+	pointer to 4Tile -
+		j : 115
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -256
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 116
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -192
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 117
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -128
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 118
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : -64
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 119
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 0
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 120
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 64
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 121
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 128
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 122
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 192
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 123
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 256
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 124
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 320
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 125
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 384
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 126
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 448
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 127
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 512
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 128
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 576
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 129
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 640
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 130
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 704
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 131
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 768
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 132
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 832
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 133
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 896
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 134
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 960
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 135
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1024
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 136
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1088
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 137
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1152
+				f : 928
+			h : 0
+	pointer to 4Tile -
+		j : 138
+		std::string : 4Wall
+		4Tile -
+			std::string : 4Wall
+			sf::Vector2<f> -
+				f : 1216
+				f : 928
+			h : 3
+	j : 3
+	pointer to 13GameCharacter -
+		j : 139
+		std::string : 6Player
+		13GameCharacter -
+			std::string : 6Player
+			sf::Vector2<f> -
+				f : 0
+				f : 0
+			a : 50
+			a : 15
 			sf::Color -
-				unsigned char : 190
-				unsigned char : 190
-				unsigned char : 190
-				unsigned char : 255
-			unsigned char : 2
-			unsigned char : 1
-			unsigned char : 1
-			bool : 1
-	pointer to class GameCharacter -
-		unsigned int : 97
-		std::string : class Melee
-		class GameCharacter -
-			std::string : class Melee
-			sf::Vector2<float> -
-				float : 128
-				float : 288
-			signed char : 30
-			signed char : 5
-	pointer to class GameCharacter -
-		unsigned int : 98
-		std::string : class Bat
-		class GameCharacter -
-			std::string : class Bat
-			sf::Vector2<float> -
-				float : 320
-				float : 384
-			signed char : 10
-			signed char : 10
-class TurnSystem -
-	std::string : class TurnSystem
-	unsigned int : 0
-	signed char : 15
+				h : 190
+				h : 190
+				h : 190
+				h : 255
+			h : 2
+			h : 1
+			h : 1
+			b : 1
+	pointer to 13GameCharacter -
+		j : 140
+		std::string : 3Bat
+		13GameCharacter -
+			std::string : 3Bat
+			sf::Vector2<f> -
+				f : 960
+				f : 384
+			a : 10
+			a : 10
+	pointer to 13GameCharacter -
+		j : 141
+		std::string : 5Melee
+		13GameCharacter -
+			std::string : 5Melee
+			sf::Vector2<f> -
+				f : 384
+				f : 704
+			a : 30
+			a : 5
+10TurnSystem -
+	std::string : 10TurnSystem
+	j : 0
+	a : 15

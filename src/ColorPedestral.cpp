@@ -30,7 +30,7 @@ void ColorPedestral::render(sf::RenderWindow& window)
 	Tile::render(window);
 };
 
-void ColorPedestral::interact(Map& map, sf::Vector2<float> target, const float& dt)
+void ColorPedestral::interact(Map& map, sf::Vector2<float> target)
 {
 	auto playerShr = map.get<Player>();
 

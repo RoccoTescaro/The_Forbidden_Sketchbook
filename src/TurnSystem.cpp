@@ -39,7 +39,7 @@ void TurnSystem::update(const float& dt)
             actorShr->getWeapon().update(targetEntity->getCenter(), dt);
             if (actorShr->getWeapon().isAnimationEnded())
             {
-                targetEntity->interact(*mapShr, actorShr->getPos(), dt);
+                targetEntity->interact(*mapShr, actorShr->getPos());
                 if (isPlayerTurn())
                 {
                     firstAttack.update();
@@ -125,7 +125,7 @@ void TurnSystem::newRound()
     auto& gameCharacters = map.lock()->getGameCharacters();
 
     for (auto& gameCharacter : gameCharacters)
-        if (Config::maxActivationDistance > Utils::Math::distance(map.lock()->get<Player>()->getPos(), gameCharacter.second->getPos()))
+        if (Config::maxActivationDistance > Utils::Math::distance(map.lock()->posFloatToInt(map.lock()->get<Player>()->getPos()), map.lock()->posFloatToInt(gameCharacter.second->getPos())))
             turnQueue.emplace(gameCharacter.second);
 }
 

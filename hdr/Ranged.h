@@ -26,7 +26,7 @@ public:
 		weapon.reset(new Weapon{ 2, 3, 5 });
 	}
 
-    virtual ~Ranged() {};
+    inline virtual ~Ranged() override {};
 
     void serialize(Archive& fs) override
     {

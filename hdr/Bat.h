@@ -26,7 +26,7 @@ public:
 		weapon.reset(new Weapon{ 2,1,1 });
 	}
 
-    virtual ~Bat() {};
+    inline virtual ~Bat() override {};
 
     inline bool isSolid() const override { return false; };
 

@@ -2,6 +2,7 @@
 #include "../hdr/Map.h"
 #include "../hdr/Player.h"
 
+
 void GameCharacter::interact(Map &map, sf::Vector2<float> target)
 {
 

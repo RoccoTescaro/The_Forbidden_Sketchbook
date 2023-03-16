@@ -26,7 +26,7 @@ public:
 		weapon.reset(new Weapon{ 3, 2, 1 });
 	}
 
-    virtual ~Melee() {};
+    inline virtual ~Melee() override {};
 
     static Serializable* create() { return new Melee{ 30,5 }; };
 private:

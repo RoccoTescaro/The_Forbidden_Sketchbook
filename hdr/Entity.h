@@ -10,7 +10,7 @@ class GameCharacter;
 class Entity : public Serializable
 {
 public:
-	virtual ~Entity() = default;
+	virtual ~Entity() = 0;
 
 	inline virtual void render(sf::RenderWindow& window) { window.draw(sprite); };
 	inline virtual void setPos(const sf::Vector2<float>& pos) { sprite.setPosition(pos); };
@@ -38,3 +38,5 @@ public:
 protected:
 	sf::Sprite sprite;
 };
+
+inline Entity::~Entity() {}

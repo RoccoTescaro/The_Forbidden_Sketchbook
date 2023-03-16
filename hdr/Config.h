@@ -20,7 +20,7 @@ namespace Config //see weapon for refactor
 	const sf::Vector2<int> windowDim{ 1290,800 };
 	const uint8_t fps{ 60 };
 	const float eps{ 0.0005f };
-	const float maxActivationDistance{2048};
+	const int maxActivationDistance{12};
 	const float viewZoomSpeed = 0.02f;
 	const float viewMovementSpeed = 0.02f;
 	const float epsDistance = 2.f; //eps distance should actually be 2*deltaMovement but deltaMovement is not allways calculatable
