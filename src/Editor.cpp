@@ -2,6 +2,13 @@
 #include "../hdr/Config.h"
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
+#include "../hdr/Player.h"
+#include "../hdr/Ranged.h"
+#include "../hdr/Melee.h"
+#include "../hdr/Bat.h"
+#include "../hdr/Wall.h"
+#include "../hdr/Hole.h"
+#include "../hdr/ColorPedestral.h"
 #include "../hdr/TurnSystem.h"
 
 Editor::Editor() 
@@ -59,7 +66,7 @@ void Editor::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::setState(3); //Pause State
+		Application::setState(Application::Index::PAUSE);
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
@@ -105,7 +112,6 @@ void Editor::update()
 	if (input.isKeyDown(Input::MouseL))
 	{
 		bool thereIsNoWall = !map->get<Wall>(mousePos).get();
-		LOG("there is no wall : {1}", thereIsNoWall);
 		if (dynamic_cast<Wall*>(placeHolderEntity.get()) && thereIsNoWall) 
 		{
 			bool canBuild = true;

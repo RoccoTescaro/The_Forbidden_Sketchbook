@@ -1,4 +1,5 @@
 #include "../hdr/TurnSystem.h"
+#include "../hdr/Player.h"
 
 void TurnSystem::init(std::shared_ptr<Map> map)
 {
@@ -26,6 +27,7 @@ void TurnSystem::update(const float& dt)
         if (Utils::Math::distance(actorShr->getPos(), action.target) < Config::epsDistance)
         {   
             actorShr->setPos(action.target);
+            if (isPlayerTurn()) firstStep.update();
             actionQueue.pop();
             if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
         }
@@ -34,10 +36,15 @@ void TurnSystem::update(const float& dt)
         auto targetEntity = mapShr->get<GameCharacter>(mapShr->posFloatToInt(action.target));
         if (targetEntity.get())
         {
-            actorShr->getWeapon().update(action.target, dt);
+            actorShr->getWeapon().update(targetEntity->getCenter(), dt);
             if (actorShr->getWeapon().isAnimationEnded())
             {
-                targetEntity->interact(*mapShr, actorShr->getPos());
+                targetEntity->interact(*mapShr, actorShr->getPos(), dt);
+                if (isPlayerTurn())
+                {
+                    firstAttack.update();
+                    if (targetEntity->getHealth() == 0) threeKill.update();
+                }
                 actionQueue.pop();
                 if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
             }
@@ -54,7 +61,6 @@ void TurnSystem::update(const float& dt)
 void TurnSystem::turnBuild(sf::Vector2<float> target)
 {
     if (!actionQueue.empty()) return;
-
 
     //ACTOR
     auto actorShr = actor.lock();
@@ -95,7 +101,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
             energy -= actorShr->getMovementStrategy()->getMovementCost();
             inRange = (Utils::Math::distance(mapShr->posFloatToInt(newPos), targetPos) <= range && (targetGameCharacter||targetTile)); //if you can attack u must do it        
         
-            LOG("Entity: {4}, move to target: {{1},{2}}, remaing energy {3}", newPos.x, newPos.y, energy, typeid(*actorShr.get()).name());
+            //LOG("Entity: {4}, move to target: {{1},{2}}, remaing energy {3}", newPos.x, newPos.y, energy, typeid(*actorShr.get()).name());
 
             if (stepQueue.size() >= 1) newPos = stepQueue.front();
         }
@@ -108,7 +114,7 @@ void TurnSystem::turnBuild(sf::Vector2<float> target)
         targetHp -= dmg;
         actionQueue.emplace(Action::Type::Interact, target);
 
-        LOG("Entity: {4}, interact with target: {{1},{2}}, remaing energy {3}", target.x, target.y, energy, typeid(*actorShr.get()).name());
+        //LOG("Entity: {4}, interact with target: {{1},{2}}, remaing energy {3}", target.x, target.y, energy, typeid(*actorShr.get()).name());
 
         if (isPlayerTurn()) break; //if it's the player's turn, he can decide how to distribute damage between targets
     }

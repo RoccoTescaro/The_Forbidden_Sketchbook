@@ -16,7 +16,7 @@ public:
 
     inline void update(const float& dt) 
     {
-        threshold += dt * 0.1f;
+        threshold += dt * 0.2f;
         shader.setUniform("threshold", threshold);
     };
 

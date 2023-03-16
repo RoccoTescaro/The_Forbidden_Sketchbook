@@ -5,7 +5,7 @@
 #include "../hdr/Game.h"
 #include "../hdr/Pause.h"
 
-State* Application::getState(uint8_t index)
+State* Application::getState(Index index)
 {
 	return app.states[index].get();
 }
@@ -20,11 +20,6 @@ State* Application::getPrevState()
 	return app.states[app.previousStateIndex].get();
 }
 
-void Application::addState(State* state)
-{
-	app.states.emplace_back(state);
-}
-
 void Application::run()
 {
 	app.window.reset(new sf::RenderWindow(sf::VideoMode(Config::windowDim.x, Config::windowDim.y), "", sf::Style::Close));
@@ -36,10 +31,11 @@ void Application::run()
 	//of the singleton is called aswell as a static variable. Static variable are declare and define
 	//in a non deterministic way and we must ensure that config variables are declared before the 
 	//istanciation of the singleton
-	app.states.emplace_back(new Menu);
-	app.states.emplace_back(new Game);
-	app.states.emplace_back(new Editor);
-	app.states.emplace_back(new Pause);
+
+	app.states[MENU] = static_cast<std::unique_ptr<State>>(new Menu);
+	app.states[GAME] = static_cast<std::unique_ptr<State>>(new Game);
+	app.states[EDITOR] = static_cast<std::unique_ptr<State>>(new Editor);
+	app.states[PAUSE] = static_cast<std::unique_ptr<State>>(new Pause);
 	
 	//MAIN LOOP
 	sf::Clock clock;
@@ -59,11 +55,6 @@ void Application::run()
 		app.dt = std::max(clock.getElapsedTime().asSeconds(), Config::eps);
 		clock.restart();
 	}
-};
-
-Application::Application() 
-{
-	states.reserve(0);
 };
 
 Application Application::app{};

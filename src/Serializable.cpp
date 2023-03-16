@@ -2,7 +2,16 @@
 #include "../hdr/Map.h"
 #include "../hdr/Tile.h"
 #include "../hdr/GameCharacter.h"
+#include "../hdr/Player.h"
+#include "../hdr/Ranged.h"
+#include "../hdr/Melee.h"
+#include "../hdr/Bat.h"
+#include "../hdr/Wall.h"
+#include "../hdr/Hole.h"
+#include "../hdr/ColorPedestral.h"
+#include "../hdr/WeaponBench.h"
 #include "../hdr/TurnSystem.h"
+
 
 //there was an easy way to automaticaly register all classes by instasiating a static template object in each class
 //but working with singleton can offen couse a lot of problems so we just decided to do it manually

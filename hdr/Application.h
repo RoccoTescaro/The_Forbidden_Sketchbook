@@ -16,22 +16,23 @@ public:
 	//Even if singleton getApplication() or get() is not provvided, we prefered the following form Application::getWindow() 
 	//instead of Application::get().window or Application::get().getWindow() (thats the reason for all the method to be static)
 
-	static State* getState(uint8_t index); //return the state based on index, to determine the index see in run method states definition
+	enum Index 
+	{ 
+		MENU, 
+		GAME, 
+		PAUSE, 
+		EDITOR,
+		ENUM_SIZE 
+	}; 
+
+	static State* getState(Index index); //return the state based on index, to determine the index see in run method states definition
 	static State* getCurrentState(); 
 	static State* getPrevState(); 
 	
-	static void addState(State* state); 
-
-	inline static void setState(uint8_t index) 
+	inline static void setState(Index index) 
 	{ 
 		app.previousStateIndex = app.currentStateIndex; 
 		app.currentStateIndex = index; 
-	};
-
-	inline static void nextState() 
-	{ 
-		app.previousStateIndex = app.currentStateIndex; 
-		app.currentStateIndex++; 
 	};
 
 	inline static void prevState() { std::swap(app.currentStateIndex,app.previousStateIndex); };
@@ -42,12 +43,12 @@ public:
 
 	static void run(); //initialize the application and main loop
 private:
-	Application();
+	Application() = default;
 	static Application app;
 
-	std::vector<std::unique_ptr<State>> states; //could use a map from string to state or an enum to make easier to access a specific state like getState("pause")
-	uint8_t currentStateIndex = 0;
-	uint8_t previousStateIndex = -1; //initialized with invalid state index
+	std::unique_ptr<State> states[Index::ENUM_SIZE]{};
+	Index currentStateIndex = MENU;
+	Index previousStateIndex = MENU; //Will be overwritten after first setState
 
 	//unique_ptr couse sfml creates a window on sf::RenderWindow initialization, 
 	//but we dont want to open the window till run method is called

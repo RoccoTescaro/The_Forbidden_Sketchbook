@@ -22,7 +22,7 @@ Pause::Pause() :
         {
             Game* game = dynamic_cast<Game*>(Application::getPrevState());
             Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
-            ASS(!(game || editor));
+            //ASSERT(!(game || editor));
             
             if (game) game->save();
             else if (editor) editor->save();
@@ -41,7 +41,7 @@ Pause::Pause() :
 
             Game* game = dynamic_cast<Game*>(Application::getPrevState());
             Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
-            ASS(!(game || editor));
+            //ASSERT(!(game || editor));
 
             if (game)
             {   
@@ -98,7 +98,7 @@ void Pause::update()
         if (backClicked)
             Application::prevState(); 
         else //menuClicked
-            Application::setState(0);
+            Application::setState(Application::Index::MENU);
     }
 }
 

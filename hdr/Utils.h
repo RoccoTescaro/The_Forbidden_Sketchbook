@@ -5,6 +5,8 @@
 #include <cmath>
 #include<sstream>
 
+#define PI 3.14159265358979323846f
+
 namespace Utils 
 {
 
@@ -54,12 +56,13 @@ namespace Utils
         exit(1);
     }
 
+    /*
     template<typename T>
     static void ass(const T& condition, const char* expression)
     {
         if (condition)
             Utils::error(expression);
-    }
+    }*/
 
     template<typename T, typename... Args>
     static void warning(const T& condition, const char* message, Args... args)
@@ -129,6 +132,6 @@ namespace Utils
 
 #define LOG(...) Utils::log(__VA_ARGS__)
 #define ERROR(...) Utils::error(__VA_ARGS__)
-#define ASS(condition) Utils::ass(condition, #condition)
+//#define ASSERT(condition) Utils::assert(condition, #condition)
 #define WARNING(...) Utils::warning(__VA_ARGS__)
 

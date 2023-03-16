@@ -4,6 +4,7 @@
 #include "Filter.h"
 #include "Bar.h"
 #include "DialogueManager.h"
+#include "Player.h"
 
 class Hud 
 {

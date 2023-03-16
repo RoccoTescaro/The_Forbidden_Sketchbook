@@ -1,4 +1,6 @@
 #include "../hdr/Hud.h"
+#include "../hdr/Player.h"
+#include "../hdr/AchievementManager.h"
 
 Hud::Hud()
 {
@@ -24,6 +26,11 @@ Hud::Hud()
 	
 	dialogueManager.setFont(Config::dialogueFontPath);
 	dialogueManager.setTexture(Config::dialogueTexturePath);
+	dialogueManager.setTextSize(20);
+	sf::Vector2<int> windowDim{ (int)Application::getWindow().getSize().x, (int)Application::getWindow().getSize().y };
+	dialogueManager.setPos(sf::Vector2<int>{windowDim.x * 5 / 8 - 16, 8});
+	dialogueManager.setScale(0.5f, 0.6f);
+	dialogueManager.setTextBox(sf::Rect<int>{windowDim.x * 5 / 8, 20 , windowDim.x * 3 / 8, windowDim.y / 10});
 }
 
 void Hud::setPlayer(const std::shared_ptr<Player>& player) 
@@ -48,7 +55,17 @@ void Hud::update(const float& dt)
 	playerHealth.update(dt);
 	playerEnergy.update(dt);
 
-	//check if player started a dialogue
+	const Achievement& ach = AchievementManager::getAchievement();
+	if (ach.name != "")
+	{
+		dialogueManager.addText(ach.name + ":\n" + ach.description);
+		dialogueManager.show(); //not needed but otherwise it adds 3 sec of delay to first achievement unlocked
+	}
+
+	if(Application::getInput().isKeyPressed(Input::Enter) || dialogueManager.isAnimationEnded())
+		dialogueManager.next();
+
+	dialogueManager.update(dt);
 }
 
 void Hud::render(sf::RenderWindow& window)
@@ -63,9 +80,6 @@ void Hud::render(sf::RenderWindow& window)
 	playerHealth.render(window);
 	playerEnergy.render(window);
 
-	//dialogueManager.setTextureRect({ window.getSize().x * 0.22f, window.getSize().y * 0.78f, window.getSize().x * 0.56f, window.getSize().y * 0.14f });
-	//dialogueManager.setPos({ window.getSize().x * 0.2f, window.getSize().y * 0.75f });
-	//dialogueManager.setScale({ window.getSize().x * 0.6f, window.getSize().y * 0.2f});
 	dialogueManager.render(window);
 }
 

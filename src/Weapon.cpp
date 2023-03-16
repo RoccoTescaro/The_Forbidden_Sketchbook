@@ -66,6 +66,10 @@ Weapon::Bullet::Bullet(const sf::Vector2<float>& pos, const sf::Vector2<float>& 
 	sprite.setScale(24.f / textureRect.width, 24.f / textureRect.height);
 	sprite.setOrigin(0.f, 50.f);
 	sprite.setPosition(pos);
+	sf::Vector2<float> dir = target - pos;
+	float angleBetween = std::acos(dir.x/Utils::Math::mod(dir)) * 180.f / PI;
+	float angle = dir.y < 0? 360 - angleBetween : angleBetween;
+	sprite.setRotation(angle);
 }
 
 void Weapon::Bullet::update(const float& dt)

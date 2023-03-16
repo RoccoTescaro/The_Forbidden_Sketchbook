@@ -1,4 +1,5 @@
 #include "../hdr/Game.h"
+#include "../hdr/Player.h"
 
 Game::Game()
 	: cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)
@@ -45,7 +46,7 @@ void Game::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::setState(3);
+		Application::setState(Application::Index::PAUSE);
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));
