@@ -3,7 +3,7 @@
 
 void Input::update()
 {
-    sf::RenderWindow &window=Application::getWindow();
+    sf::RenderWindow &window=Application::get().getWindow();
     
     if (!window.hasFocus())
         return;
@@ -35,7 +35,7 @@ void Input::update()
 
 sf::Vector2<float> Input::getMousePos(const sf::View* view) const
 {
-    sf::RenderWindow &window=Application::getWindow();
+    sf::RenderWindow &window=Application::get().getWindow();
 
     if (!view)
         view = &window.getDefaultView();

@@ -16,6 +16,8 @@ public:
 
 	void update(const float& dt);
 
+	void showAchievement(const std::string& name, const std::string& description);
+
 	void render(sf::RenderWindow& window);
 private:
 	sf::View gui;

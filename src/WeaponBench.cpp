@@ -3,8 +3,6 @@
 #include "../hdr/Player.h"
 #include "../hdr/Weapon.h"
 
-Trigger WeaponBench::trigger{ Achievement{"The pen is mightier than the sword", "First weapon unlocked in the game", 1} };
-
 WeaponBench::WeaponBench()
 {
 	static sf::Texture* texture;
@@ -27,8 +25,6 @@ void WeaponBench::interact(Map &map, sf::Vector2<float> target, const float &dt)
 	
 	Weapon meleeWeapon {5,2,1,false};
 	Weapon rangedWeapon {3,3,4,false};
-
-	trigger.update();
 
 	if(playerShr->getWeapon().isHidden())
 		playerShr->setWeapon(meleeWeapon);

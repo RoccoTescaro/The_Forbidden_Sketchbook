@@ -22,9 +22,9 @@ public:
 	{
 		if (!targetValue) return; //handled died
 
-		value += transitionSpeed * dt * (*targetValue - value); 
+		value += transitionSpeed * dt * (static_cast<float>(*targetValue) - value); 
 		
-		shader.setUniform("value", value/(targetMaxValue));
+		shader.setUniform("value", value/(static_cast<Type>(targetMaxValue)));
 		text.setString(std::to_string(static_cast<Type>(round(value))));
 	};
 	

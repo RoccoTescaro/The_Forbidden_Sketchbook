@@ -80,6 +80,8 @@ Menu::Menu() :
 
 void Menu::update() 
 {
+    Application& app = Application::get();
+
     transitionEffect.update(dt);
 
     start.getText().setFillColor(sf::Color(0, 0, 0, 255));
@@ -110,16 +112,16 @@ void Menu::update()
         load.setClicked(false);
         editor.setClicked(false);
 
-        if (startClicked)  Application::setState(Application::Index::GAME);
+        if (startClicked)  app.setState(Application::Index::GAME);
         else if (loadClicked)
         {
-            Game* game = dynamic_cast<Game*>(Application::getState(Application::Index::GAME));
+            Game* game = dynamic_cast<Game*>(app.getState(Application::Index::GAME));
             //ASSERT(!game);
             game->load();
-            Application::setState(Application::Index::GAME);
+            app.setState(Application::Index::GAME);
         }
-        else if (editorClicked) Application::setState(Application::Index::EDITOR);
-        else Application::getWindow().close();
+        else if (editorClicked) app.setState(Application::Index::EDITOR);
+        else app.getWindow().close();
     }
 }
 

@@ -1,7 +1,7 @@
 #include "../hdr/Camera.h"
 
 Camera::Camera(const sf::Vector2<float>& viewPort)
-	: input(Application::getInput())
+	: input(Application::get().getInput())
 {
 	setView(sf::Vector2u{ (unsigned int)viewPort.x,(unsigned int)viewPort.y });
 	setCenter(sf::Vector2<int>{ viewPort * 0.5f });

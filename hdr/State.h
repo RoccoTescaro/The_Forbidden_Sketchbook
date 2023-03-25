@@ -6,7 +6,7 @@
 class State 
 {
 public:
-	State() : window(Application::getWindow()), dt(Application::getDeltaTime()), input(Application::getInput()) {};
+	State() : window(Application::get().getWindow()), dt(Application::get().getDeltaTime()), input(Application::get().getInput()) {};
 
 	virtual ~State() = default;
 

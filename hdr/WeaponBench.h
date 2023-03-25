@@ -1,6 +1,5 @@
 #pragma once
 #include "Tile.h"
-#include "Trigger.h"
 
 class WeaponBench : public Tile
 {
@@ -15,5 +14,4 @@ public:
     static Serializable* create() { return new WeaponBench; };
 private:
     static Register registration;
-    static Trigger trigger;
 };

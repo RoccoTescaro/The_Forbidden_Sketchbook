@@ -44,7 +44,7 @@ void Application::run()
 
 	while (app.window->isOpen())
 	{
-		State& state = *Application::getState(app.currentStateIndex);
+		State& state = *app.getState(app.currentStateIndex);
 		app.input.update();
 		state.update();
 

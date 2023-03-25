@@ -2,8 +2,6 @@
 #include "../hdr/Map.h"
 #include "../hdr/Player.h"
 
-Trigger ColorPedestral::trigger{ Achievement{"Colors speak louder than words", "First color unlocked in the game", 1} };
-
 ColorPedestral::ColorPedestral()
 	: color(255, 125, 125, 255)
 {
@@ -36,7 +34,6 @@ void ColorPedestral::interact(Map& map, sf::Vector2<float> target, const float& 
 
 	if (color != nullColor) 
 	{
-		trigger.update();
 		playerShr->setFilterColor(color);
 		color = nullColor;
 		colorSprite.setFillColor(color);

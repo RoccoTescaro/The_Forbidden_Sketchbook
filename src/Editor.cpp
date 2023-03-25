@@ -12,7 +12,7 @@
 #include "../hdr/TurnSystem.h"
 
 Editor::Editor() 
-    : cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)
+    : cam(sf::Vector2<float>{ Application::get().getWindow().getSize() }), map(new Map)
 {   
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
@@ -66,7 +66,7 @@ void Editor::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::setState(Application::Index::PAUSE);
+		Application::get().setState(Application::Index::PAUSE);
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));

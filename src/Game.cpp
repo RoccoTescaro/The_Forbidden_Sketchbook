@@ -2,7 +2,7 @@
 #include "../hdr/Player.h"
 
 Game::Game()
-	: cam(sf::Vector2<float>{ Application::getWindow().getSize() }), map(new Map)
+	: cam(sf::Vector2<float>{ Application::get().getWindow().getSize() }), map(new Map)
 {
 	backgroundTexture.loadFromFile(Config::gameBackgroundTexturePath);
 	backgroundShader.loadFromFile(Config::backgroundShaderPath, sf::Shader::Fragment);
@@ -20,7 +20,7 @@ Game::Game()
 	mousePosText.setCharacterSize(16);
 	window.setMouseCursorVisible(false);
 
-	turnSystem.init(map);
+	turnSystem.init(&hud, map);
 	Archive arc(Config::gameMapPath, Archive::Load);
 	arc >> *map >> turnSystem;
 	//map->append({ 0,0 }, new Player{ 50,15,190,190,190 }); //#TODO remove
@@ -46,7 +46,7 @@ void Game::update()
 		transitionEffect.start();
 
 	if (transitionEffect.isEnded())
-		Application::setState(Application::Index::PAUSE);
+		Application::get().setState(Application::Index::PAUSE);
 
 	//MOUSE
 	mousePos = map->posFloatToInt(input.getMousePos(&cam.getView()));

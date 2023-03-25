@@ -8,6 +8,8 @@ Pause::Pause() :
     back({ 0.f, window.getSize().y * 0.43f }, sf::Vector2<int>(window.getSize().x, window.getSize().y * 0.14f)),
     menu({ 0.f, window.getSize().y * 0.71f }, sf::Vector2<int>(window.getSize().x, window.getSize().y * 0.14f))
 {
+    Application& app = Application::get();
+
     //BACKGROUND
     backgroundTexture.loadFromFile(Config::menuBackgroundTexturePath);
     background.setTexture(backgroundTexture);
@@ -18,10 +20,10 @@ Pause::Pause() :
     save.setFont(Config::buttonFontPath);
     save.setText(" SavE ", window.getSize().y * 0.125f);
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
-    save.setOnClick([this]()
+    save.setOnClick([this, &app]()
         {
-            Game* game = dynamic_cast<Game*>(Application::getPrevState());
-            Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
+            Game* game = dynamic_cast<Game*>(app.getPrevState());
+            Editor* editor = dynamic_cast<Editor*>(app.getPrevState());
             //ASSERT(!(game || editor));
             
             if (game) game->save();
@@ -32,15 +34,15 @@ Pause::Pause() :
     back.setFont(Config::buttonFontPath);
     back.setText(" BaCk ", window.getSize().y * 0.125f);
     back.getText().setFillColor(sf::Color(0, 0, 0, 255));
-    back.setOnClick([this]()
+    back.setOnClick([this, &app]()
         {
             transitionEffect.start();
             save.setActive(false); //not allow to press any other button if scene is changing
             back.setActive(false);
             menu.setActive(false);
 
-            Game* game = dynamic_cast<Game*>(Application::getPrevState());
-            Editor* editor = dynamic_cast<Editor*>(Application::getPrevState());
+            Game* game = dynamic_cast<Game*>(app.getPrevState());
+            Editor* editor = dynamic_cast<Editor*>(app.getPrevState());
             //ASSERT(!(game || editor));
 
             if (game)
@@ -71,6 +73,8 @@ Pause::Pause() :
 
 void Pause::update()
 {
+    Application& app = Application::get();
+
     transitionEffect.update(dt);
 
     save.getText().setFillColor(sf::Color(0, 0, 0, 255));
@@ -96,9 +100,9 @@ void Pause::update()
         menu.setClicked(false);
 
         if (backClicked)
-            Application::prevState(); 
+            app.prevState(); 
         else //menuClicked
-            Application::setState(Application::Index::MENU);
+            app.setState(Application::Index::MENU);
     }
 }
 

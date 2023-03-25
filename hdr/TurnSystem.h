@@ -3,7 +3,7 @@
 #include "GameCharacter.h"
 #include "Map.h"
 #include "Utils.h"
-#include "Trigger.h"
+#include "Achievement.h"
 
 class TurnSystem : public Serializable
 {
@@ -31,7 +31,9 @@ private:
     using ActionQueue = std::queue<Action>;
     using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, Compare>;
 public:
-    void init(std::shared_ptr<Map> map);
+    TurnSystem();
+
+    void init(Hud* hud, std::shared_ptr<Map> map);
   
     void update(const float &dt); //update actor accordingly to actionQueue
     void turnBuild(sf::Vector2<float> target); //update actionQueue accordingly to input
@@ -53,7 +55,5 @@ private:
     ActionQueue actionQueue;
     std::weak_ptr<GameCharacter> actor;
 
-    Trigger firstStep{ Achievement{"One small step", "First successful movement in the game", 1} };
-    Trigger firstAttack{ Achievement{"The best defence is a good offence", "First attack landed in the game", 1} };
-    Trigger threeKill{ Achievement{"Never underestimate the power of a small group of committed people", "Three enemies killed in the game", 3} };
+    std::unordered_map<std::string, Achievement> achievements; //could use an enum or/and a vector instead of a map
 };

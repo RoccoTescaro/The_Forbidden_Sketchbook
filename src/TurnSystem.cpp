@@ -1,8 +1,20 @@
 #include "../hdr/TurnSystem.h"
 #include "../hdr/Player.h"
+#include "../hdr/ColorPedestral.h"
 
-void TurnSystem::init(std::shared_ptr<Map> map)
+TurnSystem::TurnSystem()
 {
+    achievements["firstStep"] = Achievement{ "One small step", "First successful movement in the game" };
+    achievements["firstAttack"] = Achievement{ "The best defence is a good offence", "First attack landed in the game" };
+    achievements["threeKills"] = Achievement{ "One small step", "First successful movement in the game", 3 };
+    achievements["firstColor"] = Achievement{ "Colors speaks lauder than words", "First color unlocked" };
+}
+
+void TurnSystem::init(Hud* hud, std::shared_ptr<Map> map)
+{
+    for (auto& ach : achievements)
+        ach.second.attach(hud);
+
     this->map = map;
     while (!turnQueue.empty())
         turnQueue.pop();
@@ -27,7 +39,11 @@ void TurnSystem::update(const float& dt)
         if (Utils::Math::distance(actorShr->getPos(), action.target) < Config::epsDistance)
         {   
             actorShr->setPos(action.target);
-            if (isPlayerTurn()) firstStep.update();
+            if (isPlayerTurn())
+            {
+                achievements["firstStep"].progress++;
+                achievements["firstStep"].notify();
+            }
             actionQueue.pop();
             if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
         }
@@ -42,8 +58,13 @@ void TurnSystem::update(const float& dt)
                 targetEntity->interact(*mapShr, actorShr->getPos(), dt);
                 if (isPlayerTurn())
                 {
-                    firstAttack.update();
-                    if (targetEntity->getHealth() == 0) threeKill.update();
+                    achievements["firstAttack"].progress++;
+                    achievements["firstAttack"].notify();
+                    if (targetEntity->getHealth() == 0)
+                    {
+                        achievements["threeKills"].progress++;
+                        achievements["threeKills"].notify();
+                    }
                 }
                 actionQueue.pop();
                 if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
@@ -51,7 +72,15 @@ void TurnSystem::update(const float& dt)
         }
         else
         {
-            mapShr->get<Tile>(mapShr->posFloatToInt(action.target))->interact(*mapShr, action.target, dt);
+            auto tile = mapShr->get<Tile>(mapShr->posFloatToInt(action.target));
+            tile->interact(*mapShr, action.target, dt);
+
+            if (dynamic_cast<ColorPedestral*>(tile.get())) 
+            {
+				achievements["firstColor"].progress++;
+				achievements["firstColor"].notify();
+			}
+
             actionQueue.pop();
         }
         break;
