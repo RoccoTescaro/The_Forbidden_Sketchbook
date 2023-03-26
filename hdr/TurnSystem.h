@@ -31,8 +31,6 @@ private:
     using ActionQueue = std::queue<Action>;
     using TurnQueue = std::priority_queue<std::weak_ptr<GameCharacter>, std::vector<std::weak_ptr<GameCharacter>>, Compare>;
 public:
-    TurnSystem();
-
     void init(Hud* hud, std::shared_ptr<Map> map);
   
     void update(const float &dt); //update actor accordingly to actionQueue
@@ -55,5 +53,8 @@ private:
     ActionQueue actionQueue;
     std::weak_ptr<GameCharacter> actor;
 
-    std::unordered_map<std::string, Achievement> achievements; //could use an enum or/and a vector instead of a map
+    Achievement firstStep{ "One small step", "First successful movement in the game" };
+    Achievement firstAttack{ "The best defence is a good offence", "First attack landed in the game" };
+    Achievement threeKills{ "One small step", "First successful movement in the game", 3 };
+    Achievement firstColor{ "Colors speaks lauder than words", "First color unlocked" };
 };

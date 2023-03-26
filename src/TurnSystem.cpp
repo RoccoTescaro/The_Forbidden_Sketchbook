@@ -2,18 +2,13 @@
 #include "../hdr/Player.h"
 #include "../hdr/ColorPedestral.h"
 
-TurnSystem::TurnSystem()
-{
-    achievements["firstStep"] = Achievement{ "One small step", "First successful movement in the game" };
-    achievements["firstAttack"] = Achievement{ "The best defence is a good offence", "First attack landed in the game" };
-    achievements["threeKills"] = Achievement{ "One small step", "First successful movement in the game", 3 };
-    achievements["firstColor"] = Achievement{ "Colors speaks lauder than words", "First color unlocked" };
-}
 
 void TurnSystem::init(Hud* hud, std::shared_ptr<Map> map)
 {
-    for (auto& ach : achievements)
-        ach.second.attach(hud);
+    firstStep.attach(hud);
+    firstAttack.attach(hud);
+    threeKills.attach(hud);
+    firstColor.attach(hud);
 
     this->map = map;
     while (!turnQueue.empty())
@@ -41,8 +36,8 @@ void TurnSystem::update(const float& dt)
             actorShr->setPos(action.target);
             if (isPlayerTurn())
             {
-                achievements["firstStep"].progress++;
-                achievements["firstStep"].notify();
+                firstStep.progress++;
+                firstStep.notify();
             }
             actionQueue.pop();
             if (actorShr->getEnergy() == 0 || (actionQueue.empty() && !isPlayerTurn())) newTurn();
@@ -58,12 +53,12 @@ void TurnSystem::update(const float& dt)
                 targetEntity->interact(*mapShr, actorShr->getPos(), dt);
                 if (isPlayerTurn())
                 {
-                    achievements["firstAttack"].progress++;
-                    achievements["firstAttack"].notify();
+                    firstAttack.progress++;
+                    firstAttack.notify();
                     if (targetEntity->getHealth() == 0)
                     {
-                        achievements["threeKills"].progress++;
-                        achievements["threeKills"].notify();
+                        threeKills.progress++;
+                        threeKills.notify();
                     }
                 }
                 actionQueue.pop();
@@ -77,8 +72,8 @@ void TurnSystem::update(const float& dt)
 
             if (dynamic_cast<ColorPedestral*>(tile.get())) 
             {
-				achievements["firstColor"].progress++;
-				achievements["firstColor"].notify();
+				firstColor.progress++;
+				firstColor.notify();
 			}
 
             actionQueue.pop();
